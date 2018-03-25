@@ -1,0 +1,17 @@
+.light-theme-box, .dark-theme-box {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  cursor: pointer;
+  margin-left: 0.5em;
+  border: 1px solid; }
+
+.light-theme-box {
+  background-color: #f8f9fa;
+  border-color: rgba(52, 58, 64, 0.3); }
+
+.dark-theme-box {
+  background-color: #343a40;
+  border-color: rgba(248, 249, 250, 0.3); }
+
+/*# sourceMappingURL=Header.css.map */

@@ -1,21 +1,39 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {Component} from 'react'
+import {Switch, Route} from '../node_modules/react-router-dom/umd/react-router-dom.min.js'
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
+// Components
+import Header from './components/Header/Header'
+import Home from './components/Home/Home'
+import News from './components/News/News'
+import Guides from './components/Guides/Guides'
+import Videos from './components/Videos/Videos'
+import Staff from './components/Staff/Staff'
+import Contact from './components/Contact/Contact'
+
+export default class App extends Component {
+    constructor(props){
+        super(props)
+        this.state={
+            theme: 'dark',
+            pathname: this.props.location
+        }
+    }
+    switchTheme = (theme) => {
+        this.setState({theme: theme})
+    }
+    render() {
+        return (
+            <div className={`App h-100 ${this.state.theme}-theme bg-${this.state.theme}`}>
+                <Header theme={this.switchTheme}/>
+                <Switch>
+                    <Route exact path='/' component={Home}/>
+                    <Route path='/news' component={News}/>
+                    <Route path='/guides' component={Guides}/>
+                    <Route path='/videos' component={Videos}/>
+                    <Route path='/staff' component={Staff}/>
+                    <Route path='/contact' component={Contact}/>
+                </Switch>
+            </div>
+        )
+    }
 }
-
-export default App;
