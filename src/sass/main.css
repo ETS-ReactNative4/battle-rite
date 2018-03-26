@@ -11,9 +11,13 @@
 
 .dark-theme {
   color: #f8f9fa; }
+  .dark-theme hr {
+    border-color: #f8f9fa; }
 
 .light-theme {
   color: #343a40; }
+  .light-theme hr {
+    border-color: #343a40; }
 
 textarea {
   min-height: 5em;

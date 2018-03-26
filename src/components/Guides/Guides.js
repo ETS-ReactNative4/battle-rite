@@ -32,135 +32,159 @@ import Varesh from '../../images/champions/Varesh_icon.png'
 import Zander from '../../images/champions/Zander_icon.png'
 
 export default class Guides extends Component {
-    champions = [
-        {
-            image: Alysia,
-            name: 'Alysia',
-            type: 'Ranged'
-        },
-        {
-            image: Ashka,
-            name: 'Ashka',
-            type: 'Ranged'
-        },
-        {
-            image: Bakko,
-            name: 'Bakko',
-            type: 'Melee'
-        },
-        {
-            image: Blossom,
-            name: 'Blossom',
-            type: 'Support'
-        },
-        {
-            image: Croak,
-            name: 'Croak',
-            type: 'Melee'
-        },
-        {
-            image: Destiny,
-            name: 'Destiny',
-            type: 'Ranged'
-        },
-        {
-            image: Ezmo,
-            name: 'Ezmo',
-            type: 'Ranged'
-        },
-        {
-            image: Freya,
-            name: 'Freya',
-            type: 'Melee'
-        },
-        {
-            image: Iva,
-            name: 'Iva',
-            type: 'Ranged'
-        },
-        {
-            image: Jade,
-            name: 'Jade',
-            type: 'Ranged'
-        },
-        {
-            image: Jumong,
-            name: 'Jumong',
-            type: 'Ranged'
-        },
-        {
-            image: Lucie,
-            name: 'Lucie',
-            type: 'Support'
-        },
-        {
-            image: Oldur,
-            name: 'Oldur',
-            type: 'Support'
-        },
-        {
-            image: Pearl,
-            name: 'Pearl',
-            type: 'Support'
-        },
-        {
-            image: Pestilus,
-            name: 'Pestilus',
-            type: 'Support'
-        },
-        {
-            image: Poloma,
-            name: 'Poloma',
-            type: 'Support'
-        },
-        {
-            image: Raigon,
-            name: 'Raigon',
-            type: 'Melee'
-        },
-        {
-            image: Rook,
-            name: 'Rook',
-            type: 'Melee'
-        },
-        {
-            image: RuhKaan,
-            name: 'Ruh Kaan',
-            type: 'Melee'
-        },
-        {
-            image: Shifu,
-            name: 'Shifu',
-            type: 'Melee'
-        },
-        {
-            image: Sirius,
-            name: 'Sirius',
-            type: 'Support'
-        },
-        {
-            image: Taya,
-            name: 'Taya',
-            type: 'Ranged'
-        },
-        {
-            image: Thorn,
-            name: 'Thorn',
-            type: 'Melee'
-        },
-        {
-            image: Varesh,
-            name: 'Varesh',
-            type: 'Ranged'
-        },
-        {
-            image: Zander,
-            name: 'Zander',
-            type: 'Support'
+    constructor(props) {
+        super(props)
+        this.state = {
+            champions: [
+                {
+                    image: Alysia,
+                    name: 'Alysia',
+                    type: 'ranged'
+                },
+                {
+                    image: Ashka,
+                    name: 'Ashka',
+                    type: 'ranged'
+                },
+                {
+                    image: Bakko,
+                    name: 'Bakko',
+                    type: 'melee'
+                },
+                {
+                    image: Blossom,
+                    name: 'Blossom',
+                    type: 'support'
+                },
+                {
+                    image: Croak,
+                    name: 'Croak',
+                    type: 'melee'
+                },
+                {
+                    image: Destiny,
+                    name: 'Destiny',
+                    type: 'ranged'
+                },
+                {
+                    image: Ezmo,
+                    name: 'Ezmo',
+                    type: 'ranged'
+                },
+                {
+                    image: Freya,
+                    name: 'Freya',
+                    type: 'melee'
+                },
+                {
+                    image: Iva,
+                    name: 'Iva',
+                    type: 'ranged'
+                },
+                {
+                    image: Jade,
+                    name: 'Jade',
+                    type: 'ranged'
+                },
+                {
+                    image: Jumong,
+                    name: 'Jumong',
+                    type: 'ranged'
+                },
+                {
+                    image: Lucie,
+                    name: 'Lucie',
+                    type: 'support'
+                },
+                {
+                    image: Oldur,
+                    name: 'Oldur',
+                    type: 'support'
+                },
+                {
+                    image: Pearl,
+                    name: 'Pearl',
+                    type: 'support'
+                },
+                {
+                    image: Pestilus,
+                    name: 'Pestilus',
+                    type: 'support'
+                },
+                {
+                    image: Poloma,
+                    name: 'Poloma',
+                    type: 'support'
+                },
+                {
+                    image: Raigon,
+                    name: 'Raigon',
+                    type: 'melee'
+                },
+                {
+                    image: Rook,
+                    name: 'Rook',
+                    type: 'melee'
+                },
+                {
+                    image: RuhKaan,
+                    name: 'Ruh Kaan',
+                    type: 'melee'
+                },
+                {
+                    image: Shifu,
+                    name: 'Shifu',
+                    type: 'melee'
+                },
+                {
+                    image: Sirius,
+                    name: 'Sirius',
+                    type: 'support'
+                },
+                {
+                    image: Taya,
+                    name: 'Taya',
+                    type: 'ranged'
+                },
+                {
+                    image: Thorn,
+                    name: 'Thorn',
+                    type: 'melee'
+                },
+                {
+                    image: Varesh,
+                    name: 'Varesh',
+                    type: 'ranged'
+                },
+                {
+                    image: Zander,
+                    name: 'Zander',
+                    type: 'support'
+                }
+            ],
+            theme: this.props.theme,
+            search: '',
+            type: ''
         }
-    ]
+    }
+
+    searchChamption(event) {
+        this.setState({
+            search: event.target.value
+        })
+    }
+
+    selectChampionType(type) {
+        this.setState({type})
+    }
 
     render() {
+        let filteredChampions = this.state.champions.filter(
+            champion => {
+                return champion.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1 &&
+                    champion.type.indexOf(this.state.type) !== -1
+            }
+        );
         return (
             <div className="guide py-3">
                 <div className="container">
@@ -169,8 +193,48 @@ export default class Guides extends Component {
                             <h3 className="text-uppercase">Builds & Guides</h3>
                         </div>
                         <div className="col-12">
-                            {this.champions.map((data, index) => {
-                                return <Link className="guide__container" to="#" key={index}>
+                            <div className="row mb-4 mt-3">
+                                <div className="col-sm-6">
+                                    <div className="form-group">
+                                        <input type="text" value={this.state.search}
+                                               onChange={this.searchChamption.bind(this)}
+                                               className="form-control bg-dark rounded-0 form-control-lg"
+                                               placeholder="SEARCH YOUR CHAMPION"/>
+                                    </div>
+                                </div>
+                                <div className="col-sm-6 text-sm-right text-center">
+                                    <div className="btn-group btn-group-toggle px-2" data-toggle="buttons">
+                                        <label className="btn btn-outline-light btn-lg active" onClick={() => {
+                                            this.selectChampionType('')
+                                        }}>
+                                            <input type="radio" name="champion-type"/>
+                                            <span className="h6 text-uppercase">All</span>
+                                        </label>
+                                        <label className="btn btn-outline-light btn-lg" onClick={() => {
+                                            this.selectChampionType('melee')
+                                        }}>
+                                            <input type="radio" name="champion-type"/>
+                                            <span className="h6 text-uppercase">Melee</span>
+                                        </label>
+                                        <label className="btn btn-outline-light btn-lg" onClick={() => {
+                                            this.selectChampionType('ranged')
+                                        }}>
+                                            <input type="radio" name="champion-type"/>
+                                            <span className="h6 text-uppercase">Ranged</span>
+                                        </label>
+                                        <label className="btn btn-outline-light btn-lg" onClick={() => {
+                                            this.selectChampionType('support')
+                                        }}>
+                                            <input type="radio" name="champion-type"/>
+                                            <span className="h6 text-uppercase">Support</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-12">
+                            {filteredChampions.map((data, index) => {
+                                return <Link className="guide__container" to={`/champions/${data.name.toLowerCase().replace(/\s/g, '')}`} key={index}>
                                     <div className="guide__box">
                                         <div className="guide__items" style={{backgroundImage: `url(${data.image})`}}>
                                             <span className="guide__type">{data.type}</span>
@@ -179,35 +243,6 @@ export default class Guides extends Component {
                                     </div>
                                 </Link>
                             })}
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-12">
-                            <h3 className="text-uppercase">Social networks</h3>
-                            <a href="#">
-                                <div className="social-media__icon--lg">
-                                    <span className="fa fa-discord"/>
-                                    <p>/ NYHDV4g</p>
-                                </div>
-                            </a>
-                            <a href="#">
-                                <div className="social-media__icon--lg">
-                                    <span className="fa fa-youtube fa-3x"/>
-                                    <p>/ Topplerite</p>
-                                </div>
-                            </a>
-                            <a href="#">
-                                <div className="social-media__icon--lg">
-                                    <span className="fa fa-twitter fa-3x"/>
-                                    <p>@Topplerite_</p>
-                                </div>
-                            </a>
-                            <a href="#">
-                                <div className="social-media__icon--lg">
-                                    <span className="fa fa-facebook fa-3x"/>
-                                    <p>/ Topplerite</p>
-                                </div>
-                            </a>
                         </div>
                     </div>
                 </div>
