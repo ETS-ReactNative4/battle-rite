@@ -52,10 +52,10 @@ export default class Header extends Component {
                                       to="/contact">Contact</NavLink>
                             </li>
                         </ul>
-                    </div>
-                    <div>
-                        <div className="light-theme-box" onClick={() => this.switchTheme('light')}/>
-                        <div className="dark-theme-box" onClick={() => this.switchTheme('dark')}/>
+                        <div className="d-md-block d-none">
+                            <div className="light-theme-box" onClick={() => this.switchTheme('light')}/>
+                            <div className="dark-theme-box" onClick={() => this.switchTheme('dark')}/>
+                        </div>
                     </div>
                 </nav>
             </div>
