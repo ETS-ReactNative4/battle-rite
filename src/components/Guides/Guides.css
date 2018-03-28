@@ -1,0 +1,57 @@
+.guide__container {
+  float: left;
+  position: relative;
+  width: 20%;
+  padding-bottom: 20%; }
+
+.guide__box {
+  position: absolute;
+  left: 0;
+  right: 10px;
+  top: 0;
+  bottom: 10px;
+  overflow: hidden;
+  background-color: #6d7a86; }
+
+.guide__items {
+  filter: grayscale(30%);
+  opacity: 0.5;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s;
+  height: 100%;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center; }
+  .guide__items:hover {
+    opacity: 0.8;
+    filter: grayscale(0); }
+    .guide__items:hover .guide__name, .guide__items:hover .guide__type {
+      transform: translateY(0);
+      opacity: 1; }
+
+.guide__name, .guide__type {
+  transition: all 0.3s;
+  letter-spacing: 0.1em;
+  opacity: 0;
+  color: #f8f9fa;
+  text-transform: uppercase;
+  transform: translateY(40px); }
+
+@media (max-width: 1290px) and (min-width: 1051px) {
+  .guide__container {
+    width: 25%;
+    padding-bottom: 25%; } }
+@media (max-width: 1050px) and (min-width: 651px) {
+  .guide__container {
+    width: 33.3%;
+    padding-bottom: 33.3%; } }
+@media (max-width: 650px) {
+  .guide__container {
+    width: 50%;
+    padding-bottom: 50%; } }
+
+/*# sourceMappingURL=Guides.css.map */
