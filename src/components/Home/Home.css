@@ -1,6 +1,6 @@
-.carousel-item {
+#carouselHomepage .carousel-item {
   background-color: #343a40; }
-  .carousel-item img {
-    opacity: 0.5; }
+  #carouselHomepage .carousel-item img {
+    opacity: 0.7; }
 
 /*# sourceMappingURL=Home.css.map */
