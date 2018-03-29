@@ -371,8 +371,6 @@ export default class Champion extends Component {
                 }
             ],
             championImg: '',
-            filteredChampions:'',
-            champion:'',
             data: '',
             spellSelected: 0,
             champtionId: this.props.location.pathname.split('/champions/')[1],
@@ -397,32 +395,13 @@ export default class Champion extends Component {
         firebase.database().ref('battle-rite/champions')
             .once('value').then(data => {
             console.log(data.val())
-            this.state.champions2 = data.val()
-            this.setState(this.state)
-            this.state.champion = this.state.champions.filter(
-                champ => {
-                    return champ.id.toLowerCase().indexOf(this.state.champtionId) !== -1
-                }
-            )[0]
-            this.setState(this.state)
-            this.state.spellSelected = this.state.champion.spells.filter(
-                spell => {
-                    return spell.id === this.state.spellSelected
-                }
-            )[0]
-            this.setState(this.state)
-            this.state.filteredChampions = this.state.champions.filter(
-                data => {
-                    return data.type.indexOf(this.state.champion.type) !== -1 &&
-                        data.id.indexOf(this.state.champion.id) === -1
-                }
-            )
-            this.setState(this.state)
+            /*this.state.champions = data.val()
+            this.setState(this.state)*/
         })
     }
 
     render() {
-        /*let champion = this.state.champions.filter(
+        let champion = this.state.champions.filter(
             champ => {
                 return champ.id.toLowerCase().indexOf(this.state.champtionId) !== -1
             }
@@ -437,20 +416,20 @@ export default class Champion extends Component {
                 return data.type.indexOf(champion.type) !== -1 &&
                     data.id.indexOf(champion.id) === -1
             }
-        )*/
+        )
 
         return (
             <div className="champion">
                 <div className="video-container d-lg-block d-none">
                     <video autoPlay="true" loop
-                           src={`../../../media/champions/${this.state.champion.name.toLowerCase()}/video.mp4`}
+                           src={`../../../media/champions/${champion.name.toLowerCase()}/video.mp4`}
                            className="champion__video"/>
                 </div>
                 <div className="container py-5">
                     <div className="row d-lg-none d-block">
                         <div className="col-6 offset-3">
                             <img src={this.state.championImg}
-                                 className="w-100 border" alt={`${this.state.champion.name.toLowerCase()}-champion`}/>
+                                 className="w-100 border" alt={`${champion.name.toLowerCase()}-champion`}/>
                         </div>
                     </div>
                     <div className="row">
@@ -469,18 +448,18 @@ export default class Champion extends Component {
                                     <span className="nav-link px-0 text-white">-</span>
                                 </li>
                                 <li className="nav-item">
-                                    <span className="nav-link text-white">{this.state.champion.name}</span>
+                                    <span className="nav-link text-white">{champion.name}</span>
                                 </li>
                             </ul>
                             <div
                                 className="text-uppercase h3 align-items-center justify-content-lg-start justify-content-center d-flex font-weight-light">
-                                <i className={`fa fa-4x fa-${this.state.champion.type}`}/> {this.state.champion.type}
+                                <i className={`fa fa-4x fa-${champion.type}`}/> {champion.type}
                             </div>
                             <h1 className="display-4 text-center text-uppercase text-dark bg-light">
-                                {this.state.champion.name}
+                                {champion.name}
                             </h1>
                             <h6 className="text-center text-uppercase py-1 w-75 mx-auto text-dark bg-light">
-                                {this.state.champion.slogan}
+                                {champion.slogan}
                             </h6>
                         </div>
                         <div className="col-lg-6 offset-lg-2 pt-lg-0 pt-5">
@@ -491,16 +470,16 @@ export default class Champion extends Component {
                                             Damages
                                         </h3>
                                         <p className="text-uppercase mb-0">
-                                            {this.state.champion.status.damages.props}
+                                            {champion.status.damages.props}
                                         </p>
                                     </div>
                                     <div>
-                                        <h1 className="mb-0 font-weight-bold">{this.state.champion.status.damages.rate}%</h1>
+                                        <h1 className="mb-0 font-weight-bold">{champion.status.damages.rate}%</h1>
                                     </div>
                                 </div>
                                 <div className="progress status-bar mt-2 rounded-0">
                                     <div className="progress-bar bg-light rounded-0" role="progressbar"
-                                         style={{width: `${this.state.champion.status.damages.rate}%`}}
+                                         style={{width: `${champion.status.damages.rate}%`}}
                                          aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"/>
                                 </div>
                             </div>
@@ -512,16 +491,16 @@ export default class Champion extends Component {
                                             Survivability
                                         </h3>
                                         <p className="text-uppercase mb-0">
-                                            {this.state.champion.status.survivability.props}
+                                            {champion.status.survivability.props}
                                         </p>
                                     </div>
                                     <div>
-                                        <h1 className="mb-0 font-weight-bold">{this.state.champion.status.survivability.rate}%</h1>
+                                        <h1 className="mb-0 font-weight-bold">{champion.status.survivability.rate}%</h1>
                                     </div>
                                 </div>
                                 <div className="progress status-bar mt-2 rounded-0">
                                     <div className="progress-bar bg-light rounded-0" role="progressbar"
-                                         style={{width: `${this.state.champion.status.survivability.rate}%`}}
+                                         style={{width: `${champion.status.survivability.rate}%`}}
                                          aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"/>
                                 </div>
                             </div>
@@ -533,16 +512,16 @@ export default class Champion extends Component {
                                             Protection
                                         </h3>
                                         <p className="text-uppercase mb-0">
-                                            {this.state.champion.status.protection.props}
+                                            {champion.status.protection.props}
                                         </p>
                                     </div>
                                     <div>
-                                        <h1 className="mb-0 font-weight-bold">{this.state.champion.status.protection.rate}%</h1>
+                                        <h1 className="mb-0 font-weight-bold">{champion.status.protection.rate}%</h1>
                                     </div>
                                 </div>
                                 <div className="progress status-bar mt-2 rounded-0">
                                     <div className="progress-bar bg-light rounded-0" role="progressbar"
-                                         style={{width: `${this.state.champion.status.protection.rate}%`}}
+                                         style={{width: `${champion.status.protection.rate}%`}}
                                          aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"/>
                                 </div>
                             </div>
@@ -554,16 +533,16 @@ export default class Champion extends Component {
                                             Control
                                         </h3>
                                         <p className="text-uppercase mb-0">
-                                            {this.state.champion.status.control.props}
+                                            {champion.status.control.props}
                                         </p>
                                     </div>
                                     <div>
-                                        <h1 className="mb-0 font-weight-bold">{this.state.champion.status.control.rate}%</h1>
+                                        <h1 className="mb-0 font-weight-bold">{champion.status.control.rate}%</h1>
                                     </div>
                                 </div>
                                 <div className="progress status-bar mt-2 rounded-0">
                                     <div className="progress-bar bg-light rounded-0" role="progressbar"
-                                         style={{width: `${this.state.champion.status.control.rate}%`}}
+                                         style={{width: `${champion.status.control.rate}%`}}
                                          aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"/>
                                 </div>
                             </div>
@@ -575,16 +554,16 @@ export default class Champion extends Component {
                                             Difficulty
                                         </h3>
                                         <p className="text-uppercase mb-0">
-                                            {this.state.champion.status.difficulty.props}
+                                            {champion.status.difficulty.props}
                                         </p>
                                     </div>
                                     <div>
-                                        <h1 className="mb-0 font-weight-bold">{this.state.champion.status.difficulty.rate}%</h1>
+                                        <h1 className="mb-0 font-weight-bold">{champion.status.difficulty.rate}%</h1>
                                     </div>
                                 </div>
                                 <div className="progress status-bar mt-2 rounded-0">
                                     <div className="progress-bar bg-light rounded-0" role="progressbar"
-                                         style={{width: `${this.state.champion.status.difficulty.rate}%`}}
+                                         style={{width: `${champion.status.difficulty.rate}%`}}
                                          aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"/>
                                 </div>
                             </div>
@@ -597,7 +576,7 @@ export default class Champion extends Component {
                             <div className="container">
                                 <div className="row">
                                     <div className="col-12">
-                                        {this.state.champion.quotes.map((data, index) => {
+                                        {champion.quotes.map((data, index) => {
                                             return <blockquote className="blockquote p-md-5" key={index}>
                                                 <p className="mb-0 text-capitalize">{data.content}</p>
                                                 <footer className="blockquote-footer mt-4 d-flex">
@@ -625,14 +604,14 @@ export default class Champion extends Component {
                     <div className="container">
                         <div className="row">
                             <div className="col-lg-6">
-                                <h3 className="font-weight-bold text-uppercase">{this.state.champion.name}</h3>
-                                <h1 className="display-4 text-uppercase">{this.state.champion.slogan}</h1>
+                                <h3 className="font-weight-bold text-uppercase">{champion.name}</h3>
+                                <h1 className="display-4 text-uppercase">{champion.slogan}</h1>
                             </div>
                             <div className="col-lg-6">
                                 <div className="row">
                                     <div className="col-lg-6">
                                         <h3 className="text-uppercase">Pros</h3>
-                                        {this.state.champion.pros.map((data, index) => {
+                                        {champion.pros.map((data, index) => {
                                             return <div className="px-4 py-2 mb-3 bg-success" key={index}>
                                                 {data}
                                             </div>
@@ -640,7 +619,7 @@ export default class Champion extends Component {
                                     </div>
                                     <div className="col-lg-6">
                                         <h3 className="text-uppercase">Cons</h3>
-                                        {this.state.champion.cons.map((data, index) => {
+                                        {champion.cons.map((data, index) => {
                                             return <div className="px-4 py-2 mb-3 bg-danger" key={index}>
                                                 {data}
                                             </div>
@@ -658,11 +637,11 @@ export default class Champion extends Component {
                                 <div className="row">
                                     <div className="col-xl-4 col-5">
                                         <div className="row">
-                                            {this.state.champion.spells.map((data, index) => {
+                                            {champion.spells.map((data, index) => {
                                                 return <div className="col-lg-4 col-sm-6 d-flex justify-content-center"
                                                             key={index}>
                                                     <div
-                                                        style={{backgroundImage: `url('../../../media/champions/${this.state.champion.name.toLowerCase()}/spells/${data.keyword.toLowerCase()}.png')`}}
+                                                        style={{backgroundImage: `url('../../../media/champions/${champion.name.toLowerCase()}/spells/${data.keyword.toLowerCase()}.png')`}}
                                                         className={`spell ${index === this.state.spellSelected ? 'active' : ''}`}
                                                         onClick={() => this.setState({spellSelected: index})}>
                                                         <p className="text-uppercase text-white mb-0 text-center font-weight-bold">{data.keyword}</p>
@@ -672,9 +651,9 @@ export default class Champion extends Component {
                                         </div>
                                     </div>
                                     <div className="col-xl-7 offset-xl-1 col-lg-6 offset-lg-1 col-6 offset-1">
-                                        <h3 className="text-uppercase">{this.state.spellSelected.name}</h3>
-                                        <h5 className="font-weight-light text-capitalize my-4">{this.state.spellSelected.description}</h5>
-                                        {this.state.spellSelected.details.map((data, index) => {
+                                        <h3 className="text-uppercase">{spellSelected.name}</h3>
+                                        <h5 className="font-weight-light text-capitalize my-4">{spellSelected.description}</h5>
+                                        {spellSelected.details.map((data, index) => {
                                             return <div className="d-flex justify-content-between" key={index}>
                                                 <h6>{data.name}</h6>
                                                 <h6>{data.prop}</h6>
@@ -689,7 +668,7 @@ export default class Champion extends Component {
                 <div id="carouselBuilds" className="carousel slide" data-wrap="false">
                     <div className="carousel-inner px-sm-5">
                         <div className="container">
-                            {this.state.champion.builds.map((data, index) => {
+                            {champion.builds.map((data, index) => {
                                 return <div
                                     className={`carousel-item p-md-5 px-sm-0 p-4 ${index === 0 ? 'active' : ''}`}
                                     key={index}>
@@ -706,7 +685,7 @@ export default class Champion extends Component {
                                                     className={`card__build bg-dark2 card__build--${data.type.toLowerCase()} mb-3`}>
                                                     <div className="d-flex">
                                                         <img
-                                                            src={`../../../media/champions/${this.state.champion.name.toLowerCase()}/spells/${data.spell.toLowerCase()}.png`}
+                                                            src={`../../../media/champions/${champion.name.toLowerCase()}/spells/${data.spell.toLowerCase()}.png`}
                                                             className={`card__img card__img--${data.type.toLowerCase()}`}
                                                             alt={`${data.name}-card`}/>
                                                         <div>
@@ -739,7 +718,7 @@ export default class Champion extends Component {
                                 <h1 className="display-4 text-uppercase mb-5">Basic guide</h1>
                                 <h4 className="font-weight-bold mb-3 text-uppercase">Beginner tips</h4>
                             </div>
-                            {this.state.champion.beginnerTips.map((data, index) => {
+                            {champion.beginnerTips.map((data, index) => {
                                 return <div className="col-sm-6" key={index}>
                                     <p className="font-weight-light">{data}</p>
                                 </div>
@@ -753,7 +732,7 @@ export default class Champion extends Component {
                             <div className="col-12">
                                 <h1 className="text-uppercase mb-5 display-4">Mastering guide</h1>
                             </div>
-                            {this.state.champion.masteringTips.map((data, index) => {
+                            {champion.masteringTips.map((data, index) => {
                                 return <div className="col-sm-6" key={index}>
                                     <h4 className="font-weight-bold mb-2 text-uppercase">
                                         <i className={`fa fa-2x fa-${data.type}`}/>
@@ -767,7 +746,7 @@ export default class Champion extends Component {
                 </div>
                 <div className="bg-black py-5">
                     <div className="container">
-                        {this.state.champion.synergy.length !== 0 ?
+                        {champion.synergy.length !== 0 ?
                             <div className="row mb-5">
                                 <div className="col-12">
                                     <h1 className="display-4 mb-3 text-uppercase">Synergy & Match-up</h1>
@@ -790,7 +769,7 @@ export default class Champion extends Component {
                                 </Link>
                             </div>
                             <div className="col-6">
-                                <h3 className="text-uppercase mb-0">A video with {this.state.champion.name}</h3>
+                                <h3 className="text-uppercase mb-0">A video with {champion.name}</h3>
                                 <Link className="nav-link p-0" to="/videos">
                                     <p className="text-uppercase font-weight-bold text-secondary">
                                         Show all videos <i className="fa fa-myarrow-right"/>
@@ -800,7 +779,7 @@ export default class Champion extends Component {
                         </div>
                         <div className="row">
                             <div className="col-6">
-                                {this.state.filteredChampions.map((data, index) => {
+                                {filteredChampions.map((data, index) => {
                                     return <Link className="guide__container"
                                                  to={`/champions/${data.name.toLowerCase().replace(/\s/g, '')}`}
                                                  key={index}>
@@ -813,7 +792,7 @@ export default class Champion extends Component {
                             </div>
                             <div className="col-6">
                                 <div className="embed-responsive h-100">
-                                    <iframe className="embed-responsive-item" title={`${this.state.champion.name} video`}
+                                    <iframe className="embed-responsive-item" title={`${champion.name} video`}
                                             src="https://www.youtube.com/embed/W4nb08MuJ2Q?rel=0"/>
                                 </div>
                             </div>
