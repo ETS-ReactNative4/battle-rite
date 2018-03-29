@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 import {Link} from '../../../node_modules/react-router-dom/umd/react-router-dom.min.js'
 
+import * as firebase from 'firebase';
+
 // CSS
 import './Champions.min.css'
 
@@ -10,415 +12,25 @@ export default class Champion extends Component {
         this.state = {
             champions: [
                 {
-                    id: 'alysia',
-                    name: 'Alysia',
-                    type: 'ranged',
-                    status: {
-                        damages: {
-                            rate: 90,
-                            props: 'Poke, constant damage, burst'
-                        },
-                        survivability: {
-                            rate: 50,
-                            props: 'Iframe, shield, invulnerability shield, self-healing'
-                        },
-                        protection: {
-                            rate: 40,
-                            props: 'Shield, invulnerability shield, healing'
-                        },
-                        control: {
-                            rate: 60,
-                            props: 'Slow, freeze, push, projectile block'
-                        },
-                        difficulty: {
-                            rate: 80,
-                            props: ''
-                        },
-                    }
-                },
-                {
-                    id: 'ashka',
-                    name: 'Ashka',
-                    type: 'ranged',
-                    status: {
-                        damages: {
-                            rate: 90,
-                            props: 'Constant damage, Poke, AOE burst'
-                        },
-                        survivability: {
-                            rate: 60,
-                            props: 'Self-healing, air times'
-                        },
-                        protection: {
-                            rate: 0,
-                            props: ''
-                        },
-                        control: {
-                            rate: 50,
-                            props: 'AOE stun, AOE petrify, push, projectile block'
-                        },
-                        difficulty: {
-                            rate: 70,
-                            props: ''
-                        },
-                    }
-                },
-                {
-                    id: 'bakko',
-                    name: 'Bakko',
-                    type: 'melee',
-                    status: {
-                        damages: {
-                            rate: 40,
-                            props: 'Poke, burst'
-                        },
-                        survivability: {
-                            rate: 60,
-                            props: 'Shield, shield reflect, air time, dash'
-                        },
-                        protection: {
-                            rate: 30,
-                            props: 'AOE Shield'
-                        },
-                        control: {
-                            rate: 60,
-                            props: 'AOE incapacitate, push, stun, projectile reflect'
-                        },
-                        difficulty: {
-                            rate: 50,
-                            props: ''
-                        },
-                    }
-                },
-                {
-                    id: 'blossom',
-                    name: 'Blossom',
-                    type: 'support',
-                    status: {
-                        damages: {
-                            rate: 40,
-                            props: 'Burst'
-                        },
-                        survivability: {
-                            rate: 80,
-                            props: 'Heal, AOE heal, AOE invulnerability, air time, projectile reflect'
-                        },
-                        protection: {
-                            rate: 70,
-                            props: 'Heal, AOE heal, AOE invulnerability'
-                        },
-                        control: {
-                            rate: 30,
-                            props: 'AOE stun, weaken, push, projectile reflect, invocation block'
-                        },
-                        difficulty: {
-                            rate: 40,
-                            props: ''
-                        },
-                    }
-                },
-                {
-                    id: 'croak',
-                    name: 'Croak',
-                    type: 'melee',
-                    status: {
-                        damages: {
-                            rate: 50,
-                            props: 'Burst'
-                        },
-                        survivability: {
-                            rate: 80,
-                            props: 'Dash, air time, dispell, camouflage, self-healing'
-                        },
-                        protection: {
-                            rate: 0,
-                            props: ''
-                        },
-                        control: {
-                            rate: 70,
-                            props: 'Incapacitate, stun, blind'
-                        },
-                        difficulty: {
-                            rate: 70,
-                            props: ''
-                        },
-                    }
-                },
-                {
-                    id: 'destiny',
-                    name: 'Destiny',
-                    type: 'ranged',
-                    status: {
-                        damages: {
-                            rate: 100,
-                            props: 'Poke, burst, constant damage'
-                        },
-                        survivability: {
-                            rate: 40,
-                            props: 'Counter, iframe, movement dispel, movement speed, shield'
-                        },
-                        protection: {
-                            rate: 20,
-                            props: 'Shield'
-                        },
-                        control: {
-                            rate: 40,
-                            props: 'Stun, push, silence, slow, projectile slow'
-                        },
-                        difficulty: {
-                            rate: 70,
-                            props: ''
-                        },
-                    }
-                },
-                {
-                    id: 'ezmo',
-                    name: 'Ezmo',
-                    type: 'ranged',
-                    status: {
-                        damages: {
-                            rate: 100,
-                            props: 'Constant damage, Burst'
-                        },
-                        survivability: {
-                            rate: 50,
-                            props: 'Air time, lifesteal, shield, absorb shield'
-                        },
-                        protection: {
-                            rate: 20,
-                            props: 'Shield'
-                        },
-                        control: {
-                            rate: 40,
-                            props: 'Grab, root, pull'
-                        },
-                        difficulty: {
-                            rate: 60,
-                            props: ''
-                        },
-                    }
-                },
-                {
-                    id: 'freya',
-                    name: 'Freya',
-                    type: 'melee',
-                    status: {
-                        damages: {
-                            rate: 40,
-                            props: 'Poke, burst, constant damage'
-                        },
-                        survivability: {
-                            rate: 100,
-                            props: 'Air times, counter, self-shields'
-                        },
-                        protection: {
-                            rate: 0,
-                            props: ''
-                        },
-                        control: {
-                            rate: 50,
-                            props: 'Pull, push, incapacitate'
-                        },
-                        difficulty: {
-                            rate: 30,
-                            props: ''
-                        },
-                    }
-                },
-                {
-                    id: 'iva',
-                    name: 'Iva',
-                    type: 'ranged',
-                    status: {
-                        damages: {
-                            rate: 90,
-                            props: 'Poke, burst, constant damage, dot'
-                        },
-                        survivability: {
-                            rate: 60,
-                            props: 'Self-shield, haste, absorb shield, iframe, dispel'
-                        },
-                        protection: {
-                            rate: 40,
-                            props: 'Shield, dispel, haste'
-                        },
-                        control: {
-                            rate: 50,
-                            props: 'Pull, stun, incapacitate'
-                        },
-                        difficulty: {
-                            rate: 30,
-                            props: ''
-                        },
-                    }
-                },
-                {
-                    id: 'jade',
-                    name: 'Jade',
-                    type: 'ranged',
-                    status: {
-                        damages: {
-                            rate: 100,
-                            props: 'Poke, Burst, constant damage'
-                        },
-                        survivability: {
-                            rate: 50,
-                            props: 'iframe, self-healing, immaterial'
-                        },
-                        protection: {
-                            rate: 0,
-                            props: ''
-                        },
-                        control: {
-                            rate: 50,
-                            props: 'Stun, Root, Slow, push'
-                        },
-                        difficulty: {
-                            rate: 90,
-                            props: ''
-                        },
-                    }
-                },
-                {
-                    id: 'jumong',
-                    name: 'Jumong',
-                    type: 'ranged',
-                    status: {
-                        damages: {
-                            rate: 100,
-                            props: 'Poke, Burst, constant damage'
-                        },
-                        survivability: {
-                            rate: 50,
-                            props: 'iframe, self-healing, immaterial'
-                        },
-                        protection: {
-                            rate: 0,
-                            props: ''
-                        },
-                        control: {
-                            rate: 50,
-                            props: 'Stun, Root, Slow, push'
-                        },
-                        difficulty: {
-                            rate: 90,
-                            props: ''
-                        },
-                    }
-                },
-                {
-                    id: 'lucie',
-                    name: 'Lucie',
-                    type: 'support',
-                    status: {
-                        damages: {
-                            rate: 30,
-                            props: 'Burst'
-                        },
-                        survivability: {
-                            rate: 80,
-                            props: 'Self shield, Self heal, iframe, dispel'
-                        },
-                        protection: {
-                            rate: 90,
-                            props: 'Heal, Shield, dispel'
-                        },
-                        control: {
-                            rate: 80,
-                            props: 'Panic, Petrify, dispel, push, slow'
-                        },
-                        difficulty: {
-                            rate: 90,
-                            props: ''
-                        },
-                    }
-                },
-                {
-                    id: 'oldur',
-                    name: 'Oldur',
-                    type: 'support',
-                    status: {
-                        damages: {
-                            rate: 60,
-                            props: 'Burst, constant damage'
-                        },
-                        survivability: {
-                            rate: 60,
-                            props: 'Absorb Shield, iframe, self heal'
-                        },
-                        protection: {
-                            rate: 50,
-                            props: 'Heal, iframe'
-                        },
-                        control: {
-                            rate: 40,
-                            props: 'AOE Petrify, AOE stun, push, slow, projectile reflect'
-                        },
-                        difficulty: {
-                            rate: 50,
-                            props: ''
-                        },
-                    }
-                },
-                {
-                    id: 'pearl',
-                    name: 'Pearl',
-                    type: 'support',
-                    status: {
-                        damages: {
-                            rate: 40,
-                            props: 'Burst, constant damage'
-                        },
-                        survivability: {
-                            rate: 100,
-                            props: 'iframe, self heal, self shield, counter, dispel'
-                        },
-                        protection: {
-                            rate: 80,
-                            props: 'Heal, shield, dispel'
-                        },
-                        control: {
-                            rate: 60,
-                            props: 'Silence, push, projectile slow'
-                        },
-                        difficulty: {
-                            rate: 50,
-                            props: ''
-                        },
-                    }
-                },
-                {
-                    id: 'pestilus',
-                    name: 'Pestilus',
-                    type: 'support',
-                    status: {
-                        damages: {
-                            rate: 30,
-                            props: 'Poke, burst'
-                        },
-                        survivability: {
-                            rate: 70,
-                            props: 'iframe, little self heal, shield'
-                        },
-                        protection: {
-                            rate: 90,
-                            props: 'Heal, shield, damage reduction'
-                        },
-                        control: {
-                            rate: 70,
-                            props: 'Panics, brain bug, root, invocation block'
-                        },
-                        difficulty: {
-                            rate: 80,
-                            props: ''
-                        },
-                    }
-                },
-                {
                     id: 'poloma',
                     name: 'Poloma',
                     slogan: 'The Pyschopomp',
                     type: 'support',
+                    quotes: [
+                        {
+                            content: 'Godof is well known in the EU Battlerite scene as one of the best healer players but is not limited to only the healer role. He has played in many tournaments and currently resides in team “Impact” alongside “vAgue57” and “Dizzlarn”. He has reached Grand Champion every season on the ladder and managed to attain 1st place in 3v3 teams during season 1. He has won 575 games with Oldur with only 165 losses.',
+                            auth: 'Godof'
+                        }
+                    ],
+                    pros: [
+                        'Good supporting kit',
+                        'Very good ultimate',
+                        'Good damage with Pixie (R)'
+                    ],
+                    cons: [
+                        'Weak without Otherside',
+                        'No burst healing'
+                    ],
                     status: {
                         damages: {
                             rate: 30,
@@ -756,258 +368,61 @@ export default class Champion extends Component {
                         },
                     ],
                     synergy: []
-                },
-                {
-                    id: 'raigon',
-                    name: 'Raigon',
-                    type: 'melee',
-                    status: {
-                        damages: {
-                            rate: 80,
-                            props: 'Constant damage, burst'
-                        },
-                        survivability: {
-                            rate: 70,
-                            props: 'Air time, reflect shield, dashes, lifesteal, iframe'
-                        },
-                        protection: {
-                            rate: 0,
-                            props: ''
-                        },
-                        control: {
-                            rate: 50,
-                            props: 'Bump, slow, incapacitate, stun'
-                        },
-                        difficulty: {
-                            rate: 30,
-                            props: ''
-                        },
-                    }
-                },
-                {
-                    id: 'rook',
-                    name: 'Rook',
-                    type: 'melee',
-                    status: {
-                        damages: {
-                            rate: 60,
-                            props: 'Poke, burst'
-                        },
-                        survivability: {
-                            rate: 60,
-                            props: 'Counter, invulnerability, iframe, self-healing, haste'
-                        },
-                        protection: {
-                            rate: 0,
-                            props: ''
-                        },
-                        control: {
-                            rate: 60,
-                            props: 'AOE incapacitate, armor break, slow, stun, push'
-                        },
-                        difficulty: {
-                            rate: 30,
-                            props: ''
-                        },
-                    }
-                },
-                {
-                    id: 'ruhkaan',
-                    name: 'Ruh Kaan',
-                    type: 'melee',
-                    status: {
-                        damages: {
-                            rate: 60,
-                            props: 'Poke, Burst'
-                        },
-                        survivability: {
-                            rate: 80,
-                            props: 'AOE lifesteal, lifesteal, absorb shield, iframe'
-                        },
-                        protection: {
-                            rate: 20,
-                            props: 'Grab, heal'
-                        },
-                        control: {
-                            rate: 60,
-                            props: 'Silence, grab, slow'
-                        },
-                        difficulty: {
-                            rate: 40,
-                            props: ''
-                        },
-                    }
-                },
-                {
-                    id: 'shifu',
-                    name: 'Shifu',
-                    type: 'melee',
-                    status: {
-                        damages: {
-                            rate: 80,
-                            props: 'Burst, constant damage'
-                        },
-                        survivability: {
-                            rate: 70,
-                            props: 'Immaterial, counter, lifesteal, iframe, shield, haste'
-                        },
-                        protection: {
-                            rate: 0,
-                            props: ''
-                        },
-                        control: {
-                            rate: 20,
-                            props: 'AOE incapacitate, grab'
-                        },
-                        difficulty: {
-                            rate: 60,
-                            props: ''
-                        },
-                    }
-                },
-                {
-                    id: 'sirius',
-                    name: 'Sirius',
-                    type: 'support',
-                    status: {
-                        damages: {
-                            rate: 60,
-                            props: 'Burst'
-                        },
-                        survivability: {
-                            rate: 60,
-                            props: 'Iframe, counter, dash, AOE heal'
-                        },
-                        protection: {
-                            rate: 50,
-                            props: 'AOE Heal'
-                        },
-                        control: {
-                            rate: 70,
-                            props: 'AOE Petrify, weaken, slow'
-                        },
-                        difficulty: {
-                            rate: 40,
-                            props: ''
-                        },
-                    }
-                },
-                {
-                    id: 'taya',
-                    name: 'Taya',
-                    type: 'ranged',
-                    status: {
-                        damages: {
-                            rate: 90,
-                            props: 'Constant damage, burst'
-                        },
-                        survivability: {
-                            rate: 60,
-                            props: 'Haste, iframe, dash, shield'
-                        },
-                        protection: {
-                            rate: 60,
-                            props: 'iframe, haste'
-                        },
-                        control: {
-                            rate: 30,
-                            props: 'Stun, pull, push'
-                        },
-                        difficulty: {
-                            rate: 80,
-                            props: ''
-                        },
-                    }
-                },
-                {
-                    id: 'thorn',
-                    name: 'Thorn',
-                    type: 'melee',
-                    status: {
-                        damages: {
-                            rate: 30,
-                            props: 'Poke'
-                        },
-                        survivability: {
-                            rate: 60,
-                            props: 'Lifesteal, self-healing, iframe, invulnerability shield'
-                        },
-                        protection: {
-                            rate: 50,
-                            props: 'iframe, repositioning, invulnerability shield'
-                        },
-                        control: {
-                            rate: 100,
-                            props: 'AOE grab, stun, entangled, slow, block projectiles, reflect damages, damage reduction'
-                        },
-                        difficulty: {
-                            rate: 60,
-                            props: ''
-                        },
-                    }
-                },
-                {
-                    id: 'varesh',
-                    name: 'Varesh',
-                    type: 'ranged',
-                    status: {
-                        damages: {
-                            rate: 100,
-                            props: 'Poke, constant damage, burst'
-                        },
-                        survivability: {
-                            rate: 50,
-                            props: 'Lifesteal, shield, counter, iframe'
-                        },
-                        protection: {
-                            rate: 10,
-                            props: 'Shield'
-                        },
-                        control: {
-                            rate: 40,
-                            props: 'Silence, slow, push, reduce damage and healing'
-                        },
-                        difficulty: {
-                            rate: 90,
-                            props: ''
-                        },
-                    }
-                },
-                {
-                    id: 'zander',
-                    name: 'Zander',
-                    type: 'support',
-                    status: {
-                        damages: {
-                            rate: 50,
-                            props: 'Constant damage, Poke, burst'
-                        },
-                        survivability: {
-                            rate: 90,
-                            props: 'Self-healing, iframes, dispels, movement speed'
-                        },
-                        protection: {
-                            rate: 60,
-                            props: 'Healing, AOE healing, AOE dispel, iframes'
-                        },
-                        control: {
-                            rate: 60,
-                            props: 'AOE sheep, increases targets damages, push, invocation block'
-                        },
-                        difficulty: {
-                            rate: 80,
-                            props: ''
-                        },
-                    }
                 }
             ],
+            championImg: '',
+            filteredChampions:'',
+            champion:'',
+            data: '',
             spellSelected: 0,
             champtionId: this.props.location.pathname.split('/champions/')[1],
         }
+        this.getImage('icon')
+    }
+
+    getImage(image) {
+        firebase.storage().ref().child(`champions/${this.state.champtionId.toLowerCase()}/${image}.png`).getDownloadURL().then(url => {
+            this.state.championImg = url;
+            this.setState(this.state)
+        })
+    }
+
+    // Update data to db.
+    updateData() {
+        // ref like: 'battle-rite/champions/jade
+        firebase.database().ref('battle-rite/${obj}').set({});
+    }
+
+    componentDidMount() {
+        firebase.database().ref('battle-rite/champions')
+            .once('value').then(data => {
+            console.log(data.val())
+            this.state.champions2 = data.val()
+            this.setState(this.state)
+            this.state.champion = this.state.champions.filter(
+                champ => {
+                    return champ.id.toLowerCase().indexOf(this.state.champtionId) !== -1
+                }
+            )[0]
+            this.setState(this.state)
+            this.state.spellSelected = this.state.champion.spells.filter(
+                spell => {
+                    return spell.id === this.state.spellSelected
+                }
+            )[0]
+            this.setState(this.state)
+            this.state.filteredChampions = this.state.champions.filter(
+                data => {
+                    return data.type.indexOf(this.state.champion.type) !== -1 &&
+                        data.id.indexOf(this.state.champion.id) === -1
+                }
+            )
+            this.setState(this.state)
+        })
     }
 
     render() {
-        let champion = this.state.champions.filter(
+        /*let champion = this.state.champions.filter(
             champ => {
                 return champ.id.toLowerCase().indexOf(this.state.champtionId) !== -1
             }
@@ -1022,20 +437,20 @@ export default class Champion extends Component {
                 return data.type.indexOf(champion.type) !== -1 &&
                     data.id.indexOf(champion.id) === -1
             }
-        )
+        )*/
+
         return (
             <div className="champion">
                 <div className="video-container d-lg-block d-none">
                     <video autoPlay="true" loop
-                           src={`../../../media/champions/${champion.name.toLowerCase()}/video.mp4`}
+                           src={`../../../media/champions/${this.state.champion.name.toLowerCase()}/video.mp4`}
                            className="champion__video"/>
                 </div>
                 <div className="container py-5">
                     <div className="row d-lg-none d-block">
                         <div className="col-6 offset-3">
-                            <img
-                                src={`../../../media/champions/${champion.name.toLowerCase()}/icon.png`}
-                                className="w-100 border" alt={`${champion.name.toLowerCase()}-champion`}/>
+                            <img src={this.state.championImg}
+                                 className="w-100 border" alt={`${this.state.champion.name.toLowerCase()}-champion`}/>
                         </div>
                     </div>
                     <div className="row">
@@ -1054,18 +469,18 @@ export default class Champion extends Component {
                                     <span className="nav-link px-0 text-white">-</span>
                                 </li>
                                 <li className="nav-item">
-                                    <span className="nav-link text-white">{champion.name}</span>
+                                    <span className="nav-link text-white">{this.state.champion.name}</span>
                                 </li>
                             </ul>
                             <div
                                 className="text-uppercase h3 align-items-center justify-content-lg-start justify-content-center d-flex font-weight-light">
-                                <i className={`fa fa-4x fa-${champion.type}`}/> {champion.type}
+                                <i className={`fa fa-4x fa-${this.state.champion.type}`}/> {this.state.champion.type}
                             </div>
                             <h1 className="display-4 text-center text-uppercase text-dark bg-light">
-                                {champion.name}
+                                {this.state.champion.name}
                             </h1>
                             <h6 className="text-center text-uppercase py-1 w-75 mx-auto text-dark bg-light">
-                                {champion.slogan}
+                                {this.state.champion.slogan}
                             </h6>
                         </div>
                         <div className="col-lg-6 offset-lg-2 pt-lg-0 pt-5">
@@ -1076,16 +491,16 @@ export default class Champion extends Component {
                                             Damages
                                         </h3>
                                         <p className="text-uppercase mb-0">
-                                            {champion.status.damages.props}
+                                            {this.state.champion.status.damages.props}
                                         </p>
                                     </div>
                                     <div>
-                                        <h1 className="mb-0 font-weight-bold">{champion.status.damages.rate}%</h1>
+                                        <h1 className="mb-0 font-weight-bold">{this.state.champion.status.damages.rate}%</h1>
                                     </div>
                                 </div>
                                 <div className="progress status-bar mt-2 rounded-0">
                                     <div className="progress-bar bg-light rounded-0" role="progressbar"
-                                         style={{width: `${champion.status.damages.rate}%`}}
+                                         style={{width: `${this.state.champion.status.damages.rate}%`}}
                                          aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"/>
                                 </div>
                             </div>
@@ -1097,16 +512,16 @@ export default class Champion extends Component {
                                             Survivability
                                         </h3>
                                         <p className="text-uppercase mb-0">
-                                            {champion.status.survivability.props}
+                                            {this.state.champion.status.survivability.props}
                                         </p>
                                     </div>
                                     <div>
-                                        <h1 className="mb-0 font-weight-bold">{champion.status.survivability.rate}%</h1>
+                                        <h1 className="mb-0 font-weight-bold">{this.state.champion.status.survivability.rate}%</h1>
                                     </div>
                                 </div>
                                 <div className="progress status-bar mt-2 rounded-0">
                                     <div className="progress-bar bg-light rounded-0" role="progressbar"
-                                         style={{width: `${champion.status.survivability.rate}%`}}
+                                         style={{width: `${this.state.champion.status.survivability.rate}%`}}
                                          aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"/>
                                 </div>
                             </div>
@@ -1118,16 +533,16 @@ export default class Champion extends Component {
                                             Protection
                                         </h3>
                                         <p className="text-uppercase mb-0">
-                                            {champion.status.protection.props}
+                                            {this.state.champion.status.protection.props}
                                         </p>
                                     </div>
                                     <div>
-                                        <h1 className="mb-0 font-weight-bold">{champion.status.protection.rate}%</h1>
+                                        <h1 className="mb-0 font-weight-bold">{this.state.champion.status.protection.rate}%</h1>
                                     </div>
                                 </div>
                                 <div className="progress status-bar mt-2 rounded-0">
                                     <div className="progress-bar bg-light rounded-0" role="progressbar"
-                                         style={{width: `${champion.status.protection.rate}%`}}
+                                         style={{width: `${this.state.champion.status.protection.rate}%`}}
                                          aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"/>
                                 </div>
                             </div>
@@ -1139,16 +554,16 @@ export default class Champion extends Component {
                                             Control
                                         </h3>
                                         <p className="text-uppercase mb-0">
-                                            {champion.status.control.props}
+                                            {this.state.champion.status.control.props}
                                         </p>
                                     </div>
                                     <div>
-                                        <h1 className="mb-0 font-weight-bold">{champion.status.control.rate}%</h1>
+                                        <h1 className="mb-0 font-weight-bold">{this.state.champion.status.control.rate}%</h1>
                                     </div>
                                 </div>
                                 <div className="progress status-bar mt-2 rounded-0">
                                     <div className="progress-bar bg-light rounded-0" role="progressbar"
-                                         style={{width: `${champion.status.control.rate}%`}}
+                                         style={{width: `${this.state.champion.status.control.rate}%`}}
                                          aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"/>
                                 </div>
                             </div>
@@ -1160,16 +575,16 @@ export default class Champion extends Component {
                                             Difficulty
                                         </h3>
                                         <p className="text-uppercase mb-0">
-                                            {champion.status.difficulty.props}
+                                            {this.state.champion.status.difficulty.props}
                                         </p>
                                     </div>
                                     <div>
-                                        <h1 className="mb-0 font-weight-bold">{champion.status.difficulty.rate}%</h1>
+                                        <h1 className="mb-0 font-weight-bold">{this.state.champion.status.difficulty.rate}%</h1>
                                     </div>
                                 </div>
                                 <div className="progress status-bar mt-2 rounded-0">
                                     <div className="progress-bar bg-light rounded-0" role="progressbar"
-                                         style={{width: `${champion.status.difficulty.rate}%`}}
+                                         style={{width: `${this.state.champion.status.difficulty.rate}%`}}
                                          aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"/>
                                 </div>
                             </div>
@@ -1182,24 +597,16 @@ export default class Champion extends Component {
                             <div className="container">
                                 <div className="row">
                                     <div className="col-12">
-                                        <blockquote className="blockquote p-md-5">
-                                            <p className="mb-0">
-                                                Godof is well known in the EU Battlerite scene as one of the best healer
-                                                players but
-                                                is not limited to only the healer role. He has played in many
-                                                tournaments and
-                                                currently resides in team “Impact” alongside “vAgue57” and “Dizzlarn”.
-                                                He has
-                                                reached Grand Champion every season on the ladder and managed to attain
-                                                1st place in
-                                                3v3 teams during season 1. He has won 575 games with Oldur with only 165
-                                                losses.
-                                            </p>
-                                            <footer className="blockquote-footer mt-4 d-flex">
-                                                <h5 className="font-weight-bold">— Godof</h5> <i
-                                                className="fa fa-battlerite ml-2 fa-2x" aria-hidden="true"/>
-                                            </footer>
-                                        </blockquote>
+                                        {this.state.champion.quotes.map((data, index) => {
+                                            return <blockquote className="blockquote p-md-5" key={index}>
+                                                <p className="mb-0 text-capitalize">{data.content}</p>
+                                                <footer className="blockquote-footer mt-4 d-flex">
+                                                    <h5 className="font-weight-bold text-capitalize">— {data.auth}</h5>
+                                                    <i
+                                                        className="fa fa-battlerite ml-2 fa-2x" aria-hidden="true"/>
+                                                </footer>
+                                            </blockquote>
+                                        })}
                                     </div>
                                 </div>
                             </div>
@@ -1218,31 +625,27 @@ export default class Champion extends Component {
                     <div className="container">
                         <div className="row">
                             <div className="col-lg-6">
-                                <h3 className="font-weight-bold text-uppercase">Poloma</h3>
-                                <h1 className="display-4 text-uppercase">The Psychopomp</h1>
+                                <h3 className="font-weight-bold text-uppercase">{this.state.champion.name}</h3>
+                                <h1 className="display-4 text-uppercase">{this.state.champion.slogan}</h1>
                             </div>
                             <div className="col-lg-6">
                                 <div className="row">
                                     <div className="col-lg-6">
                                         <h3 className="text-uppercase">Pros</h3>
-                                        <div className="px-4 py-2 mb-3 bg-success">
-                                            Good supporting kit
-                                        </div>
-                                        <div className="px-4 py-2 mb-3 bg-success">
-                                            Very good ultimate
-                                        </div>
-                                        <div className="px-4 py-2 mb-3 bg-success">
-                                            Good damage with Pixie (R)
-                                        </div>
+                                        {this.state.champion.pros.map((data, index) => {
+                                            return <div className="px-4 py-2 mb-3 bg-success" key={index}>
+                                                {data}
+                                            </div>
+                                        })}
                                     </div>
                                     <div className="col-lg-6">
                                         <h3 className="text-uppercase">Cons</h3>
-                                        <div className="px-4 py-2 mb-3 bg-danger">
-                                            Weak without Otherside
-                                        </div>
-                                        <div className="px-4 py-2 mb-3 bg-danger">
-                                            No burst healing
-                                        </div>
+                                        {this.state.champion.cons.map((data, index) => {
+                                            return <div className="px-4 py-2 mb-3 bg-danger" key={index}>
+                                                {data}
+                                            </div>
+                                        })}
+
                                     </div>
                                 </div>
                             </div>
@@ -1255,10 +658,11 @@ export default class Champion extends Component {
                                 <div className="row">
                                     <div className="col-xl-4 col-5">
                                         <div className="row">
-                                            {champion.spells.map((data, index) => {
+                                            {this.state.champion.spells.map((data, index) => {
                                                 return <div className="col-lg-4 col-sm-6 d-flex justify-content-center"
                                                             key={index}>
-                                                    <div style={{backgroundImage: `url('../../../media/champions/${champion.name.toLowerCase()}/spells/${data.keyword.toLowerCase()}.png')`}}
+                                                    <div
+                                                        style={{backgroundImage: `url('../../../media/champions/${this.state.champion.name.toLowerCase()}/spells/${data.keyword.toLowerCase()}.png')`}}
                                                         className={`spell ${index === this.state.spellSelected ? 'active' : ''}`}
                                                         onClick={() => this.setState({spellSelected: index})}>
                                                         <p className="text-uppercase text-white mb-0 text-center font-weight-bold">{data.keyword}</p>
@@ -1268,9 +672,9 @@ export default class Champion extends Component {
                                         </div>
                                     </div>
                                     <div className="col-xl-7 offset-xl-1 col-lg-6 offset-lg-1 col-6 offset-1">
-                                        <h3 className="text-uppercase">{spellSelected.name}</h3>
-                                        <h5 className="font-weight-light text-capitalize my-4">{spellSelected.description}</h5>
-                                        {spellSelected.details.map((data, index) => {
+                                        <h3 className="text-uppercase">{this.state.spellSelected.name}</h3>
+                                        <h5 className="font-weight-light text-capitalize my-4">{this.state.spellSelected.description}</h5>
+                                        {this.state.spellSelected.details.map((data, index) => {
                                             return <div className="d-flex justify-content-between" key={index}>
                                                 <h6>{data.name}</h6>
                                                 <h6>{data.prop}</h6>
@@ -1285,7 +689,7 @@ export default class Champion extends Component {
                 <div id="carouselBuilds" className="carousel slide" data-wrap="false">
                     <div className="carousel-inner px-sm-5">
                         <div className="container">
-                            {champion.builds.map((data, index) => {
+                            {this.state.champion.builds.map((data, index) => {
                                 return <div
                                     className={`carousel-item p-md-5 px-sm-0 p-4 ${index === 0 ? 'active' : ''}`}
                                     key={index}>
@@ -1301,9 +705,10 @@ export default class Champion extends Component {
                                                 <div
                                                     className={`card__build bg-dark2 card__build--${data.type.toLowerCase()} mb-3`}>
                                                     <div className="d-flex">
-                                                        <img src={`../../../media/champions/${champion.name.toLowerCase()}/spells/${data.spell.toLowerCase()}.png`}
-                                                             className={`card__img card__img--${data.type.toLowerCase()}`}
-                                                             alt={`${data.name}-card`}/>
+                                                        <img
+                                                            src={`../../../media/champions/${this.state.champion.name.toLowerCase()}/spells/${data.spell.toLowerCase()}.png`}
+                                                            className={`card__img card__img--${data.type.toLowerCase()}`}
+                                                            alt={`${data.name}-card`}/>
                                                         <div>
                                                             <small>{data.type}</small>
                                                             <h4 className="text-uppercase mb-4">{data.name}</h4>
@@ -1334,7 +739,7 @@ export default class Champion extends Component {
                                 <h1 className="display-4 text-uppercase mb-5">Basic guide</h1>
                                 <h4 className="font-weight-bold mb-3 text-uppercase">Beginner tips</h4>
                             </div>
-                            {champion.beginnerTips.map((data, index) => {
+                            {this.state.champion.beginnerTips.map((data, index) => {
                                 return <div className="col-sm-6" key={index}>
                                     <p className="font-weight-light">{data}</p>
                                 </div>
@@ -1348,7 +753,7 @@ export default class Champion extends Component {
                             <div className="col-12">
                                 <h1 className="text-uppercase mb-5 display-4">Mastering guide</h1>
                             </div>
-                            {champion.masteringTips.map((data, index) => {
+                            {this.state.champion.masteringTips.map((data, index) => {
                                 return <div className="col-sm-6" key={index}>
                                     <h4 className="font-weight-bold mb-2 text-uppercase">
                                         <i className={`fa fa-2x fa-${data.type}`}/>
@@ -1362,17 +767,18 @@ export default class Champion extends Component {
                 </div>
                 <div className="bg-black py-5">
                     <div className="container">
-                        {champion.synergy.length !== 0 ?
-                        <div className="row mb-5">
-                            <div className="col-12">
-                                <h1 className="display-4 mb-3 text-uppercase">Synergy & Match-up</h1>
-                                <div className="bg-light text-dark d-inline-block px-2">
-                                    <small className="text-uppercase font-weight-bold">We are actually updating Synergy
-                                        and Match-ups.
-                                    </small>
+                        {this.state.champion.synergy.length !== 0 ?
+                            <div className="row mb-5">
+                                <div className="col-12">
+                                    <h1 className="display-4 mb-3 text-uppercase">Synergy & Match-up</h1>
+                                    <div className="bg-light text-dark d-inline-block px-2">
+                                        <small className="text-uppercase font-weight-bold">We are actually updating
+                                            Synergy
+                                            and Match-ups.
+                                        </small>
+                                    </div>
                                 </div>
-                            </div>
-                        </div> : ''
+                            </div> : ''
                         }
                         <div className="row">
                             <div className="col-6">
@@ -1384,7 +790,7 @@ export default class Champion extends Component {
                                 </Link>
                             </div>
                             <div className="col-6">
-                                <h3 className="text-uppercase mb-0">A video with {champion.name}</h3>
+                                <h3 className="text-uppercase mb-0">A video with {this.state.champion.name}</h3>
                                 <Link className="nav-link p-0" to="/videos">
                                     <p className="text-uppercase font-weight-bold text-secondary">
                                         Show all videos <i className="fa fa-myarrow-right"/>
@@ -1394,7 +800,7 @@ export default class Champion extends Component {
                         </div>
                         <div className="row">
                             <div className="col-6">
-                                {filteredChampions.map((data, index) => {
+                                {this.state.filteredChampions.map((data, index) => {
                                     return <Link className="guide__container"
                                                  to={`/champions/${data.name.toLowerCase().replace(/\s/g, '')}`}
                                                  key={index}>
@@ -1407,7 +813,7 @@ export default class Champion extends Component {
                             </div>
                             <div className="col-6">
                                 <div className="embed-responsive h-100">
-                                    <iframe className="embed-responsive-item"
+                                    <iframe className="embed-responsive-item" title={`${this.state.champion.name} video`}
                                             src="https://www.youtube.com/embed/W4nb08MuJ2Q?rel=0"/>
                                 </div>
                             </div>
