@@ -1,6 +1,14 @@
 .w-5 {
   width: 5% !important; }
 
+#carouselBuilds .carousel-item {
+  max-width: 1110px;
+  opacity: 1;
+  transition: opacity 0s; }
+#carouselBuilds .active.carousel-item-left,
+#carouselBuilds .active.carousel-item-right {
+  opacity: 0; }
+
 #carouselChampion {
   min-height: 300px; }
 

@@ -388,7 +388,9 @@ export default class Champion extends Component {
     // Update data to db.
     updateData() {
         // ref like: 'battle-rite/champions/jade
-        firebase.database().ref('battle-rite/${obj}').set({});
+        firebase.database().ref('battle-rite/champions/ashka').set({
+            name: 'ahmed'
+        });
     }
 
     componentDidMount() {
