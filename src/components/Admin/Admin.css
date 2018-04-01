@@ -1,15 +1,3 @@
-.bd-sidebar {
-  order: 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1); }
 
-@media (min-width: 1200px) {
-  .bd-sidebar {
-    flex: 0 1 320px; } }
-@media (min-width: 768px) {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 4rem;
-  z-index: 1000;
-  height: calc(100vh - 4rem); }
 
 /*# sourceMappingURL=Admin.css.map */

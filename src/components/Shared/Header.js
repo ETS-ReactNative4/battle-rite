@@ -18,10 +18,6 @@ export default class Header extends Component {
         this.setState({theme: theme})
     }
 
-    logout = () => {
-        firebase.auth().signOut()
-    }
-
     componentDidMount() {
         firebase.auth().onAuthStateChanged(firebaseUser => {
             if (firebaseUser) {
@@ -36,7 +32,7 @@ export default class Header extends Component {
         return (
             <div>
                 <nav
-                    className={`navbar navbar-expand-lg border-bottom navbar-${this.state.theme} bg-${this.state.theme}`}>
+                    className={`navbar navbar-expand-lg border-bottom border-secondary navbar-${this.state.theme} bg-${this.state.theme}`}>
                     <Link to='/' className="navbar-brand">BattleRite</Link>
                     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar"
                             aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,16 +64,16 @@ export default class Header extends Component {
                                 <NavLink className="nav-link text-uppercase"
                                          to="/contact">Contact</NavLink>
                             </li>
-                            {this.state.isAuthenticated?<li className="nav-item">
+                            {this.state.isAuthenticated ? <li className="nav-item">
                                 <NavLink className="nav-link text-uppercase"
-                                         to="/admin">Admin</NavLink>
-                            </li>:''}
+                                         to="/admin/champions">Admin</NavLink>
+                            </li> : ''}
                         </ul>
                         <div className="d-md-flex navbar-nav align-items-center d-none">
                             {this.state.isAuthenticated ?
-                                <NavLink to="#" className="nav-link text-uppercase"
-                                        onClick={this.logout}>Logout</NavLink> :
-                                <NavLink className="nav-link text-uppercase" to="/auth">Login</NavLink>}
+                                <NavLink to="/" className="nav-link text-uppercase"
+                                         onClick={logout}>Logout</NavLink> :
+                                <NavLink className="nav-link text-uppercase" to="/login">Login</NavLink>}
                             <div className="light-theme-box" onClick={() => this.switchTheme('light')}/>
                             <div className="dark-theme-box" onClick={() => this.switchTheme('dark')}/>
                         </div>
@@ -86,4 +82,8 @@ export default class Header extends Component {
             </div>
         )
     }
+}
+
+const logout = () => {
+    firebase.auth().signOut()
 }
