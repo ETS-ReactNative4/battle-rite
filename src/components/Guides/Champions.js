@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
-import {Link} from '../../../node_modules/react-router-dom/umd/react-router-dom.min.js'
+import {Link} from '../../../node_modules/react-router-dom/umd/react-router-dom.min'
 
-import * as firebase from 'firebase';
+import * as firebase from 'firebase'
 
 // CSS
 import './Champions.min.css'
@@ -380,8 +380,7 @@ export default class Champion extends Component {
 
     getImage(image) {
         firebase.storage().ref().child(`champions/${this.state.champtionId.toLowerCase()}/${image}.png`).getDownloadURL().then(url => {
-            this.state.championImg = url;
-            this.setState(this.state)
+            this.setState({championImg: url})
         })
     }
 
