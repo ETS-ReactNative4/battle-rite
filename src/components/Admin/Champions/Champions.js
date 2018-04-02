@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 import {NavLink} from '../../../../node_modules/react-router-dom/umd/react-router-dom.min'
 
+import * as firebase from 'firebase'
+
 export default class Champions extends Component {
     constructor() {
         super()
@@ -41,6 +43,9 @@ export default class Champions extends Component {
             tempMasteringGuideDescription: '',
             tempBasicGuideTitle: '',
             tempBasicGuideDescription: '',
+            progressbarIcon: 0,
+            progressbarAvatar: 0,
+            progressbarVideo: 0,
         }
     }
 
@@ -89,6 +94,47 @@ export default class Champions extends Component {
                 basicGuide
             })
         }
+        const uploadImage = (event, type) => {
+            // Get file
+            let file = event.target.files[0]
+
+            // Create a storage ref
+            let storgeRef = firebase.storage().ref(`champions/${this.state.name ? this.state.name : 'none'}/${type}`)
+
+            // Upload file
+            let task = storgeRef.put(file)
+            let self = this
+
+            // Update progress bar
+            task.on('state_changed',
+
+                function progress(snapshot) {
+                    let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                    switch (type) {
+                        case 'icon':
+                            self.setState({progressbarIcon: percentage})
+                            break
+                        case 'avatar':
+                            self.setState({progressbarAvatar: percentage})
+                            break
+                        case 'video':
+                            self.setState({progressbarVideo: percentage})
+                            break
+                        default:
+                            break
+                    }
+                }
+
+                /*function error(err) {
+
+                },*/
+
+                /*function complete() {
+
+                },*/
+            )
+        }
+
         const saveChampion = () => {
             console.log(this.state)
         }
@@ -114,7 +160,7 @@ export default class Champions extends Component {
                                     Type</label>
                                 <div className="btn-group w-100">
                                     <button type="button" id="champType"
-                                            className="btn btn-block border btn-light dropdown-toggle"
+                                            className="btn btn-block rounded border btn-light dropdown-toggle"
                                             data-toggle="dropdown"
                                             aria-haspopup="true" aria-expanded="false">
                                         {this.state.type}
@@ -138,10 +184,67 @@ export default class Champions extends Component {
                                 <div className="form-group">
                                     <label htmlFor="champSolgan">
                                         <small className="text-danger mr-1">*</small>
-                                        Solgan</label>
+                                        Slogan</label>
                                     <input type="text" id="champSolgan" value={this.state.slogan}
                                            onChange={e => this.setState({slogan: e.target.value})}
                                            className="form-control" placeholder="Champion slogan"/>
+                                </div>
+                            </div>
+                            <div className="col-6">
+                                <label htmlFor="champUploadIcon"><span className="text-danger mr-1">*</span>Icon</label>
+                                <div className="input-group">
+                                    <div className="custom-file">
+                                        <input type="file" className="custom-file-input"
+                                               onChange={e => uploadImage(e, 'icon')}
+                                               id="champUploadIcon"/>
+                                        <label className="custom-file-label" htmlFor="champUploadIcon">Upload champion
+                                            icon</label>
+                                    </div>
+                                </div>
+                                <div className="progress bg-transparent h-25 mb-3 rounded-0">
+                                    <div
+                                        className="progress-bar h-25 progress-bar-striped progress-bar-animated rounded-0"
+                                        role="progressbar" style={{width: `${this.state.progressbarIcon}%`}}
+                                        aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-6">
+                                <label htmlFor="champUploadIcon"><span
+                                    className="text-danger mr-1">*</span>Video</label>
+                                <div className="input-group">
+                                    <div className="custom-file">
+                                        <input type="file" className="custom-file-input"
+                                               onChange={e => uploadImage(e, 'video')}
+                                               id="champUploadVideo"/>
+                                        <label className="custom-file-label" htmlFor="champUploadVideo">Upload champion
+                                            video</label>
+                                    </div>
+                                </div>
+                                <div className="progress bg-transparent h-25 mb-3 rounded-0">
+                                    <div
+                                        className="progress-bar h-25 progress-bar-striped progress-bar-animated rounded-0"
+                                        role="progressbar" style={{width: `${this.state.progressbarVideo}%`}}
+                                        aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"/>
+                                </div>
+                            </div>
+                            <div className="col-6">
+                                <label htmlFor="champUploadIcon"><span className="text-danger mr-1">*</span>Avatar</label>
+                                <div className="input-group">
+                                    <div className="custom-file">
+                                        <input type="file" className="custom-file-input"
+                                               onChange={e => uploadImage(e, 'avatar')}
+                                               id="champUploadAvatar"/>
+                                        <label className="custom-file-label" htmlFor="champUploadAvatar">Upload champion
+                                            avatar</label>
+                                    </div>
+                                </div>
+                                <div className="progress bg-transparent h-25 mb-3 rounded-0">
+                                    <div
+                                        className="progress-bar h-25 progress-bar-striped progress-bar-animated rounded-0"
+                                        role="progressbar" style={{width: `${this.state.progressbarAvatar}%`}}
+                                        aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"/>
                                 </div>
                             </div>
                         </div>
@@ -158,7 +261,7 @@ export default class Champions extends Component {
                                                    className="form-control"
                                                    placeholder="Pros"/>
                                             <div className="input-group-append">
-                                                <button className="btn font-weight-bold input-group-text"
+                                                <button className="btn font-weight-bold rounded-right input-group-text"
                                                         onClick={setPros}>+
                                                 </button>
                                             </div>
@@ -211,7 +314,7 @@ export default class Champions extends Component {
                                                    className="form-control"
                                                    placeholder="Cons"/>
                                             <div className="input-group-append">
-                                                <button className="btn font-weight-bold input-group-text"
+                                                <button className="btn font-weight-bold rounded-right input-group-text"
                                                         onClick={setCons}>+
                                                 </button>
                                             </div>
@@ -401,9 +504,10 @@ export default class Champions extends Component {
                                     </div> : ''}
                             </div>
                         </div>
-                        <div className="row mt-5">
+                        <div className="row mt-4">
                             <div className="col-12">
                                 <div className="p-4 rounded border border-secondary text-dark bg-light">
+                                    <h5 className="mb-3">Status</h5>
                                     <nav>
                                         <div className="nav nav-tabs" id="nav-tab" role="tablist">
                                             <NavLink className="nav-item nav-link text-dark active"
@@ -413,7 +517,6 @@ export default class Champions extends Component {
                                                      aria-selected="true">
                                                 Damages
                                             </NavLink>
-
                                             <NavLink className="nav-item nav-link text-dark"
                                                      id="status-survivability-tab"
                                                      data-toggle="tab"
@@ -422,21 +525,18 @@ export default class Champions extends Component {
                                                      aria-selected="true">
                                                 Survivability
                                             </NavLink>
-
                                             <NavLink className="nav-item nav-link text-dark" id="status-protection-tab"
                                                      data-toggle="tab"
                                                      to="#protection-nav" role="tab" aria-controls="protection-nav"
                                                      aria-selected="true">
                                                 Protection
                                             </NavLink>
-
                                             <NavLink className="nav-item nav-link text-dark" id="status-control-tab"
                                                      data-toggle="tab"
                                                      to="#control-nav" role="tab" aria-controls="control-nav"
                                                      aria-selected="true">
                                                 Control
                                             </NavLink>
-
                                             <NavLink className="nav-item nav-link text-dark" id="status-difficulty-tab"
                                                      data-toggle="tab"
                                                      to="#difficulty-nav" role="tab" aria-controls="difficulty-nav"
