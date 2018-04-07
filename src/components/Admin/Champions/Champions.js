@@ -3,6 +3,8 @@ import {NavLink} from '../../../../node_modules/react-router-dom/umd/react-route
 
 import * as firebase from 'firebase'
 
+import './champion.min.css'
+
 export default class Champions extends Component {
     constructor() {
         super()
@@ -37,12 +39,26 @@ export default class Champions extends Component {
                     rate: 0
                 },
             },
+            combos: [
+                {
+                    video: 0,
+                    difficulty: 0,
+                    skillCombo: '',
+                    description: ''
+                },
+            ],
             tempPros: '',
             tempCons: '',
             tempMasteringGuideTitle: '',
             tempMasteringGuideDescription: '',
             tempBasicGuideTitle: '',
             tempBasicGuideDescription: '',
+            tempCombos: {
+                video: 0,
+                difficulty: 0,
+                skillCombo: '',
+                description: ''
+            },
             progressbarIcon: 0,
             progressbarAvatar: 0,
             progressbarVideo: 0,
@@ -50,6 +66,8 @@ export default class Champions extends Component {
     }
 
     render() {
+
+        // Pros
         const setPros = () => {
             if (this.state.tempPros === '') return false
             let pros = this.state.pros
@@ -59,6 +77,8 @@ export default class Champions extends Component {
                 pros
             })
         }
+
+        // Cons
         const setCons = () => {
             if (this.state.tempCons === '') return false
             let cons = this.state.cons
@@ -68,6 +88,8 @@ export default class Champions extends Component {
                 cons
             })
         }
+
+        // Mastering guide
         const setMasteringGuide = () => {
             if (this.state.tempMasteringGuideTitle === '' && this.state.tempMasteringGuideDescription === '') return false
             let masteringGuide = this.state.masteringGuide
@@ -81,6 +103,8 @@ export default class Champions extends Component {
                 masteringGuide
             })
         }
+
+        // Basic guide
         const setBasicGuide = () => {
             if (this.state.tempBasicGuideTitle === '' && this.state.tempBasicGuideDescription === '') return false
             let basicGuide = this.state.basicGuide
@@ -94,20 +118,37 @@ export default class Champions extends Component {
                 basicGuide
             })
         }
-        const uploadImage = (event, type) => {
+
+        /**
+         *
+         * @param event For get obj file from the input
+         * @param type File extension like icon, video
+         * @param comboNumber Number combo 1 ~ unlimited
+         */
+        const uploadMedia = (event, type, comboNumber) => {
             // Get file
             let file = event.target.files[0]
 
             // Create a storage ref
-            let storgeRef = firebase.storage().ref(`champions/${this.state.name ? this.state.name : 'none'}/${type}`)
+            let storageRef = {}
+            console.log(comboNumber)
+            if (comboNumber !== undefined) {
+                storageRef = firebase.storage().ref(`champions/${this.state.name ? this.state.name : 'none'}/combos/${comboNumber}`)
+            } else {
+                storageRef = firebase.storage().ref(`champions/${this.state.name ? this.state.name : 'none'}/${type}`)
+            }
 
             // Upload file
-            let task = storgeRef.put(file)
+            let task = storageRef.put(file)
             let self = this
 
             // Update progress bar
             task.on('state_changed',
 
+                /**
+                 *
+                 * @param snapshot File obj when uploading
+                 */
                 function progress(snapshot) {
                     let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
                     switch (type) {
@@ -133,6 +174,37 @@ export default class Champions extends Component {
 
                 },*/
             )
+        }
+
+        // Combos
+        /**
+         *
+         * @param target For get obj file from the input || Value directly like difficulty rates
+         * @param obj State name using to know what is the state wanna edit
+         * @param num Number of cards meaning obj number
+         */
+        const setCombo = (target, obj, num) => {
+            let combos = this.state.combos
+            if (obj === 'difficulty') {
+                combos[num][obj] = target
+            } else {
+                combos[num][obj] = target.target.value
+            }
+            this.setState({combos})
+        }
+
+        const difficultyRate = e => {
+            let arr = document.getElementsByClassName('difficultyCircle')
+            for (let element of arr) {
+                element.classList.remove("difficultyActive")
+            }
+            e.target.classList.add("difficultyActive");
+        }
+
+        const addComboCard = () => {
+            let arr = this.state.combos
+            arr.push(this.state.tempCombos)
+            this.setState({combos: arr})
         }
 
         const saveChampion = () => {
@@ -195,7 +267,7 @@ export default class Champions extends Component {
                                 <div className="input-group">
                                     <div className="custom-file">
                                         <input type="file" className="custom-file-input"
-                                               onChange={e => uploadImage(e, 'icon')}
+                                               onChange={e => uploadMedia(e, 'icon')}
                                                id="champUploadIcon"/>
                                         <label className="custom-file-label" htmlFor="champUploadIcon">Upload champion
                                             icon</label>
@@ -216,7 +288,7 @@ export default class Champions extends Component {
                                 <div className="input-group">
                                     <div className="custom-file">
                                         <input type="file" className="custom-file-input"
-                                               onChange={e => uploadImage(e, 'video')}
+                                               onChange={e => uploadMedia(e, 'video')}
                                                id="champUploadVideo"/>
                                         <label className="custom-file-label" htmlFor="champUploadVideo">Upload champion
                                             video</label>
@@ -230,11 +302,12 @@ export default class Champions extends Component {
                                 </div>
                             </div>
                             <div className="col-6">
-                                <label htmlFor="champUploadIcon"><span className="text-danger mr-1">*</span>Avatar</label>
+                                <label htmlFor="champUploadIcon"><span
+                                    className="text-danger mr-1">*</span>Avatar</label>
                                 <div className="input-group">
                                     <div className="custom-file">
                                         <input type="file" className="custom-file-input"
-                                               onChange={e => uploadImage(e, 'avatar')}
+                                               onChange={e => uploadMedia(e, 'avatar')}
                                                id="champUploadAvatar"/>
                                         <label className="custom-file-label" htmlFor="champUploadAvatar">Upload champion
                                             avatar</label>
@@ -794,6 +867,95 @@ export default class Champions extends Component {
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div className="row mt-4">
+                            <div className="col-12">
+                                <h5 className="mb-0">Combos</h5>
+                            </div>
+                            {this.state.combos.map((data, key) => {
+                                return <div className="col-lg-6 mt-3" key={key}>
+                                    <div className="card border-light rounded bg-dark text-light">
+                                        {/*<img className="card-img-top" src="" alt="Card image cap"/>*/}
+                                        <div
+                                            className="bg-light d-flex justify-content-center text-dark align-items-center"
+                                            style={{height: '11em'}}
+                                            onClick={() => document.getElementById("combosFile").click()}>
+                                            <div
+                                                className="d-flex justify-content-center flex-column align-items-center">
+                                                <span className="font-weight-bold text-uppercase">No video</span>
+                                                <small>Click to upload one...</small>
+                                            </div>
+                                        </div>
+                                        <input type="file" id="combosFile" onChange={e => uploadMedia(e, 'video', key)}
+                                               className="d-none"/>
+                                        <div className="card-body pb-0">
+                                            <div className="d-flex">
+                                                <label htmlFor="">Difficulty:</label>
+                                                <div className="difficulty d-flex align-items-center">
+                                                    <div className="difficultyBox">
+                                                        <input type="radio" name={`difficukty-${key}`}/><span
+                                                        onClick={e => {
+                                                            difficultyRate(e),
+                                                                setCombo(5, 'difficulty', key)
+                                                        }
+                                                        } className='difficultyCircle'/>
+                                                    </div>
+                                                    <div className="difficultyBox">
+                                                        <input type="radio" name={`difficukty-${key}`}/><span
+                                                        onClick={e => {
+                                                            difficultyRate(e),
+                                                                setCombo(4, 'difficulty', key)
+                                                        }
+                                                        } className='difficultyCircle'/>
+                                                    </div>
+                                                    <div className="difficultyBox">
+                                                        <input type="radio" name={`difficukty-${key}`}/><span
+                                                        onClick={e => {
+                                                            difficultyRate(e),
+                                                                setCombo(3, 'difficulty', key)
+                                                        }
+                                                        } className='difficultyCircle'/>
+                                                    </div>
+                                                    <div className="difficultyBox">
+                                                        <input type="radio" name={`difficukty-${key}`}/><span
+                                                        onClick={e => {
+                                                            difficultyRate(e),
+                                                                setCombo(2, 'difficulty', key)
+                                                        }
+                                                        } className='difficultyCircle'/>
+                                                    </div>
+                                                    <div className="difficultyBox">
+                                                        <input type="radio" name={`difficukty-${key}`}/><span
+                                                        onClick={e => {
+                                                            difficultyRate(e),
+                                                                setCombo(1, 'difficulty', key)
+                                                        }
+                                                        } className='difficultyCircle'/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="form-group">
+                                                <label htmlFor="champCombosSkillCombo">Skill Combo</label>
+                                                <input type="text" id="champCombosSkillCombo" className="form-control"
+                                                       onChange={e => setCombo(e, 'skillCombo', key)}
+                                                       value={this.state.combos[key].skillCombo}/>
+                                            </div>
+                                            <div className="form-group">
+                                                <label htmlFor="champCombosDescription">Description</label>
+                                                <textarea id="champCombosDescription" className="form-control" cols="30"
+                                                          rows="5" onChange={e => setCombo(e, 'description', key)}
+                                                          value={this.state.combos[key].description}/>
+                                            </div>
+
+                                        </div>
+                                        <div className="card-footer pt-0 d-flex">
+                                            <button className="btn bg-transparent ml-auto text-light"
+                                                    onClick={addComboCard}>Add another
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            })}
                         </div>
                         <div className="row mt-5">
                             <div className="col-12">
