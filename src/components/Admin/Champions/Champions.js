@@ -5,6 +5,9 @@ import * as firebase from 'firebase'
 
 import './champion.min.css'
 
+import uploadIcon from '../../../../src/images/icons/upload.svg'
+import playIcon from '../../../../src/images/icons/play.svg'
+
 export default class Champions extends Component {
     constructor() {
         super()
@@ -74,14 +77,46 @@ export default class Champions extends Component {
                     ]
                 }
             ],
+            battlerites: [
+                {
+                    name: '',
+                    description: '',
+                    img: '',
+                    keyword: '',
+                    type: ''
+                },
+                {
+                    name: '',
+                    description: '',
+                    img: '',
+                    keyword: '',
+                    type: ''
+                },
+            ],
+            quotes: [
+                {
+                    name: '',
+                    sound: ''
+                },
+            ],
+
+            battleriteTypes: [
+                'offense',
+                'survival',
+                'mixed',
+                'Control',
+                'utility',
+                'mobility',
+                'support',
+            ],
+
+            // Temp objects
             tempPros: '',
             tempCons: '',
             tempMasteringGuideTitle: '',
             tempMasteringGuideDescription: '',
             tempBasicGuideTitle: '',
             tempBasicGuideDescription: '',
-            tempComboProgressbar: [0],
-            tempSpellProgressbar: [0],
             tempCombos: {
                 video: '',
                 difficulty: 0,
@@ -104,9 +139,22 @@ export default class Champions extends Component {
                     },
                 ]
             },
+            tempBattlerites: {
+                name: '',
+                description: '',
+                img: '',
+                keyword: '',
+                type: ''
+            },
+
+            // Progress bars
             progressbarIcon: 0,
             progressbarAvatar: 0,
             progressbarVideo: 0,
+            tempComboProgressbar: [0],
+            tempSpellProgressbar: [0],
+            tempBattleriteProgressbar: [0],
+            tempQuotesProgressbar: [0],
         }
     }
 
@@ -228,6 +276,11 @@ export default class Champions extends Component {
                                 self.setState({progressbarVideo: percentage})
                             }
                             break
+                        case 'sound':
+                            let tempQuotesProgressbar = self.state.tempQuotesProgressbar
+                            tempQuotesProgressbar[num] = percentage
+                            self.setState(tempQuotesProgressbar)
+                            break
                         default:
                             break
                     }
@@ -248,16 +301,36 @@ export default class Champions extends Component {
                                 combos[num].video = task.snapshot.downloadURL
                                 self.setState({combos, tempComboProgressbar: tempComboProgressbar})
                                 break
-                            case 'icon': // Spells
-                                let tempSpellProgressbar = self.state.tempSpellProgressbar
-                                tempSpellProgressbar[num] = 0
+                            case 'icon': // Spells & battlerites
+                                if (typePath === '/spells') {
+                                    let tempSpellProgressbar = self.state.tempSpellProgressbar
+                                    tempSpellProgressbar[num] = 0
 
-                                let spells = self.state.spells
-                                spells[num].img = task.snapshot.downloadURL
-                                self.setState({spells, tempSpellProgressbar})
+                                    let spells = self.state.spells
+                                    spells[num].img = task.snapshot.downloadURL
+                                    self.setState({spells, tempSpellProgressbar})
 
-                                let spellIcon = document.getElementById(`spellIcon-${num}`).files[0].name
-                                document.getElementById(`spellIconLabel-${num}`).innerText = spellIcon
+                                    let spellIcon = document.getElementById(`spellIcon-${num}`).files[0].name
+                                    document.getElementById(`spellIconLabel-${num}`).innerText = spellIcon
+                                } else if (typePath === '/battlerites') {
+                                    let tempBattleriteProgressbar = self.state.tempBattleriteProgressbar
+                                    tempBattleriteProgressbar[num] = 0
+
+                                    let battlerites = self.state.battlerites
+                                    battlerites[num].img = task.snapshot.downloadURL
+                                    self.setState({battlerites, tempBattleriteProgressbar})
+
+                                    let battleriteIcon = document.getElementById(`battleriteIcon-${num}`).files[0].name
+                                    document.getElementById(`battleriteIconLabel-${num}`).innerText = battleriteIcon
+                                }
+                                break
+                            case 'sound': // Quotes
+                                let tempQuotesProgressbar = self.state.tempQuotesProgressbar
+                                tempQuotesProgressbar[num] = 0
+
+                                let quotes = self.state.quotes
+                                quotes[num].sound = task.snapshot.downloadURL
+                                self.setState({quotes, tempQuotesProgressbar})
                                 break
                             default:
                                 //
@@ -368,6 +441,57 @@ export default class Champions extends Component {
             this.setState({spells: arr})
         }
         /*** Spells ***/
+
+        /*** Battlerites ***/
+        /**
+         *
+         * @param event For get obj file from the input
+         * @param obj State name using to know what is the state wanna edit
+         * @param num Number of cards meaning obj number
+         */
+        const setBattlerite = (event, obj, num) => {
+            let battlerites = this.state.battlerites
+            if (obj === 'type') {
+                battlerites[num][obj] = event
+            } else {
+                battlerites[num][obj] = event.target.value
+            }
+            this.setState(battlerites)
+        }
+
+        const addBattlerite = () => {
+            let arr = this.state.battlerites
+            let tempBattlerites = Object.assign({}, this.state.tempBattlerites)
+            arr.push(tempBattlerites)
+            this.setState({battlerites: arr})
+        }
+        /*** Battlerites ***/
+
+        /*** Quotes ***/
+        /**
+         *
+         * @param event For get obj file from the input
+         * @param obj State name using to know what is the state wanna edit
+         * @param num Number of cards meaning obj number
+         */
+        const setQuote = (event, obj, num) => {
+            let quotes = this.state.quotes
+            quotes[num][obj] = event.target.value
+            this.setState(quotes)
+        }
+
+        const addQuoteSound = () => {
+            let quotes = this.state.quotes
+            quotes.push(
+                {
+                    name: '',
+                    sound: ''
+                }
+            )
+            this.setState(quotes)
+        }
+
+        /*** Quotes ***/
 
         const saveChampion = () => {
             console.log(this.state)
@@ -1158,6 +1282,153 @@ export default class Champions extends Component {
                                     </div>
                                 </div>
                             })}
+                        </div>
+                        <div className="row mt-4">
+                            <div className="col-12">
+                                <h5 className="mb-0">Battlerites</h5>
+                            </div>
+                            {this.state.battlerites.map((data, key) => {
+                                return <div className="col-6 mt-3" key={key}>
+                                    <div className="card border-light rounded bg-dark text-light">
+                                        <div className="card-body">
+                                            <div className="form-group">
+                                                <label htmlFor="battleriteName"><span
+                                                    className="text-danger mr-1">*</span>Name</label>
+                                                <input type="text" id="battleriteName" placeholder="Name..."
+                                                       value={data.name}
+                                                       onChange={e => setBattlerite(e, 'name', key)}
+                                                       className="form-control"/>
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-6">
+                                                    <div className="form-group">
+                                                        <label htmlFor="battleriteType"><span
+                                                            className="text-danger mr-1">*</span>Type</label>
+                                                        <button type="button" id="battleriteType"
+                                                                className="btn btn-block rounded border btn-light dropdown-toggle"
+                                                                data-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false">
+                                                            {data.type === '' ? this.state.battleriteTypes[0] : data.type}
+                                                        </button>
+                                                        <div className="dropdown-menu">
+                                                            {this.state.battleriteTypes.map((data, index) => {
+                                                                return <button className="dropdown-item text-capitalize"
+                                                                               onClick={() => setBattlerite(data, 'type', key)}
+                                                                               key={index}>{data}</button>
+                                                            })}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="col-6">
+                                                    <div className="form-group">
+                                                        <label htmlFor="battleriteKeyword"><span
+                                                            className="text-danger mr-1">*</span>keyword</label>
+                                                        <input type="text" id="battleriteKeyword" placeholder="Key..."
+                                                               value={data.keyword}
+                                                               onChange={e => setBattlerite(e, 'keyword', key)}
+                                                               className="form-control"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <label htmlFor="battleriteIcon"><span
+                                                    className="text-danger mr-1">*</span>Icon</label>
+                                                <div className="input-group">
+                                                    <div className="input-group-prepend">
+                                                        <Link
+                                                            to={data.img !== '' ? data.img : 'javascript:void(0)'}
+                                                            target="_blank">
+                                                            <button
+                                                                className={`btn btn-secondary rounded-left ${data.img !== '' ? '' : 'disabled'}`}
+                                                                type="button">
+                                                                Show
+                                                            </button>
+                                                        </Link>
+                                                    </div>
+                                                    <div className="custom-file">
+                                                        <input type="file" className="custom-file-input"
+                                                               id={`battleriteIcon-${key}`} accept="image/*"
+                                                               onChange={e => uploadMedia(e, 'icon', '/battlerites', key)}/>
+                                                        <label className="custom-file-label"
+                                                               id={`battleriteIconLabel-${key}`}
+                                                               htmlFor={`battleriteIcon-${key}`}>
+                                                            Upload battlerite icon</label>
+                                                    </div>
+                                                </div>
+                                                <div className="progress bg-transparent rounded-0">
+                                                    <div
+                                                        className="progress-bar progress-bar-animated rounded-0"
+                                                        role="progressbar"
+                                                        style={{
+                                                            height: '5px',
+                                                            width: `${this.state.tempBattleriteProgressbar[key]}%`
+                                                        }}
+                                                        aria-valuenow="25" aria-valuemin="0"
+                                                        aria-valuemax="100"/>
+                                                </div>
+                                            </div>
+                                            <div className="form-group">
+                                                <label htmlFor="battleriteDescription"><span
+                                                    className="text-danger mr-1">*</span>Description</label>
+                                                <textarea id="battleriteDescription" value={data.description}
+                                                          onChange={e => setBattlerite(e, 'description', key)}
+                                                          className="form-control"
+                                                          cols="30" rows="3"/>
+                                            </div>
+                                        </div>
+                                        <div className="card-footer pt-0 d-flex">
+                                            <button className="btn bg-transparent ml-auto text-light"
+                                                    onClick={addBattlerite}>Add another
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            })}
+                        </div>
+                        <div className="row mt-4">
+                            <div className="col-12">
+                                <h5 className="mb-0">Quotes</h5>
+                            </div>
+                            <div className="col-6 mt-3">
+                                <div className="card border-light rounded bg-dark text-light">
+                                    <div className="card-body">
+                                        {this.state.quotes.map((data, key) => {
+                                            return <div className="form-group" key={key}>
+                                                <div className="input-group">
+                                                    <input type="text" value={this.state.quotes[key].name}
+                                                           onChange={e => setQuote(e, 'name', key)}
+                                                           placeholder="Name..."
+                                                           className="form-control" id="quoteName"/>
+                                                    <div className="input-group-append">
+                                                        <Link
+                                                            to={data.sound !== '' ? data.sound : 'javascript:void(0)'}
+                                                            target="_blank">
+                                                            <button
+                                                                className={`btn ${data.sound !== '' ? '' : 'disabled'}`}
+                                                                type="button">
+                                                                <img src={playIcon} style={{width: '20px'}}
+                                                                     alt="Play icon"/>
+                                                            </button>
+                                                        </Link>
+                                                        <label htmlFor={`quoteSound-${key}`}
+                                                               className="btn font-weight-bold rounded-right input-group-text">
+                                                            <img src={uploadIcon} style={{width: '20px'}}
+                                                                 alt="Upload icon"/>
+                                                        </label>
+                                                        <input type="file" className="d-none"
+                                                               id={`quoteSound-${key}`} accept=".mp3"
+                                                               onChange={e => uploadMedia(e, 'sound', '/quotes', key)}/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        })}
+                                        <button className="btn btn-sm rounded"
+                                                onClick={() => addQuoteSound()}
+                                                type="button">Add +
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div className="row mt-5">
                             <div className="col-12">
