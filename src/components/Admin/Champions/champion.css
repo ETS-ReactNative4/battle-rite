@@ -7,8 +7,7 @@
   background-color: #f8f9fa; }
 
 .difficulty {
-  unicode-bidi: bidi-override;
-  direction: rtl; }
+  unicode-bidi: bidi-override; }
   .difficulty .difficultyBox {
     position: relative;
     width: 0.6em;
