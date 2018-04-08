@@ -159,7 +159,6 @@ export default class Champions extends Component {
     }
 
     render() {
-
         // Pros
         const setPros = () => {
             if (this.state.tempPros === '') return false
@@ -481,16 +480,13 @@ export default class Champions extends Component {
         }
 
         const addQuoteSound = () => {
-            let quotes = this.state.quotes
-            quotes.push(
-                {
-                    name: '',
-                    sound: ''
-                }
-            )
-            this.setState(quotes)
+            let arr = this.state.quotes
+            arr.push({
+                name: '',
+                sound: ''
+            })
+            this.setState({quotes: arr})
         }
-
         /*** Quotes ***/
 
         const saveChampion = () => {
