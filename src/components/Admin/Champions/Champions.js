@@ -231,7 +231,6 @@ export default class Champions extends Component {
          * @param num Number of cards meaning obj number
          */
         const uploadMedia = (event, type, typePath = '', num) => {
-            console.log(event.target.value)
             // Get file
             let file = event.target.files[0]
 
@@ -490,7 +489,24 @@ export default class Champions extends Component {
         /*** Quotes ***/
 
         const saveChampion = () => {
-            console.log(this.state)
+            firebase.database().ref(`battle-rite/champions/${this.state.name}`).set({
+                name: this.state.name,
+                slogan: this.state.slogan,
+                avatar: this.state.avatar,
+                video: this.state.video,
+                icon: this.state.icon,
+                type: this.state.type,
+                pros: this.state.pros,
+                cons: this.state.cons,
+                bio: this.state.bio,
+                masteringGuide: this.state.masteringGuide,
+                basicGuide: this.state.basicGuide,
+                status: this.state.status,
+                combos: this.state.combos,
+                spells: this.state.spells,
+                battlerites: this.state.battlerites,
+                quotes: this.state.quotes,
+            });
         }
         return (
             <div className="aChampions">
@@ -503,8 +519,8 @@ export default class Champions extends Component {
                                     <label htmlFor="champName">
                                         <small className="text-danger mr-1">*</small>
                                         Name</label>
-                                    <input type="text" id="champName" value={this.state.name}
-                                           onChange={e => this.setState({name: e.target.value})}
+                                    <input type="text" required id="champName" value={this.state.name}
+                                           onChange={e => this.setState({name: e.target.value.toLowerCase()})}
                                            className="form-control" placeholder="Champion name"/>
                                 </div>
                             </div>
@@ -539,8 +555,8 @@ export default class Champions extends Component {
                                     <label htmlFor="champSolgan">
                                         <small className="text-danger mr-1">*</small>
                                         Slogan</label>
-                                    <input type="text" id="champSolgan" value={this.state.slogan}
-                                           onChange={e => this.setState({slogan: e.target.value})}
+                                    <input type="text" required id="champSolgan" value={this.state.slogan}
+                                           onChange={e => this.setState({slogan: e.target.value.toLowerCase()})}
                                            className="form-control" placeholder="Champion slogan"/>
                                 </div>
                             </div>
@@ -558,7 +574,7 @@ export default class Champions extends Component {
                                         </Link>
                                     </div>
                                     <div className="custom-file">
-                                        <input type="file" className="custom-file-input" accept="image/*"
+                                        <input type="file" required className="custom-file-input" accept="image/*"
                                                onChange={e => uploadMedia(e, 'icon')}
                                                id="champUploadIcon"/>
                                         <label className="custom-file-label" id="champUploadIconLabel"
@@ -590,7 +606,7 @@ export default class Champions extends Component {
                                         </Link>
                                     </div>
                                     <div className="custom-file">
-                                        <input type="file" className="custom-file-input" accept="video/*"
+                                        <input type="file" required className="custom-file-input" accept="video/*"
                                                onChange={e => uploadMedia(e, 'video')}
                                                id="champUploadVideo"/>
                                         <label className="custom-file-label" id="champUploadVideoLabel"
@@ -620,7 +636,7 @@ export default class Champions extends Component {
                                         </Link>
                                     </div>
                                     <div className="custom-file">
-                                        <input type="file" className="custom-file-input" accept="image/*"
+                                        <input type="file" required className="custom-file-input" accept="image/*"
                                                onChange={e => uploadMedia(e, 'avatar')}
                                                id="champUploadAvatar"/>
                                         <label className="custom-file-label" id="champUploadAvatarLabel"
@@ -645,7 +661,7 @@ export default class Champions extends Component {
                                             Pros</label>
                                         <div className="input-group">
                                             <input type="text" id="champPros" value={this.state.tempPros}
-                                                   onChange={e => this.setState({tempPros: e.target.value})}
+                                                   onChange={e => this.setState({tempPros: e.target.value.toLowerCase()})}
                                                    className="form-control"
                                                    placeholder="Pros"/>
                                             <div className="input-group-append">
@@ -698,7 +714,7 @@ export default class Champions extends Component {
                                             Cons</label>
                                         <div className="input-group">
                                             <input type="text" id="champCons" value={this.state.tempCons}
-                                                   onChange={e => this.setState({tempCons: e.target.value})}
+                                                   onChange={e => this.setState({tempCons: e.target.value.toLowerCase()})}
                                                    className="form-control"
                                                    placeholder="Cons"/>
                                             <div className="input-group-append">
@@ -750,9 +766,9 @@ export default class Champions extends Component {
                                     <label htmlFor="champBio">
                                         <small className="text-danger mr-1">*</small>
                                         Bio</label>
-                                    <textarea id="champBio" className="form-control" value={this.state.bio} cols="30"
+                                    <textarea id="champBio" required className="form-control" value={this.state.bio} cols="30"
                                               rows="5"
-                                              onChange={e => this.setState({bio: e.target.value})}/>
+                                              onChange={e => this.setState({bio: e.target.value.toLowerCase()})}/>
                                 </div>
                             </div>
                         </div>
@@ -766,7 +782,7 @@ export default class Champions extends Component {
                                                 <label htmlFor="champMasteringGuideTitle">Title</label>
                                                 <input type="text" id="champMasteringGuideTitle"
                                                        value={this.state.tempMasteringGuideTitle}
-                                                       onChange={e => this.setState({tempMasteringGuideTitle: e.target.value})}
+                                                       onChange={e => this.setState({tempMasteringGuideTitle: e.target.value.toLowerCase()})}
                                                        className="form-control"
                                                        placeholder="Mastering Guide Title"/>
 
@@ -775,7 +791,7 @@ export default class Champions extends Component {
                                                 <label htmlFor="champMasteringGuideDescription">Description</label>
                                                 <textarea id="champMasteringGuideDescription"
                                                           value={this.state.tempMasteringGuideDescription}
-                                                          onChange={e => this.setState({tempMasteringGuideDescription: e.target.value})}
+                                                          onChange={e => this.setState({tempMasteringGuideDescription: e.target.value.toLowerCase()})}
                                                           className="form-control"
                                                           placeholder="Mastering Guide Description" cols="30" rows="5"/>
                                             </div>
@@ -833,7 +849,7 @@ export default class Champions extends Component {
                                                 <label htmlFor="champBasicGuideTitle">Title</label>
                                                 <input type="text" id="champBasicGuideTitle"
                                                        value={this.state.tempBasicGuideTitle}
-                                                       onChange={e => this.setState({tempBasicGuideTitle: e.target.value})}
+                                                       onChange={e => this.setState({tempBasicGuideTitle: e.target.value.toLowerCase()})}
                                                        className="form-control"
                                                        placeholder="Basic Guide Title"/>
 
@@ -842,7 +858,7 @@ export default class Champions extends Component {
                                                 <label htmlFor="champBasicGuideDescription">Description</label>
                                                 <textarea id="champBasicGuideDescription"
                                                           value={this.state.tempBasicGuideDescription}
-                                                          onChange={e => this.setState({tempBasicGuideDescription: e.target.value})}
+                                                          onChange={e => this.setState({tempBasicGuideDescription: e.target.value.toLowerCase()})}
                                                           className="form-control"
                                                           placeholder="Basic Guide Description" cols="30" rows="5"/>
                                             </div>
@@ -1146,14 +1162,14 @@ export default class Champions extends Component {
                                                 </div>
                                             </div>
                                             <div className="form-group">
-                                                <label htmlFor="champCombosSkillCombo">Skill Combo</label>
-                                                <input type="text" id="champCombosSkillCombo" className="form-control"
+                                                <label htmlFor={`champCombosSkillCombo-${key}`}>Skill Combo</label>
+                                                <input type="text" id={`champCombosSkillCombo-${key}`} className="form-control"
                                                        onChange={e => setCombo(e, 'skillCombo', key)}
                                                        value={this.state.combos[key].skillCombo}/>
                                             </div>
                                             <div className="form-group">
-                                                <label htmlFor="champCombosDescription">Description</label>
-                                                <textarea id="champCombosDescription" className="form-control" cols="30"
+                                                <label htmlFor={`champCombosDescription-${key}`}>Description</label>
+                                                <textarea id={`champCombosDescription-${key}`} className="form-control" cols="30"
                                                           rows="5" onChange={e => setCombo(e, 'description', key)}
                                                           value={this.state.combos[key].description}/>
                                             </div>
@@ -1179,34 +1195,33 @@ export default class Champions extends Component {
                                             <div className="row">
                                                 <div className="col-6">
                                                     <div className="form-group">
-                                                        <label htmlFor="spellName"><span
+                                                        <label htmlFor={`spellName-${key}`}><span
                                                             className="text-danger mr-1">*</span>Name
                                                             & keyword</label>
                                                         <div className="input-group">
-                                                            <input type="text" id="spellName" placeholder="Name..."
+                                                            <input type="text" required id={`spellName-${key}`} placeholder="Name..."
                                                                    value={data.name}
                                                                    onChange={e => setSpell(e, 'name', key)}
                                                                    className="form-control w-75"/>
-                                                            <input type="text" id="spellKeyword" placeholder="Key..."
+                                                            <input type="text" required id={`spellKeyword-${key}`} placeholder="Key..."
                                                                    value={data.keyword}
                                                                    onChange={e => setSpell(e, 'keyword', key)}
                                                                    className="form-control w-25"/>
                                                         </div>
                                                     </div>
                                                     <div className="form-group mb-0">
-                                                        <label htmlFor="spellDetailsName">
-                                                            <span className="text-danger mr-1">*</span>
+                                                        <label htmlFor="spellDetailsName-1">
                                                             Names & props
                                                         </label>
                                                         {data.details.map((data, index) => {
                                                             return <div className="input-group mb-2"
                                                                         key={index}>
-                                                                <input type="text" id="spellDetailsName"
+                                                                <input type="text" id={`spellDetailsName-${index}`}
                                                                        placeholder="Name..."
                                                                        value={data.name}
                                                                        onChange={e => setSpell(e, 'details', key, 'name', index)}
                                                                        className="form-control w-75"/>
-                                                                <input type="text" id="spellDetailsProp"
+                                                                <input type="text" id={`spellDetailsProp-${index}`}
                                                                        placeholder="Prop..."
                                                                        value={data.prop}
                                                                        onChange={e => setSpell(e, 'details', key, 'prop', index)}
@@ -1236,7 +1251,7 @@ export default class Champions extends Component {
                                                                 </Link>
                                                             </div>
                                                             <div className="custom-file">
-                                                                <input type="file" className="custom-file-input"
+                                                                <input type="file" required className="custom-file-input"
                                                                        id={`spellIcon-${key}`} accept="image/*"
                                                                        onChange={e => uploadMedia(e, 'icon', '/spells', key)}/>
                                                                 <label className="custom-file-label"
@@ -1259,9 +1274,9 @@ export default class Champions extends Component {
                                                         </div>
                                                     </div>
                                                     <div className="form-group">
-                                                        <label htmlFor="spellDescription"><span
+                                                        <label htmlFor={`spellDescription-${key}`}><span
                                                             className="text-danger mr-1">*</span>Description</label>
-                                                        <textarea id="spellDescription" value={data.description}
+                                                        <textarea id={`spellDescription-${key}`} required value={data.description}
                                                                   onChange={e => setSpell(e, 'description', key)}
                                                                   className="form-control"
                                                                   cols="30" rows="3"/>
@@ -1288,9 +1303,9 @@ export default class Champions extends Component {
                                     <div className="card border-light rounded bg-dark text-light">
                                         <div className="card-body">
                                             <div className="form-group">
-                                                <label htmlFor="battleriteName"><span
+                                                <label htmlFor={`battleriteName-{key}`}><span
                                                     className="text-danger mr-1">*</span>Name</label>
-                                                <input type="text" id="battleriteName" placeholder="Name..."
+                                                <input type="text" required id={`battleriteName-{key}`} placeholder="Name..."
                                                        value={data.name}
                                                        onChange={e => setBattlerite(e, 'name', key)}
                                                        className="form-control"/>
@@ -1298,9 +1313,9 @@ export default class Champions extends Component {
                                             <div className="row">
                                                 <div className="col-6">
                                                     <div className="form-group">
-                                                        <label htmlFor="battleriteType"><span
+                                                        <label htmlFor={`battleriteType-{key}`}><span
                                                             className="text-danger mr-1">*</span>Type</label>
-                                                        <button type="button" id="battleriteType"
+                                                        <button type="button" id={`battleriteType-{key}`}
                                                                 className="btn btn-block rounded border btn-light dropdown-toggle"
                                                                 data-toggle="dropdown" aria-haspopup="true"
                                                                 aria-expanded="false">
@@ -1317,9 +1332,9 @@ export default class Champions extends Component {
                                                 </div>
                                                 <div className="col-6">
                                                     <div className="form-group">
-                                                        <label htmlFor="battleriteKeyword"><span
+                                                        <label htmlFor={`battleriteKeyword-{key}`}><span
                                                             className="text-danger mr-1">*</span>keyword</label>
-                                                        <input type="text" id="battleriteKeyword" placeholder="Key..."
+                                                        <input type="text" required id={`battleriteKeyword-{key}`} placeholder="Key..."
                                                                value={data.keyword}
                                                                onChange={e => setBattlerite(e, 'keyword', key)}
                                                                className="form-control"/>
@@ -1342,7 +1357,7 @@ export default class Champions extends Component {
                                                         </Link>
                                                     </div>
                                                     <div className="custom-file">
-                                                        <input type="file" className="custom-file-input"
+                                                        <input type="file" required className="custom-file-input"
                                                                id={`battleriteIcon-${key}`} accept="image/*"
                                                                onChange={e => uploadMedia(e, 'icon', '/battlerites', key)}/>
                                                         <label className="custom-file-label"
@@ -1364,9 +1379,9 @@ export default class Champions extends Component {
                                                 </div>
                                             </div>
                                             <div className="form-group">
-                                                <label htmlFor="battleriteDescription"><span
+                                                <label htmlFor={`battleriteDescription-{key}`}><span
                                                     className="text-danger mr-1">*</span>Description</label>
-                                                <textarea id="battleriteDescription" value={data.description}
+                                                <textarea id={`battleriteDescription-{key}`} required value={data.description}
                                                           onChange={e => setBattlerite(e, 'description', key)}
                                                           className="form-control"
                                                           cols="30" rows="3"/>
@@ -1394,7 +1409,7 @@ export default class Champions extends Component {
                                                     <input type="text" value={this.state.quotes[key].name}
                                                            onChange={e => setQuote(e, 'name', key)}
                                                            placeholder="Name..."
-                                                           className="form-control" id="quoteName"/>
+                                                           className="form-control" id={`quoteName-${key}`}/>
                                                     <div className="input-group-append">
                                                         <Link
                                                             to={data.sound !== '' ? data.sound : 'javascript:void(0)'}
