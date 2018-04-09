@@ -19,7 +19,7 @@ export default class Admin extends Component {
 
     render() {
         return (
-            <main className="aContainer col-12 col-md-9 col-xl-8 py-5 pl-md-5">
+            <main className="aContainer col-12 col-md-9 col-xl-10 py-4">
                 {this.state.sections.map((Section, key) => {
                     return <div key={key}>
                         {capitalizeFirstLetter(this.props.match.params.sectionName) === Section.name?

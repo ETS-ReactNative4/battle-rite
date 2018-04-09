@@ -1003,7 +1003,8 @@ export default class Guides extends Component {
             ],
             theme: this.props.theme,
             search: '',
-            type: ''
+            type: '',
+            admin: this.props.admin
         }
     }
 
@@ -1028,9 +1029,11 @@ export default class Guides extends Component {
             <div className="guide py-3">
                 <div className="container">
                     <div className="row">
-                        <div className="col-12 mb-2">
-                            <h3 className="text-uppercase">Builds & Guides</h3>
-                        </div>
+                        {this.state.admin === undefined ?
+                            <div className="col-12 mb-2">
+                                <h3 className="text-uppercase">Builds & Guides</h3>
+                            </div>
+                            : ''}
                         <div className="col-12">
                             <div className="row mb-4 mt-3">
                                 <div className="col-sm-6">
@@ -1074,7 +1077,7 @@ export default class Guides extends Component {
                         <div className="col-12">
                             {filteredChampions.map((data, index) => {
                                 return <Link className="guide__container"
-                                             to={`/champions/${data.name.toLowerCase().replace(/\s/g, '')}`}
+                                             to={`${this.state.admin===undefined?'/champions':this.state.admin.path}/${data.name.toLowerCase().replace(/\s/g, '')}`}
                                              key={index}>
                                     <div className="guide__box">
                                         <div className="guide__items"

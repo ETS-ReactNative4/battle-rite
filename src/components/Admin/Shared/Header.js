@@ -4,8 +4,8 @@ import {NavLink} from '../../../../node_modules/react-router-dom/umd/react-route
 export default class Header extends Component {
     render() {
         return (
-            <div className="col-12 col-md-3 col-xl-2 admin-sidebar border-secondary border-right bg-dark2">
-                <nav className="navbar py-md-4 mt-md-3">
+            <div className="col-12 col-md-3 col-xl-2 pl-0">
+                <nav className="navbar py-md-4 admin-sidebar border-secondary h-100 align-items-start border-right bg-dark2">
                     <ul className="nav navbar-nav">
                         <li className="nav-item">
                             <NavLink className="nav-link text-uppercase small text-light"

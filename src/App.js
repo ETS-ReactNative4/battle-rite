@@ -20,7 +20,7 @@ import Signup from './components/Auth/Signup'
 // Admin
 import AHeader from './components/Admin/Shared/Header'
 import Admin from './components/Admin/Admin'
-// import Afunctions from './components/Admin/Afunctions'
+import Afunctions from './components/Admin/Afunctions'
 
 export default class App extends Component {
     constructor(props) {
@@ -62,10 +62,11 @@ export default class App extends Component {
                     <Route path='/login' component={Auth}/>
 
                     {this.state.isAuthenticated ? <Route>
-                        <div className="row">
+                        <div className="d-flex">
                             <AHeader/>
-                            <Route path='/admin/:sectionName' component={Admin}/>
-                            {/*<Route path='/admin/:sectionName/:function' component={Afunctions}/>*/}
+                            <Route exact path='/admin/:sectionName' component={Admin}/>
+                            <Route exact path='/admin/champions/create' component={Afunctions}/>
+                            <Route path='/admin/champions/edit/:champion' component={Afunctions}/>
                         </div>
                         </Route> :
                         <Route>
