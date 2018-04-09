@@ -1,0 +1,39 @@
+@import ../../../sass/vars
+
+.difficultySpan
+  content: ""
+  height: 100%
+  width: 100%
+  display: block
+  border-radius: 100%
+  background-color: $light-color
+
+.difficulty
+  unicode-bidi: bidi-override
+  //direction: rtl
+  .difficultyBox
+    position: relative
+    width: 0.6em
+    height: 0.6em
+    border-radius: 100px
+    margin-left: 0.7em
+    input[type=radio]
+      position: absolute
+      right: 0
+      left: 0
+      top: 0
+      bottom: 0
+      opacity: 0
+      z-index: 1
+      &:checked + .difficultyCircle,
+      &:hover + .difficultyCircle
+        @extend .difficultySpan
+    .difficultyCircle
+      position: absolute
+      left: 0
+      right: 0
+      bottom: 0
+      top: 0
+      border-radius: 100px
+      background-color: lighten($dark-color,10%)
+      transition: .5s
