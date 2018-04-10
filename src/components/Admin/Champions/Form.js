@@ -156,14 +156,14 @@ export default class Form extends Component {
             tempBattleriteProgressbar: [0],
             tempQuotesProgressbar: [0],
 
-            editChampion: this.props.champion,
+            editChampion: this.props.match.params.champion,
         }
     }
 
     componentDidMount() {
         if (this.state.editChampion === undefined) return false
         let champion = this.state.editChampion.toLowerCase().replace(/\s/g, '')
-        firebase.database().ref(`battle-rite/champions/${champion}`)
+        firebase.database().ref(`champions/${champion}`)
             .once('value').then(data => {
             console.log(data.val())
             this.setState(data.val())
@@ -248,7 +248,7 @@ export default class Form extends Component {
 
             // Create a storage ref
             let storageRef = firebase.storage()
-                .ref(`champions/${this.state.name ? this.state.name : 'none'}${typePath}/${
+                .ref(`champions/${this.state.name}${typePath}/${
                     num !== undefined ? num : type
                     }`)
 
@@ -502,7 +502,7 @@ export default class Form extends Component {
 
         const saveChampion = () => {
             let champion = this.state.name.toLowerCase().replace(/\s/g, '')
-            firebase.database().ref(`battle-rite/champions/${champion}`).set({
+            firebase.database().ref(`champions/${champion}`).set({
                 name: this.state.name,
                 slogan: this.state.slogan,
                 avatar: this.state.avatar,
@@ -522,7 +522,7 @@ export default class Form extends Component {
             });
         }
         return (
-            <div className="aChampions">
+            <div className="aChampions col-12 col-md-9 col-xl-10 py-4">
                 <form onSubmit={e => e.preventDefault()}>
                     <div className="container">
                         <div className="row">

@@ -20,7 +20,8 @@ import Signup from './components/Auth/Signup'
 // Admin
 import AHeader from './components/Admin/Shared/Header'
 import Admin from './components/Admin/Admin'
-import Afunctions from './components/Admin/Afunctions'
+import AChampionsForm from './components/Admin/Champions/Form'
+import ANewsForm from './components/Admin/News/Form'
 
 export default class App extends Component {
     constructor(props) {
@@ -65,8 +66,14 @@ export default class App extends Component {
                         <div className="d-flex">
                             <AHeader/>
                             <Route exact path='/admin/:sectionName' component={Admin}/>
-                            <Route exact path='/admin/champions/create' component={Afunctions}/>
-                            <Route path='/admin/champions/edit/:champion' component={Afunctions}/>
+
+                            {/* News */}
+                            <Route exact path='/admin/news/create' component={ANewsForm}/>
+                            <Route path='/admin/news/edit/:news' component={ANewsForm}/>
+
+                            {/* Champions */}
+                            <Route exact path='/admin/champions/create' component={AChampionsForm}/>
+                            <Route path='/admin/champions/edit/:champion' component={AChampionsForm}/>
                         </div>
                         </Route> :
                         <Route>
