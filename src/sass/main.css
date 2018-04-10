@@ -19,6 +19,9 @@
   .light-theme hr {
     border-color: #343a40; }
 
+body {
+  height: 100%; }
+
 textarea {
   min-height: 5em;
   max-height: 15em; }

@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 import {Link} from '../../../../node_modules/react-router-dom/umd/react-router-dom.min'
 
+import NewsCards from '../../News/News'
+
 export default class News extends Component{
     render(){
         return(
@@ -12,6 +14,7 @@ export default class News extends Component{
                         </div>
                     </div>
                 </div>
+                <NewsCards admin={{path:'/admin/news/edit'}}/>
             </div>
         )
     }

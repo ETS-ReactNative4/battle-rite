@@ -48,7 +48,7 @@ export default class App extends Component {
 
     render() {
         return (
-            <div className={`App h-100 ${this.state.theme}-theme bg-${this.state.theme}`} data-theme={this.state.theme}>
+            <div className={`App h-100 ${this.state.theme}-theme bg-${this.state.theme}`} data-theme={this.state.theme} style={{overflowX: 'hidden'}}>
                 <Header theme={this.switchTheme}/>
                 <Switch>
                     <Route exact path='/' component={Home}/>
@@ -63,17 +63,19 @@ export default class App extends Component {
                     <Route path='/login' component={Auth}/>
 
                     {this.state.isAuthenticated ? <Route>
-                        <div className="d-flex">
-                            <AHeader/>
-                            <Route exact path='/admin/:sectionName' component={Admin}/>
+                        <div className="container-fluid">
+                            <div className="row">
+                                <AHeader/>
+                                <Route exact path='/admin/:sectionName' component={Admin}/>
 
-                            {/* News */}
-                            <Route exact path='/admin/news/create' component={ANewsForm}/>
-                            <Route path='/admin/news/edit/:news' component={ANewsForm}/>
+                                {/* News */}
+                                <Route exact path='/admin/news/create' component={ANewsForm}/>
+                                <Route path='/admin/news/edit/:news' component={ANewsForm}/>
 
-                            {/* Champions */}
-                            <Route exact path='/admin/champions/create' component={AChampionsForm}/>
-                            <Route path='/admin/champions/edit/:champion' component={AChampionsForm}/>
+                                {/* Champions */}
+                                <Route exact path='/admin/champions/create' component={AChampionsForm}/>
+                                <Route path='/admin/champions/edit/:champion' component={AChampionsForm}/>
+                            </div>
                         </div>
                         </Route> :
                         <Route>

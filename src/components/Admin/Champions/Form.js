@@ -502,7 +502,7 @@ export default class Form extends Component {
 
         const saveChampion = () => {
             let champion = this.state.name.toLowerCase().replace(/\s/g, '')
-            firebase.database().ref(`champions/${champion}`).set({
+            let champions = {
                 name: this.state.name,
                 slogan: this.state.slogan,
                 avatar: this.state.avatar,
@@ -519,7 +519,8 @@ export default class Form extends Component {
                 spells: this.state.spells,
                 battlerites: this.state.battlerites,
                 quotes: this.state.quotes,
-            });
+            }
+            firebase.database().ref(`champions/${champion}`).set(champions);
         }
         return (
             <div className="aChampions col-12 col-md-9 col-xl-10 py-4">
@@ -1463,7 +1464,7 @@ export default class Form extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div className="row mt-5">
+                        <div className="row mt-4">
                             <div className="col-12">
                                 <button className="btn btn-light" type="submit" onClick={saveChampion}>Save</button>
                             </div>
