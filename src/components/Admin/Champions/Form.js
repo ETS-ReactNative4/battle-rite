@@ -170,358 +170,359 @@ export default class Form extends Component {
         })
     }
 
-    render() {
-        // Pros
-        const setPros = () => {
-            if (this.state.tempPros === '') return false
-            let pros = this.state.pros
-            pros.push(this.state.tempPros)
-            this.setState({
-                tempPros: '',
-                pros
-            })
-        }
+    // Pros
+    setPros = () => {
+        if (this.state.tempPros === '') return false
+        let pros = this.state.pros
+        pros.push(this.state.tempPros)
+        this.setState({
+            tempPros: '',
+            pros
+        })
+    }
 
-        // Cons
-        const setCons = () => {
-            if (this.state.tempCons === '') return false
-            let cons = this.state.cons
-            cons.push(this.state.tempCons)
-            this.setState({
-                tempCons: '',
-                cons
-            })
-        }
+    // Cons
+    setCons = () => {
+        if (this.state.tempCons === '') return false
+        let cons = this.state.cons
+        cons.push(this.state.tempCons)
+        this.setState({
+            tempCons: '',
+            cons
+        })
+    }
 
-        // Mastering guide
-        const setMasteringGuide = () => {
-            if (this.state.tempMasteringGuideTitle === '' && this.state.tempMasteringGuideDescription === '') return false
-            let masteringGuide = this.state.masteringGuide
-            masteringGuide.push({
-                title: this.state.tempMasteringGuideTitle,
-                description: this.state.tempMasteringGuideDescription
-            })
-            this.setState({
-                tempMasteringGuideTitle: '',
-                tempMasteringGuideDescription: '',
-                masteringGuide
-            })
-        }
+    // Mastering guide
+    setMasteringGuide = () => {
+        if (this.state.tempMasteringGuideTitle === '' && this.state.tempMasteringGuideDescription === '') return false
+        let masteringGuide = this.state.masteringGuide
+        masteringGuide.push({
+            title: this.state.tempMasteringGuideTitle,
+            description: this.state.tempMasteringGuideDescription
+        })
+        this.setState({
+            tempMasteringGuideTitle: '',
+            tempMasteringGuideDescription: '',
+            masteringGuide
+        })
+    }
 
-        // Basic guide
-        const setBasicGuide = () => {
-            if (this.state.tempBasicGuideTitle === '' && this.state.tempBasicGuideDescription === '') return false
-            let basicGuide = this.state.basicGuide
-            basicGuide.push({
-                title: this.state.tempBasicGuideTitle,
-                description: this.state.tempBasicGuideDescription
-            })
-            this.setState({
-                tempBasicGuideTitle: '',
-                tempBasicGuideDescription: '',
-                basicGuide
-            })
-        }
+    // Basic guide
+    setBasicGuide = () => {
+        if (this.state.tempBasicGuideTitle === '' && this.state.tempBasicGuideDescription === '') return false
+        let basicGuide = this.state.basicGuide
+        basicGuide.push({
+            title: this.state.tempBasicGuideTitle,
+            description: this.state.tempBasicGuideDescription
+        })
+        this.setState({
+            tempBasicGuideTitle: '',
+            tempBasicGuideDescription: '',
+            basicGuide
+        })
+    }
 
-        /**
-         *
-         * @param event For get obj file from the input
-         * @param obj State name using to know what is the state wanna edit
-         * @param subType Child state like: parent:{child:0}
-         */
-        const setStatus = (event, obj, subType) => {
-            let status = this.state.status
-            status[obj][subType] = event.target.value
-            this.setState(status)
-        }
+    /**
+     *
+     * @param event For get obj file from the input
+     * @param obj State name using to know what is the state wanna edit
+     * @param subType Child state like: parent:{child:0}
+     */
+    setStatus = (event, obj, subType) => {
+        let status = this.state.status
+        status[obj][subType] = event.target.value
+        this.setState(status)
+    }
 
-        /**
-         *
-         * @param event For get obj file from the input
-         * @param type File extension like icon, video
-         * @param typePath Path of obj like : /combos
-         * @param num Number of cards meaning obj number
-         */
-        const uploadMedia = (event, type, typePath = '', num) => {
-            // Get file
-            let file = event.target.files[0]
+    /**
+     *
+     * @param event For get obj file from the input
+     * @param type File extension like icon, video
+     * @param typePath Path of obj like : /combos
+     * @param num Number of cards meaning obj number
+     */
+    uploadMedia = (event, type, typePath = '', num) => {
+        // Get file
+        let file = event.target.files[0]
 
-            // Create a storage ref
-            let storageRef = firebase.storage()
-                .ref(`champions/${this.state.name}${typePath}/${
-                    num !== undefined ? num : type
-                    }`)
+        // Create a storage ref
+        let storageRef = firebase.storage()
+            .ref(`champions/${this.state.name}${typePath}/${
+                num !== undefined ? num : type
+                }`)
 
-            // Upload file
-            let task = storageRef.put(file)
-            let self = this
+        // Upload file
+        let task = storageRef.put(file)
+        let self = this
 
-            // Update progress bar
-            task.on('state_changed',
-                /**
-                 *
-                 * @param snapshot File obj when uploading
-                 */
-                function progress(snapshot) {
-                    let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        // Update progress bar
+        task.on('state_changed',
+            /**
+             *
+             * @param snapshot File obj when uploading
+             */
+            function progress(snapshot) {
+                let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                switch (type) {
+                    case 'icon':
+                        if (num !== undefined) {
+                            let tempSpellProgressbar = self.state.tempSpellProgressbar
+                            tempSpellProgressbar[num] = percentage
+                            self.setState(tempSpellProgressbar)
+                        } else {
+                            self.setState({progressbarIcon: percentage})
+                        }
+                        break
+                    case 'avatar':
+                        self.setState({progressbarAvatar: percentage})
+                        break
+                    case 'video':
+                        if (num !== undefined) {
+                            let tempComboProgressbar = self.state.tempComboProgressbar
+                            tempComboProgressbar[num] = percentage
+                            self.setState(tempComboProgressbar)
+                        } else {
+                            self.setState({progressbarVideo: percentage})
+                        }
+                        break
+                    case 'sound':
+                        let tempQuotesProgressbar = self.state.tempQuotesProgressbar
+                        tempQuotesProgressbar[num] = percentage
+                        self.setState(tempQuotesProgressbar)
+                        break
+                    default:
+                        break
+                }
+            },
+
+            function error(err) {
+                console.log(err)
+            },
+
+            function complete() {
+                if (num !== undefined) {
                     switch (type) {
-                        case 'icon':
-                            if (num !== undefined) {
+                        case 'video': // Combos
+                            let tempComboProgressbar = self.state.tempComboProgressbar
+                            tempComboProgressbar[num] = 0
+
+                            let combos = self.state.combos
+                            combos[num].video = task.snapshot.downloadURL
+                            self.setState({combos, tempComboProgressbar: tempComboProgressbar})
+                            break
+                        case 'icon': // Spells & battlerites
+                            if (typePath === '/spells') {
                                 let tempSpellProgressbar = self.state.tempSpellProgressbar
-                                tempSpellProgressbar[num] = percentage
-                                self.setState(tempSpellProgressbar)
-                            } else {
-                                self.setState({progressbarIcon: percentage})
+                                tempSpellProgressbar[num] = 0
+
+                                let spells = self.state.spells
+                                spells[num].img = task.snapshot.downloadURL
+                                self.setState({spells, tempSpellProgressbar})
+
+                                let spellIcon = document.getElementById(`spellIcon-${num}`).files[0].name
+                                document.getElementById(`spellIconLabel-${num}`).innerText = spellIcon
+                            } else if (typePath === '/battlerites') {
+                                let tempBattleriteProgressbar = self.state.tempBattleriteProgressbar
+                                tempBattleriteProgressbar[num] = 0
+
+                                let battlerites = self.state.battlerites
+                                battlerites[num].img = task.snapshot.downloadURL
+                                self.setState({battlerites, tempBattleriteProgressbar})
+
+                                let battleriteIcon = document.getElementById(`battleriteIcon-${num}`).files[0].name
+                                document.getElementById(`battleriteIconLabel-${num}`).innerText = battleriteIcon
                             }
                             break
-                        case 'avatar':
-                            self.setState({progressbarAvatar: percentage})
-                            break
-                        case 'video':
-                            if (num !== undefined) {
-                                let tempComboProgressbar = self.state.tempComboProgressbar
-                                tempComboProgressbar[num] = percentage
-                                self.setState(tempComboProgressbar)
-                            } else {
-                                self.setState({progressbarVideo: percentage})
-                            }
-                            break
-                        case 'sound':
+                        case 'sound': // Quotes
                             let tempQuotesProgressbar = self.state.tempQuotesProgressbar
-                            tempQuotesProgressbar[num] = percentage
-                            self.setState(tempQuotesProgressbar)
+                            tempQuotesProgressbar[num] = 0
+
+                            let quotes = self.state.quotes
+                            quotes[num].sound = task.snapshot.downloadURL
+                            self.setState({quotes, tempQuotesProgressbar})
                             break
                         default:
+                            //
                             break
                     }
-                },
+                } else {
+                    switch (type) {
+                        case 'video':
+                            self.setState({video: task.snapshot.downloadURL})
 
-                function error(err) {
-                    console.log(err)
-                },
+                            let champUploadVideoLabel = document.getElementById("champUploadVideo").files[0].name
+                            document.getElementById("champUploadVideoLabel").innerText = champUploadVideoLabel
+                            break
+                        case 'icon':
+                            self.setState({icon: task.snapshot.downloadURL})
 
-                function complete() {
-                    if (num !== undefined) {
-                        switch (type) {
-                            case 'video': // Combos
-                                let tempComboProgressbar = self.state.tempComboProgressbar
-                                tempComboProgressbar[num] = 0
+                            let champUploadIcon = document.getElementById("champUploadIcon").files[0].name
+                            document.getElementById("champUploadIconLabel").innerText = champUploadIcon
+                            break
+                        case 'avatar':
+                            self.setState({avatar: task.snapshot.downloadURL})
 
-                                let combos = self.state.combos
-                                combos[num].video = task.snapshot.downloadURL
-                                self.setState({combos, tempComboProgressbar: tempComboProgressbar})
-                                break
-                            case 'icon': // Spells & battlerites
-                                if (typePath === '/spells') {
-                                    let tempSpellProgressbar = self.state.tempSpellProgressbar
-                                    tempSpellProgressbar[num] = 0
-
-                                    let spells = self.state.spells
-                                    spells[num].img = task.snapshot.downloadURL
-                                    self.setState({spells, tempSpellProgressbar})
-
-                                    let spellIcon = document.getElementById(`spellIcon-${num}`).files[0].name
-                                    document.getElementById(`spellIconLabel-${num}`).innerText = spellIcon
-                                } else if (typePath === '/battlerites') {
-                                    let tempBattleriteProgressbar = self.state.tempBattleriteProgressbar
-                                    tempBattleriteProgressbar[num] = 0
-
-                                    let battlerites = self.state.battlerites
-                                    battlerites[num].img = task.snapshot.downloadURL
-                                    self.setState({battlerites, tempBattleriteProgressbar})
-
-                                    let battleriteIcon = document.getElementById(`battleriteIcon-${num}`).files[0].name
-                                    document.getElementById(`battleriteIconLabel-${num}`).innerText = battleriteIcon
-                                }
-                                break
-                            case 'sound': // Quotes
-                                let tempQuotesProgressbar = self.state.tempQuotesProgressbar
-                                tempQuotesProgressbar[num] = 0
-
-                                let quotes = self.state.quotes
-                                quotes[num].sound = task.snapshot.downloadURL
-                                self.setState({quotes, tempQuotesProgressbar})
-                                break
-                            default:
-                                //
-                                break
-                        }
-                    } else {
-                        switch (type) {
-                            case 'video':
-                                self.setState({video: task.snapshot.downloadURL})
-
-                                let champUploadVideoLabel = document.getElementById("champUploadVideo").files[0].name
-                                document.getElementById("champUploadVideoLabel").innerText = champUploadVideoLabel
-                                break
-                            case 'icon':
-                                self.setState({icon: task.snapshot.downloadURL})
-
-                                let champUploadIcon = document.getElementById("champUploadIcon").files[0].name
-                                document.getElementById("champUploadIconLabel").innerText = champUploadIcon
-                                break
-                            case 'avatar':
-                                self.setState({avatar: task.snapshot.downloadURL})
-
-                                let champUploadAvatar = document.getElementById("champUploadAvatar").files[0].name
-                                document.getElementById("champUploadAvatarLabel").innerText = champUploadAvatar
-                                break
-                            default:
-                                //
-                                break
-                        }
+                            let champUploadAvatar = document.getElementById("champUploadAvatar").files[0].name
+                            document.getElementById("champUploadAvatarLabel").innerText = champUploadAvatar
+                            break
+                        default:
+                            //
+                            break
                     }
-                },
-            )
-        }
+                }
+            },
+        )
+    }
 
-        /*** Combos ***/
-        /**
-         *
-         * @param target For get obj file from the input || value directly like difficulty rates
-         * @param obj State name using to know what is the state wanna edit
-         * @param num Number of cards meaning obj number
-         */
-        const setCombo = (target, obj, num) => {
-            let combos = this.state.combos
-            if (obj === 'difficulty') {
-                combos[num][obj] = target
-            } else {
-                combos[num][obj] = target.target.value
-            }
-            this.setState({combos})
+    /*** Combos ***/
+    /**
+     *
+     * @param target For get obj file from the input || value directly like difficulty rates
+     * @param obj State name using to know what is the state wanna edit
+     * @param num Number of cards meaning obj number
+     */
+    setCombo = (target, obj, num) => {
+        let combos = this.state.combos
+        if (obj === 'difficulty') {
+            combos[num][obj] = target
+        } else {
+            combos[num][obj] = target.target.value
         }
+        this.setState({combos})
+    }
 
-        /**
-         *
-         * @param key Difficulty rate from 0 ~ 4
-         * @param num Number of the obj
-         */
-        const difficultyRate = (key, num) => {
-            let combos = this.state.combos
-            combos[num].difficulty = key
-            this.setState({combos})
-        }
+    /**
+     *
+     * @param key Difficulty rate from 0 ~ 4
+     * @param num Number of the obj
+     */
+    difficultyRate = (key, num) => {
+        let combos = this.state.combos
+        combos[num].difficulty = key
+        this.setState({combos})
+    }
 
-        const addComboCard = () => {
-            let arr = this.state.combos
-            let tempCombos = Object.assign({}, this.state.tempCombos)
-            arr.push(tempCombos)
-            this.setState({combos: arr})
-        }
-        /*** Combos ***/
+    addComboCard = () => {
+        let arr = this.state.combos
+        let tempCombos = Object.assign({}, this.state.tempCombos)
+        arr.push(tempCombos)
+        this.setState({combos: arr})
+    }
+    /*** Combos ***/
 
-        /*** Spells ***/
-        /**
-         *
-         * @param event For get obj file from the input
-         * @param obj State name using to know what is the state wanna edit
-         * @param num Number of cards meaning obj number
-         * @param detailsType Child state like: parent:{child:0}
-         * @param detailsIndex Number of obj in details array
-         */
-        const setSpell = (event, obj, num, detailsType, detailsIndex) => {
-            let spells = this.state.spells
-            if (detailsType === undefined) {
-                spells[num][obj] = event.target.value
-            } else {
-                spells[num][obj][detailsIndex][detailsType] = event.target.value
-            }
-            this.setState(spells)
+    /*** Spells ***/
+    /**
+     *
+     * @param event For get obj file from the input
+     * @param obj State name using to know what is the state wanna edit
+     * @param num Number of cards meaning obj number
+     * @param detailsType Child state like: parent:{child:0}
+     * @param detailsIndex Number of obj in details array
+     */
+    setSpell = (event, obj, num, detailsType, detailsIndex) => {
+        let spells = this.state.spells
+        if (detailsType === undefined) {
+            spells[num][obj] = event.target.value
+        } else {
+            spells[num][obj][detailsIndex][detailsType] = event.target.value
         }
+        this.setState(spells)
+    }
 
-        const addSpell = () => {
-            let arr = this.state.spells
-            let tempSpells = Object.assign({}, this.state.tempSpells)
-            arr.push(tempSpells)
-            this.setState({spells: arr})
-        }
+    addSpell = () => {
+        let arr = this.state.spells
+        let tempSpells = Object.assign({}, this.state.tempSpells)
+        arr.push(tempSpells)
+        this.setState({spells: arr})
+    }
 
-        /**
-         *
-         * @param num Number of cards meaning obj number
-         */
-        const addSpellDetails = num => {
-            let arr = this.state.spells
-            let details = {
-                name: '',
-                prop: ''
-            }
-            arr[num].details.push(details)
-            this.setState({spells: arr})
+    /**
+     *
+     * @param num Number of cards meaning obj number
+     */
+    addSpellDetails = num => {
+        let arr = this.state.spells
+        let details = {
+            name: '',
+            prop: ''
         }
-        /*** Spells ***/
+        arr[num].details.push(details)
+        this.setState({spells: arr})
+    }
+    /*** Spells ***/
 
-        /*** Battlerites ***/
-        /**
-         *
-         * @param event For get obj file from the input
-         * @param obj State name using to know what is the state wanna edit
-         * @param num Number of cards meaning obj number
-         */
-        const setBattlerite = (event, obj, num) => {
-            let battlerites = this.state.battlerites
-            if (obj === 'type') {
-                battlerites[num][obj] = event
-            } else {
-                battlerites[num][obj] = event.target.value
-            }
-            this.setState(battlerites)
+    /*** Battlerites ***/
+    /**
+     *
+     * @param event For get obj file from the input
+     * @param obj State name using to know what is the state wanna edit
+     * @param num Number of cards meaning obj number
+     */
+    setBattlerite = (event, obj, num) => {
+        let battlerites = this.state.battlerites
+        if (obj === 'type') {
+            battlerites[num][obj] = event
+        } else {
+            battlerites[num][obj] = event.target.value
         }
+        this.setState(battlerites)
+    }
 
-        const addBattlerite = () => {
-            let arr = this.state.battlerites
-            let tempBattlerites = Object.assign({}, this.state.tempBattlerites)
-            arr.push(tempBattlerites)
-            this.setState({battlerites: arr})
-        }
-        /*** Battlerites ***/
+    addBattlerite = () => {
+        let arr = this.state.battlerites
+        let tempBattlerites = Object.assign({}, this.state.tempBattlerites)
+        arr.push(tempBattlerites)
+        this.setState({battlerites: arr})
+    }
+    /*** Battlerites ***/
 
-        /*** Quotes ***/
-        /**
-         *
-         * @param event For get obj file from the input
-         * @param obj State name using to know what is the state wanna edit
-         * @param num Number of cards meaning obj number
-         */
-        const setQuote = (event, obj, num) => {
-            let quotes = this.state.quotes
-            quotes[num][obj] = event.target.value
-            this.setState(quotes)
-        }
+    /*** Quotes ***/
+    /**
+     *
+     * @param event For get obj file from the input
+     * @param obj State name using to know what is the state wanna edit
+     * @param num Number of cards meaning obj number
+     */
+    setQuote = (event, obj, num) => {
+        let quotes = this.state.quotes
+        quotes[num][obj] = event.target.value
+        this.setState(quotes)
+    }
 
-        const addQuoteSound = () => {
-            let arr = this.state.quotes
-            arr.push({
-                name: '',
-                sound: ''
-            })
-            this.setState({quotes: arr})
-        }
-        /*** Quotes ***/
+    addQuoteSound = () => {
+        let arr = this.state.quotes
+        arr.push({
+            name: '',
+            sound: ''
+        })
+        this.setState({quotes: arr})
+    }
+    /*** Quotes ***/
 
-        const saveChampion = () => {
-            let champion = this.state.name.toLowerCase().replace(/\s/g, '')
-            let champions = {
-                name: this.state.name,
-                slogan: this.state.slogan,
-                avatar: this.state.avatar,
-                video: this.state.video,
-                icon: this.state.icon,
-                type: this.state.type,
-                pros: this.state.pros,
-                cons: this.state.cons,
-                bio: this.state.bio,
-                masteringGuide: this.state.masteringGuide,
-                basicGuide: this.state.basicGuide,
-                status: this.state.status,
-                combos: this.state.combos,
-                spells: this.state.spells,
-                battlerites: this.state.battlerites,
-                quotes: this.state.quotes,
-            }
-            firebase.database().ref(`champions/${champion}`).set(champions);
+    saveChampion = () => {
+        let champion = this.state.name.toLowerCase().replace(/\s/g, '')
+        let champions = {
+            name: this.state.name,
+            slogan: this.state.slogan,
+            avatar: this.state.avatar,
+            video: this.state.video,
+            icon: this.state.icon,
+            type: this.state.type,
+            pros: this.state.pros,
+            cons: this.state.cons,
+            bio: this.state.bio,
+            masteringGuide: this.state.masteringGuide,
+            basicGuide: this.state.basicGuide,
+            status: this.state.status,
+            combos: this.state.combos,
+            spells: this.state.spells,
+            battlerites: this.state.battlerites,
+            quotes: this.state.quotes,
         }
+        firebase.database().ref(`champions/${champion}`).set(champions);
+    }
+
+    render() {
         return (
             <div className="aChampions col-12 col-md-9 col-xl-10 py-4">
                 <form onSubmit={e => e.preventDefault()}>
@@ -588,7 +589,7 @@ export default class Form extends Component {
                                     </div>
                                     <div className="custom-file">
                                         <input type="file" required className="custom-file-input" accept="image/*"
-                                               onChange={e => uploadMedia(e, 'icon')}
+                                               onChange={e => this.uploadMedia(e, 'icon')}
                                                id="champUploadIcon"/>
                                         <label className="custom-file-label" id="champUploadIconLabel"
                                                htmlFor="champUploadIcon">Upload champion
@@ -620,7 +621,7 @@ export default class Form extends Component {
                                     </div>
                                     <div className="custom-file">
                                         <input type="file" required className="custom-file-input" accept="video/*"
-                                               onChange={e => uploadMedia(e, 'video')}
+                                               onChange={e => this.uploadMedia(e, 'video')}
                                                id="champUploadVideo"/>
                                         <label className="custom-file-label" id="champUploadVideoLabel"
                                                htmlFor="champUploadVideo">Upload champion
@@ -650,7 +651,7 @@ export default class Form extends Component {
                                     </div>
                                     <div className="custom-file">
                                         <input type="file" required className="custom-file-input" accept="image/*"
-                                               onChange={e => uploadMedia(e, 'avatar')}
+                                               onChange={e => this.uploadMedia(e, 'avatar')}
                                                id="champUploadAvatar"/>
                                         <label className="custom-file-label" id="champUploadAvatarLabel"
                                                htmlFor="champUploadAvatar">Upload champion
@@ -679,7 +680,7 @@ export default class Form extends Component {
                                                    placeholder="Pros"/>
                                             <div className="input-group-append">
                                                 <button className="btn font-weight-bold rounded-right input-group-text"
-                                                        onClick={setPros}>+
+                                                        onClick={this.setPros}>+
                                                 </button>
                                             </div>
                                         </div>
@@ -732,7 +733,7 @@ export default class Form extends Component {
                                                    placeholder="Cons"/>
                                             <div className="input-group-append">
                                                 <button className="btn font-weight-bold rounded-right input-group-text"
-                                                        onClick={setCons}>+
+                                                        onClick={this.setCons}>+
                                                 </button>
                                             </div>
                                         </div>
@@ -812,7 +813,7 @@ export default class Form extends Component {
                                         </div>
                                         <div className="d-flex justify-content-between">
                                             <button className="btn bg-transparent text-light"
-                                                    onClick={setMasteringGuide}>Add
+                                                    onClick={this.setMasteringGuide}>Add
                                             </button>
                                             <button
                                                 className={`btn btn-secondary ${this.state.masteringGuide.length !== 0 ? '' : 'disabled'}`}
@@ -879,7 +880,7 @@ export default class Form extends Component {
                                         </div>
                                         <div className="d-flex justify-content-between">
                                             <button className="btn bg-transparent text-light"
-                                                    onClick={setBasicGuide}>Add
+                                                    onClick={this.setBasicGuide}>Add
                                             </button>
                                             <button
                                                 className={`btn btn-secondary ${this.state.basicGuide.length !== 0 ? '' : 'disabled'}`}
@@ -972,7 +973,7 @@ export default class Form extends Component {
                                                     <input type="text" id="champStatusDamagesProp"
                                                            className="form-control"
                                                            value={this.state.status.damages.props}
-                                                           onChange={e => setStatus(e, 'damages', 'props')}/>
+                                                           onChange={e => this.setStatus(e, 'damages', 'props')}/>
                                                 </div>
                                                 <div className="form-group mb-0 ml-4 mt-3">
                                                     <label htmlFor="champStatusDamagesRate">Rate</label>
@@ -980,7 +981,7 @@ export default class Form extends Component {
                                                            id="champStatusDamagesRate"
                                                            className="form-control"
                                                            value={this.state.status.damages.rate}
-                                                           onChange={e => setStatus(e, 'damages', 'rate')}/>
+                                                           onChange={e => this.setStatus(e, 'damages', 'rate')}/>
                                                 </div>
                                             </div>
                                             <div className="progress mt-2 rounded-0">
@@ -999,7 +1000,7 @@ export default class Form extends Component {
                                                     <input type="text" id="champStatusSurvivabilityProp"
                                                            className="form-control"
                                                            value={this.state.status.survivability.props}
-                                                           onChange={e => setStatus(e, 'survivability', 'props')}/>
+                                                           onChange={e => this.setStatus(e, 'survivability', 'props')}/>
                                                 </div>
                                                 <div className="form-group mb-0 ml-4 mt-3">
                                                     <label htmlFor="champStatusSurvivabilityRate">Rate</label>
@@ -1007,7 +1008,7 @@ export default class Form extends Component {
                                                            id="champStatusSurvivabilityRate"
                                                            className="form-control"
                                                            value={this.state.status.survivability.rate}
-                                                           onChange={e => setStatus(e, 'survivability', 'rate')}/>
+                                                           onChange={e => this.setStatus(e, 'survivability', 'rate')}/>
                                                 </div>
                                             </div>
                                             <div className="progress mt-2 rounded-0">
@@ -1026,7 +1027,7 @@ export default class Form extends Component {
                                                     <input type="text" id="champStatusProtectionProp"
                                                            className="form-control"
                                                            value={this.state.status.protection.props}
-                                                           onChange={e => setStatus(e, 'protection', 'props')}/>
+                                                           onChange={e => this.setStatus(e, 'protection', 'props')}/>
                                                 </div>
                                                 <div className="form-group mb-0 ml-4 mt-3">
                                                     <label htmlFor="champStatusProtectionRate">Rate</label>
@@ -1034,7 +1035,7 @@ export default class Form extends Component {
                                                            id="champStatusProtectionRate"
                                                            className="form-control"
                                                            value={this.state.status.protection.rate}
-                                                           onChange={e => setStatus(e, 'protection', 'rate')}/>
+                                                           onChange={e => this.setStatus(e, 'protection', 'rate')}/>
                                                 </div>
                                             </div>
                                             <div className="progress mt-2 rounded-0">
@@ -1053,7 +1054,7 @@ export default class Form extends Component {
                                                     <input type="text" id="champStatusControlProp"
                                                            className="form-control"
                                                            value={this.state.status.control.props}
-                                                           onChange={e => setStatus(e, 'control', 'props')}/>
+                                                           onChange={e => this.setStatus(e, 'control', 'props')}/>
                                                 </div>
                                                 <div className="form-group mb-0 ml-4 mt-3">
                                                     <label htmlFor="champStatusControlRate">Rate</label>
@@ -1061,7 +1062,7 @@ export default class Form extends Component {
                                                            id="champStatusControlRate"
                                                            className="form-control"
                                                            value={this.state.status.control.rate}
-                                                           onChange={e => setStatus(e, 'control', 'rate')}/>
+                                                           onChange={e => this.setStatus(e, 'control', 'rate')}/>
                                                 </div>
                                             </div>
                                             <div className="progress mt-2 rounded-0">
@@ -1080,15 +1081,15 @@ export default class Form extends Component {
                                                     <input type="text" id="champStatusDifficultyProp"
                                                            className="form-control"
                                                            value={this.state.status.difficulty.props}
-                                                           onChange={e => setStatus(e, 'difficulty', 'props')}/>
+                                                           onChange={e => this.setStatus(e, 'difficulty', 'props')}/>
                                                 </div>
                                                 <div className="form-group mb-0 ml-4 mt-3">
-                                                    <label htmlFor="champStatusDifficultyRate">Rate</label>
+                                                    <label htmlFor="champStatusthis.difficultyRate">Rate</label>
                                                     <input type="number" min="0" max="100" step="5"
-                                                           id="champStatusDifficultyRate"
+                                                           id="champStatusthis.difficultyRate"
                                                            className="form-control"
                                                            value={this.state.status.difficulty.rate}
-                                                           onChange={e => setStatus(e, 'difficulty', 'rate')}/>
+                                                           onChange={e => this.setStatus(e, 'difficulty', 'rate')}/>
                                                 </div>
                                             </div>
                                             <div className="progress mt-2 rounded-0">
@@ -1126,7 +1127,7 @@ export default class Form extends Component {
                                                 </div>
                                             }
                                             <input type="file" id={`combosFile-${key}`} accept="video/*"
-                                                   onChange={e => uploadMedia(e, 'video', '/combos', key)}
+                                                   onChange={e => this.uploadMedia(e, 'video', '/combos', key)}
                                                    className="d-none"/>
                                         </div>
                                         <div className="progress bg-transparent h-100 rounded-0">
@@ -1145,31 +1146,31 @@ export default class Form extends Component {
                                                 <div className="difficulty d-flex align-items-center">
                                                     <div className="difficultyBox">
                                                         <input type="radio" onChange={() => {
-                                                            difficultyRate(0, key)
+                                                            this.difficultyRate(0, key)
                                                         }} name={`difficukty-${key}`}/>
                                                         <span className='difficultyCircle'/>
                                                     </div>
                                                     <div className="difficultyBox">
                                                         <input type="radio" onChange={() => {
-                                                            difficultyRate(1, key)
+                                                            this.difficultyRate(1, key)
                                                         }} name={`difficukty-${key}`}/>
                                                         <span className='difficultyCircle'/>
                                                     </div>
                                                     <div className="difficultyBox">
                                                         <input type="radio" onChange={() => {
-                                                            difficultyRate(2, key)
+                                                            this.difficultyRate(2, key)
                                                         }} name={`difficukty-${key}`}/>
                                                         <span className='difficultyCircle'/>
                                                     </div>
                                                     <div className="difficultyBox">
                                                         <input type="radio" onChange={() => {
-                                                            difficultyRate(3, key)
+                                                            this.difficultyRate(3, key)
                                                         }} name={`difficukty-${key}`}/>
                                                         <span className='difficultyCircle'/>
                                                     </div>
                                                     <div className="difficultyBox">
                                                         <input type="radio" onChange={() => {
-                                                            difficultyRate(4, key)
+                                                            this.difficultyRate(4, key)
                                                         }} name={`difficukty-${key}`}/>
                                                         <span className='difficultyCircle'/>
                                                     </div>
@@ -1179,21 +1180,21 @@ export default class Form extends Component {
                                                 <label htmlFor={`champCombosSkillCombo-${key}`}>Skill Combo</label>
                                                 <input type="text" id={`champCombosSkillCombo-${key}`}
                                                        className="form-control"
-                                                       onChange={e => setCombo(e, 'skillCombo', key)}
+                                                       onChange={e => this.setCombo(e, 'skillCombo', key)}
                                                        value={this.state.combos[key].skillCombo}/>
                                             </div>
                                             <div className="form-group">
                                                 <label htmlFor={`champCombosDescription-${key}`}>Description</label>
                                                 <textarea id={`champCombosDescription-${key}`} className="form-control"
                                                           cols="30"
-                                                          rows="5" onChange={e => setCombo(e, 'description', key)}
+                                                          rows="5" onChange={e => this.setCombo(e, 'description', key)}
                                                           value={this.state.combos[key].description}/>
                                             </div>
 
                                         </div>
                                         <div className="card-footer pt-0 d-flex">
                                             <button className="btn bg-transparent ml-auto text-light"
-                                                    onClick={addComboCard}>Add another
+                                                    onClick={this.addComboCard}>Add another
                                             </button>
                                         </div>
                                     </div>
@@ -1218,12 +1219,12 @@ export default class Form extends Component {
                                                             <input type="text" required id={`spellName-${key}`}
                                                                    placeholder="Name..."
                                                                    value={data.name}
-                                                                   onChange={e => setSpell(e, 'name', key)}
+                                                                   onChange={e => this.setSpell(e, 'name', key)}
                                                                    className="form-control w-75"/>
                                                             <input type="text" required id={`spellKeyword-${key}`}
                                                                    placeholder="Key..."
                                                                    value={data.keyword}
-                                                                   onChange={e => setSpell(e, 'keyword', key)}
+                                                                   onChange={e => this.setSpell(e, 'keyword', key)}
                                                                    className="form-control w-25"/>
                                                         </div>
                                                     </div>
@@ -1237,18 +1238,18 @@ export default class Form extends Component {
                                                                 <input type="text" id={`spellDetailsName-${index}`}
                                                                        placeholder="Name..."
                                                                        value={data.name}
-                                                                       onChange={e => setSpell(e, 'details', key, 'name', index)}
+                                                                       onChange={e => this.setSpell(e, 'details', key, 'name', index)}
                                                                        className="form-control w-75"/>
                                                                 <input type="text" id={`spellDetailsProp-${index}`}
                                                                        placeholder="Prop..."
                                                                        value={data.prop}
-                                                                       onChange={e => setSpell(e, 'details', key, 'prop', index)}
+                                                                       onChange={e => this.setSpell(e, 'details', key, 'prop', index)}
                                                                        className="form-control w-25"/>
                                                             </div>
                                                         })}
                                                     </div>
                                                     <button className="btn btn-sm rounded"
-                                                            onClick={() => addSpellDetails(key)}
+                                                            onClick={() => this.addSpellDetails(key)}
                                                             type="button">Add +
                                                     </button>
                                                 </div>
@@ -1272,7 +1273,7 @@ export default class Form extends Component {
                                                                 <input type="file" required
                                                                        className="custom-file-input"
                                                                        id={`spellIcon-${key}`} accept="image/*"
-                                                                       onChange={e => uploadMedia(e, 'icon', '/spells', key)}/>
+                                                                       onChange={e => this.uploadMedia(e, 'icon', '/spells', key)}/>
                                                                 <label className="custom-file-label"
                                                                        id={`spellIconLabel-${key}`}
                                                                        htmlFor={`spellIcon-${key}`}>Upload
@@ -1297,7 +1298,7 @@ export default class Form extends Component {
                                                             className="text-danger mr-1">*</span>Description</label>
                                                         <textarea id={`spellDescription-${key}`} required
                                                                   value={data.description}
-                                                                  onChange={e => setSpell(e, 'description', key)}
+                                                                  onChange={e => this.setSpell(e, 'description', key)}
                                                                   className="form-control"
                                                                   cols="30" rows="3"/>
                                                     </div>
@@ -1307,7 +1308,7 @@ export default class Form extends Component {
                                         </div>
                                         <div className="card-footer pt-0 d-flex">
                                             <button className="btn bg-transparent ml-auto text-light"
-                                                    onClick={addSpell}>Add another
+                                                    onClick={this.addSpell}>Add another
                                             </button>
                                         </div>
                                     </div>
@@ -1328,7 +1329,7 @@ export default class Form extends Component {
                                                 <input type="text" required id={`battleriteName-{key}`}
                                                        placeholder="Name..."
                                                        value={data.name}
-                                                       onChange={e => setBattlerite(e, 'name', key)}
+                                                       onChange={e => this.setBattlerite(e, 'name', key)}
                                                        className="form-control"/>
                                             </div>
                                             <div className="row">
@@ -1345,7 +1346,7 @@ export default class Form extends Component {
                                                         <div className="dropdown-menu">
                                                             {this.state.battleriteTypes.map((data, index) => {
                                                                 return <button className="dropdown-item text-capitalize"
-                                                                               onClick={() => setBattlerite(data, 'type', key)}
+                                                                               onClick={() => this.setBattlerite(data, 'type', key)}
                                                                                key={index}>{data}</button>
                                                             })}
                                                         </div>
@@ -1358,7 +1359,7 @@ export default class Form extends Component {
                                                         <input type="text" required id={`battleriteKeyword-{key}`}
                                                                placeholder="Key..."
                                                                value={data.keyword}
-                                                               onChange={e => setBattlerite(e, 'keyword', key)}
+                                                               onChange={e => this.setBattlerite(e, 'keyword', key)}
                                                                className="form-control"/>
                                                     </div>
                                                 </div>
@@ -1381,7 +1382,7 @@ export default class Form extends Component {
                                                     <div className="custom-file">
                                                         <input type="file" required className="custom-file-input"
                                                                id={`battleriteIcon-${key}`} accept="image/*"
-                                                               onChange={e => uploadMedia(e, 'icon', '/battlerites', key)}/>
+                                                               onChange={e => this.uploadMedia(e, 'icon', '/battlerites', key)}/>
                                                         <label className="custom-file-label"
                                                                id={`battleriteIconLabel-${key}`}
                                                                htmlFor={`battleriteIcon-${key}`}>
@@ -1405,14 +1406,14 @@ export default class Form extends Component {
                                                     className="text-danger mr-1">*</span>Description</label>
                                                 <textarea id={`battleriteDescription-{key}`} required
                                                           value={data.description}
-                                                          onChange={e => setBattlerite(e, 'description', key)}
+                                                          onChange={e => this.setBattlerite(e, 'description', key)}
                                                           className="form-control"
                                                           cols="30" rows="3"/>
                                             </div>
                                         </div>
                                         <div className="card-footer pt-0 d-flex">
                                             <button className="btn bg-transparent ml-auto text-light"
-                                                    onClick={addBattlerite}>Add another
+                                                    onClick={this.addBattlerite}>Add another
                                             </button>
                                         </div>
                                     </div>
@@ -1430,7 +1431,7 @@ export default class Form extends Component {
                                             return <div className="form-group" key={key}>
                                                 <div className="input-group">
                                                     <input type="text" value={this.state.quotes[key].name}
-                                                           onChange={e => setQuote(e, 'name', key)}
+                                                           onChange={e => this.setQuote(e, 'name', key)}
                                                            placeholder="Name..."
                                                            className="form-control" id={`quoteName-${key}`}/>
                                                     <div className="input-group-append">
@@ -1451,13 +1452,13 @@ export default class Form extends Component {
                                                         </label>
                                                         <input type="file" className="d-none"
                                                                id={`quoteSound-${key}`} accept=".mp3"
-                                                               onChange={e => uploadMedia(e, 'sound', '/quotes', key)}/>
+                                                               onChange={e => this.uploadMedia(e, 'sound', '/quotes', key)}/>
                                                     </div>
                                                 </div>
                                             </div>
                                         })}
                                         <button className="btn btn-sm rounded"
-                                                onClick={() => addQuoteSound()}
+                                                onClick={() => this.addQuoteSound()}
                                                 type="button">Add +
                                         </button>
                                     </div>
@@ -1466,7 +1467,7 @@ export default class Form extends Component {
                         </div>
                         <div className="row mt-4">
                             <div className="col-12">
-                                <button className="btn btn-light" type="submit" onClick={saveChampion}>Save</button>
+                                <button className="btn btn-light" type="submit" onClick={this.saveChampion}>Save</button>
                             </div>
                         </div>
                     </div>

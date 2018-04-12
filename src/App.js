@@ -7,7 +7,11 @@ import * as firebase from 'firebase'
 import Header from './components/Shared/Header'
 
 import Home from './components/Home/Home'
+
+// News
 import News from './components/News/News'
+import ViewNews from './components/News/View'
+
 import Guides from './components/Guides/Guides'
 import Champions from './components/Guides/Champions'
 import Videos from './components/Videos/Videos'
@@ -52,7 +56,11 @@ export default class App extends Component {
                 <Header theme={this.switchTheme}/>
                 <Switch>
                     <Route exact path='/' component={Home}/>
-                    <Route path='/news' component={News}/>
+
+                    {/*News*/}
+                    <Route exact path='/news/' component={News}/>
+                    <Route path='/news/:news' component={ViewNews}/>
+
                     <Route exact path='/guides' component={Guides}/>
                     <Route path='/champions/:id' component={Champions}/>
                     <Route path='/videos' component={Videos}/>

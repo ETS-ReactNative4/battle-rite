@@ -25,32 +25,31 @@ export default class News extends Component {
 
     componentDidMount() {
         firebase.database().ref('news').once('value').then(data => {
-            console.log(data.val())
             let news = Object.values(data.val())
             this.setState({news})
         })
     }
+    /***
+     *
+     * @param date Take a new Date
+     * @returns {string}
+     */
+    formatDate = date => {
+        let revertToDate = new Date(date)
+        const monthNames = [
+            "January", "February", "March",
+            "April", "May", "June", "July",
+            "August", "September", "October",
+            "November", "December"
+        ];
 
+        let day = revertToDate.getDate();
+        let monthIndex = revertToDate.getMonth();
+        let year = revertToDate.getFullYear();
+
+        return day + ' ' + monthNames[monthIndex] + ' ' + year;
+    }
     render() {
-        /********
-         *
-         * @param date Take a new Date
-         * @returns {string}
-         */
-        const formatDate = date => {
-            let monthNames = [
-                "January", "February", "March",
-                "April", "May", "June", "July",
-                "August", "September", "October",
-                "November", "December"
-            ];
-
-            let day = date.getDate();
-            let monthIndex = date.getMonth();
-            let year = date.getFullYear();
-
-            return day + ' ' + monthNames[monthIndex] + ' ' + year;
-        }
         return (
             <div className="news py-3">
                 <div className="container">
@@ -67,7 +66,7 @@ export default class News extends Component {
                                     <div className="news__items" style={{backgroundImage: `url(${data.img})`}}>
                                         <h4>{data.title}</h4>
                                         <h6>{data.subTitle}</h6>
-                                        {/*<span>{formatDate(data.date)}</span>*/}
+                                        <span>{this.formatDate(data.date)}</span>
                                     </div>
                                 </Link>
                             </div>
