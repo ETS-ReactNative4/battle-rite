@@ -17,6 +17,7 @@ export default class Form extends Component {
             content: '',
             progressbarImg: 0,
 
+            permalinksFirebase: [],
             editNews: this.props.match.params.news,
         }
     }
@@ -33,7 +34,6 @@ export default class Form extends Component {
         } else {
             firebase.database().ref(`news/${this.state.editNews}`)
                 .once('value').then(data => {
-                console.log(data.val().id)
                 let news = {
                     id: data.val().id,
                     author: data.val().author,
@@ -44,9 +44,16 @@ export default class Form extends Component {
                     content: data.val().content,
                 }
                 this.setState(news)
-                console.log(data.val())
             })
         }
+
+        // Get permalink from Firebase to check by the array when saving
+        firebase.database().ref('news').once('value').then(data => {
+            let news = Object.values(data.val())
+            let permalinks = []
+            for (let v of news) if(this.state.permalink !== v.permalink) permalinks.push(v.permalink)
+            this.setState({permalinksFirebase: permalinks})
+        })
     }
 
     render() {
@@ -90,7 +97,33 @@ export default class Form extends Component {
             )
         }
 
+        const deleteNews = () => {
+            let result = window.confirm('Are you sure?')
+            if (!result) return false
+            firebase.database().ref(`news/${this.state.permalink}`).remove()
+            this.props.history.goBack()
+        }
+
         const saveNews = () => {
+            // Check using unique permalink
+            for (let permalink of this.state.permalinksFirebase) {
+                if (this.state.permalink === permalink) {
+                    alert('Permalink is exist.')
+                    return false
+                }
+            }
+
+            // Check the require inputs
+            const inputs = document.getElementsByTagName('input')
+            for (let input of inputs) {
+                if (input.value === '' && input.getAttribute('required') !== null) {
+                    return false
+                }else if (this.state.content === ''){
+                    alert('Please add content.')
+                    return false
+                }
+            }
+
             let news = {
                 id: this.state.id,
                 permalink: this.state.permalink,
@@ -102,6 +135,7 @@ export default class Form extends Component {
                 data: (new Date()).toString()
             }
             firebase.database().ref(`news/${this.state.permalink}`).set(news);
+            this.props.history.goBack()
         }
         return (
             <div className="aNews col-12 col-md-9 col-xl-10 py-4">
@@ -157,7 +191,8 @@ export default class Form extends Component {
                                             </Link>
                                         </div>
                                         <div className="custom-file">
-                                            <input type="file" required className="custom-file-input" accept="image/*"
+                                            <input type="file" required={this.state.img === '' ? 'required' : null}
+                                                   className="custom-file-input" accept="image/*"
                                                    onChange={e => uploadMedia(e)}
                                                    id="newsUploadImg"/>
                                             <label className="custom-file-label" id="newsUploadImgLabel"
@@ -188,6 +223,10 @@ export default class Form extends Component {
                             <div className="row mt-4">
                                 <div className="col-12">
                                     <button className="btn btn-light" type="submit" onClick={saveNews}>Save</button>
+                                    {this.state.editNews !== undefined ?
+                                        <button className="btn btn-outline-danger ml-3" type="button"
+                                                onClick={deleteNews}>Delete</button> : ''
+                                    }
                                 </div>
                             </div>
                         </div>

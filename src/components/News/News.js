@@ -31,45 +31,6 @@ export default class News extends Component {
         })
     }
 
-    news = [
-        {
-            image: jamilaImg,
-            title: 'Jamila, the Shadowblade Assassin',
-            date: '2018-03-13',
-            author: 'JohnnyB01'
-        },
-        {
-            image: legends_of_quna,
-            title: 'Inspirations from the Past: Legends of Quna',
-            date: '2018-02-22',
-            author: 'JohnnyB01'
-        },
-        {
-            image: dragon,
-            title: 'Sleeping Dragons',
-            date: '2018-02-22',
-            author: 'Ayydrill'
-        },
-        {
-            image: redditPartner,
-            title: 'United as one',
-            date: '2018-01-24',
-            author: 'Ayydrill'
-        },
-        {
-            image: updateJanuary,
-            title: 'Website Update January 2018',
-            date: '2018-01-23',
-            author: 'gflox'
-        },
-        {
-            image: zander,
-            title: 'Zander, The magnificent magician',
-            date: '2018-01-16',
-            author: 'Ayydrill'
-        }
-    ]
-
     render() {
         /********
          *
