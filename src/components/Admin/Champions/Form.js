@@ -13,6 +13,7 @@ export default class Form extends Component {
         super(props)
         this.state = {
             name: '',
+            hp: '',
             slogan: '',
             avatar: '',
             video: '',
@@ -65,6 +66,8 @@ export default class Form extends Component {
                     description: '',
                     img: '',
                     keyword: '',
+                    type: '',
+                    cost: '',
                     details: [
                         {
                             name: '',
@@ -83,14 +86,16 @@ export default class Form extends Component {
                     description: '',
                     img: '',
                     keyword: '',
-                    type: ''
+                    type: '',
+                    ex: false,
                 },
                 {
                     name: '',
                     description: '',
                     img: '',
                     keyword: '',
-                    type: ''
+                    type: '',
+                    ex: false,
                 },
             ],
             quotes: [
@@ -128,6 +133,8 @@ export default class Form extends Component {
                 description: '',
                 img: '',
                 keyword: '',
+                type: '',
+                cost: '',
                 details: [
                     {
                         name: '',
@@ -144,7 +151,8 @@ export default class Form extends Component {
                 description: '',
                 img: '',
                 keyword: '',
-                type: ''
+                type: '',
+                ex: false,
             },
 
             // Progress bars
@@ -231,7 +239,7 @@ export default class Form extends Component {
     setStatus = (event, obj, subType) => {
         let status = this.state.status
         status[obj][subType] = event.target.value
-        this.setState(status)
+        this.setState({status})
     }
 
     /**
@@ -244,10 +252,11 @@ export default class Form extends Component {
     uploadMedia = (event, type, typePath = '', num) => {
         // Get file
         let file = event.target.files[0]
+        let champion = this.state.name.toLowerCase().replace(/\s/g, '')
 
         // Create a storage ref
         let storageRef = firebase.storage()
-            .ref(`champions/${this.state.name}${typePath}/${
+            .ref(`champions/${champion}${typePath}/${
                 num !== undefined ? num : type
                 }`)
 
@@ -402,7 +411,7 @@ export default class Form extends Component {
         this.setState({combos})
     }
 
-    addComboCard = () => {
+    addCombo = () => {
         let arr = this.state.combos
         let tempCombos = Object.assign({}, this.state.tempCombos)
         arr.push(tempCombos)
@@ -421,12 +430,17 @@ export default class Form extends Component {
      */
     setSpell = (event, obj, num, detailsType, detailsIndex) => {
         let spells = this.state.spells
-        if (detailsType === undefined) {
-            spells[num][obj] = event.target.value
+        if (obj === 'type') {
+            spells[num][obj] = event
         } else {
-            spells[num][obj][detailsIndex][detailsType] = event.target.value
+            if (detailsType === undefined) {
+                spells[num][obj] = event.target.value
+            } else {
+                spells[num][obj][detailsIndex][detailsType] = event.target.value
+            }
         }
-        this.setState(spells)
+
+        this.setState({spells})
     }
 
     addSpell = () => {
@@ -462,10 +476,12 @@ export default class Form extends Component {
         let battlerites = this.state.battlerites
         if (obj === 'type') {
             battlerites[num][obj] = event
+        } else if (obj === 'ex') {
+            battlerites[num][obj] = event.target.checked
         } else {
             battlerites[num][obj] = event.target.value
         }
-        this.setState(battlerites)
+        this.setState({battlerites})
     }
 
     addBattlerite = () => {
@@ -486,7 +502,7 @@ export default class Form extends Component {
     setQuote = (event, obj, num) => {
         let quotes = this.state.quotes
         quotes[num][obj] = event.target.value
-        this.setState(quotes)
+        this.setState({quotes})
     }
 
     addQuoteSound = () => {
@@ -498,6 +514,19 @@ export default class Form extends Component {
         this.setState({quotes: arr})
     }
     /*** Quotes ***/
+
+    /**
+     *
+     * @param key Obj number
+     * @param obj State name using to know what is the state wanna edit
+     */
+    removeElement = (key, obj) => {
+        let arr = new Set(this.state[obj])
+        arr.forEach(element => {
+            if (this.state[obj][key] === element) arr.delete(element)
+        })
+        this.setState({[obj]: [...arr]})
+    }
 
     saveChampion = () => {
         let champion = this.state.name.toLowerCase().replace(/\s/g, '')
@@ -519,7 +548,13 @@ export default class Form extends Component {
             battlerites: this.state.battlerites,
             quotes: this.state.quotes,
         }
-        firebase.database().ref(`champions/${champion}`).set(champions);
+        try {
+            firebase.database().ref(`champions/${champion}`).set(champions);
+            this.props.history.goBack()
+        } catch (e) {
+            console.log(e.message)
+            console.log(`Champions: ${champions}`)
+        }
     }
 
     render() {
@@ -528,14 +563,23 @@ export default class Form extends Component {
                 <form onSubmit={e => e.preventDefault()}>
                     <div className="container">
                         <div className="row">
-                            <div className="col-lg-10 col-9">
+                            <div className="col-lg-8 col-6">
                                 <div className="form-group">
                                     <label htmlFor="champName">
                                         <small className="text-danger mr-1">*</small>
                                         Name</label>
-                                    <input type="text" required id="champName" value={this.state.name}
+                                    <input type="text" id="champName" value={this.state.name}
                                            onChange={e => this.setState({name: e.target.value})}
                                            className="form-control" placeholder="Champion name"/>
+                                </div>
+                            </div>
+                            <div className="col-lg-2 col-3">
+                                <div className="form-group">
+                                    <label htmlFor="champHP">
+                                        <small className="text-danger mr-1">*</small>HP</label>
+                                    <input type="text" id="champHP" value={this.state.hp}
+                                           onChange={e => this.setState({hp: e.target.value})}
+                                           className="form-control" placeholder="Champion HP"/>
                                 </div>
                             </div>
                             <div className="col-lg-2 col-3">
@@ -569,7 +613,7 @@ export default class Form extends Component {
                                     <label htmlFor="champSolgan">
                                         <small className="text-danger mr-1">*</small>
                                         Slogan</label>
-                                    <input type="text" required id="champSolgan" value={this.state.slogan}
+                                    <input type="text" id="champSolgan" value={this.state.slogan}
                                            onChange={e => this.setState({slogan: e.target.value})}
                                            className="form-control" placeholder="Champion slogan"/>
                                 </div>
@@ -588,7 +632,7 @@ export default class Form extends Component {
                                         </Link>
                                     </div>
                                     <div className="custom-file">
-                                        <input type="file" required className="custom-file-input" accept="image/*"
+                                        <input type="file" className="custom-file-input" accept="image/*"
                                                onChange={e => this.uploadMedia(e, 'icon')}
                                                id="champUploadIcon"/>
                                         <label className="custom-file-label" id="champUploadIconLabel"
@@ -620,7 +664,7 @@ export default class Form extends Component {
                                         </Link>
                                     </div>
                                     <div className="custom-file">
-                                        <input type="file" required className="custom-file-input" accept="video/*"
+                                        <input type="file" className="custom-file-input" accept="video/*"
                                                onChange={e => this.uploadMedia(e, 'video')}
                                                id="champUploadVideo"/>
                                         <label className="custom-file-label" id="champUploadVideoLabel"
@@ -650,7 +694,7 @@ export default class Form extends Component {
                                         </Link>
                                     </div>
                                     <div className="custom-file">
-                                        <input type="file" required className="custom-file-input" accept="image/*"
+                                        <input type="file" className="custom-file-input" accept="image/*"
                                                onChange={e => this.uploadMedia(e, 'avatar')}
                                                id="champUploadAvatar"/>
                                         <label className="custom-file-label" id="champUploadAvatarLabel"
@@ -701,7 +745,19 @@ export default class Form extends Component {
                                                         <div className="modal-body">
                                                             <ul>
                                                                 {this.state.pros.map((data, key) => {
-                                                                    return <li key={key}>{data}</li>
+                                                                    return <li key={key}>
+                                                                        <div
+                                                                            className="d-flex justify-content-between align-items-center">
+                                                                            {data}
+                                                                            <button type="button"
+                                                                                    onClick={() => this.removeElement(key, 'pros')}
+                                                                                    className="btn btn-sm badge badge-danger"
+                                                                                    data-dismiss="modal"
+                                                                                    aria-label="Close"
+                                                                                    title="Delete!">Delete
+                                                                            </button>
+                                                                        </div>
+                                                                    </li>
                                                                 })}
                                                             </ul>
                                                         </div>
@@ -754,7 +810,19 @@ export default class Form extends Component {
                                                         <div className="modal-body">
                                                             <ul>
                                                                 {this.state.cons.map((data, key) => {
-                                                                    return <li key={key}>{data}</li>
+                                                                    return <li key={key}>
+                                                                        <div
+                                                                            className="d-flex justify-content-between align-items-center">
+                                                                            {data}
+                                                                            <button type="button"
+                                                                                    onClick={() => this.removeElement(key, 'cons')}
+                                                                                    className="btn btn-sm badge badge-danger"
+                                                                                    data-dismiss="modal"
+                                                                                    aria-label="Close"
+                                                                                    title="Delete!">Delete
+                                                                            </button>
+                                                                        </div>
+                                                                    </li>
                                                                 })}
                                                             </ul>
                                                         </div>
@@ -780,10 +848,10 @@ export default class Form extends Component {
                                     <label htmlFor="champBio">
                                         <small className="text-danger mr-1">*</small>
                                         Bio</label>
-                                    <textarea id="champBio" required className="form-control" value={this.state.bio}
+                                    <textarea id="champBio" className="form-control" value={this.state.bio}
                                               cols="30"
                                               rows="5"
-                                              onChange={e => this.setState({bio: e.target.value.toLowerCase()})}/>
+                                              onChange={e => this.setState({bio: e.target.value})}/>
                                 </div>
                             </div>
                         </div>
@@ -797,7 +865,7 @@ export default class Form extends Component {
                                                 <label htmlFor="champMasteringGuideTitle">Title</label>
                                                 <input type="text" id="champMasteringGuideTitle"
                                                        value={this.state.tempMasteringGuideTitle}
-                                                       onChange={e => this.setState({tempMasteringGuideTitle: e.target.value.toLowerCase()})}
+                                                       onChange={e => this.setState({tempMasteringGuideTitle: e.target.value})}
                                                        className="form-control"
                                                        placeholder="Mastering Guide Title"/>
 
@@ -806,7 +874,7 @@ export default class Form extends Component {
                                                 <label htmlFor="champMasteringGuideDescription">Description</label>
                                                 <textarea id="champMasteringGuideDescription"
                                                           value={this.state.tempMasteringGuideDescription}
-                                                          onChange={e => this.setState({tempMasteringGuideDescription: e.target.value.toLowerCase()})}
+                                                          onChange={e => this.setState({tempMasteringGuideDescription: e.target.value})}
                                                           className="form-control"
                                                           placeholder="Mastering Guide Description" cols="30" rows="5"/>
                                             </div>
@@ -838,8 +906,18 @@ export default class Form extends Component {
                                                     <div className="row">
                                                         {this.state.masteringGuide.map((data, key) => {
                                                             return <div className="col-lg-6" key={key}>
-                                                                <h4 className="text-uppercase">{data.title}</h4>
-                                                                <p className="font-weight-light text-capitalize">
+                                                                <div
+                                                                    className="d-flex justify-content-between align-items-center">
+                                                                    <h4 className="text-uppercase">{data.title}</h4>
+                                                                    <button type="button"
+                                                                            onClick={() => this.removeElement(key, 'masteringGuide')}
+                                                                            className="btn btn-sm badge badge-danger"
+                                                                            data-dismiss="modal" aria-label="Close"
+                                                                            title="Delete!">Delete
+                                                                    </button>
+                                                                </div>
+                                                                <p className="font-weight-light text-capitalize"
+                                                                   style={{whiteSpace: 'pre-wrap'}}>
                                                                     {data.description}
                                                                 </p>
                                                             </div>
@@ -864,7 +942,7 @@ export default class Form extends Component {
                                                 <label htmlFor="champBasicGuideTitle">Title</label>
                                                 <input type="text" id="champBasicGuideTitle"
                                                        value={this.state.tempBasicGuideTitle}
-                                                       onChange={e => this.setState({tempBasicGuideTitle: e.target.value.toLowerCase()})}
+                                                       onChange={e => this.setState({tempBasicGuideTitle: e.target.value})}
                                                        className="form-control"
                                                        placeholder="Basic Guide Title"/>
 
@@ -873,7 +951,7 @@ export default class Form extends Component {
                                                 <label htmlFor="champBasicGuideDescription">Description</label>
                                                 <textarea id="champBasicGuideDescription"
                                                           value={this.state.tempBasicGuideDescription}
-                                                          onChange={e => this.setState({tempBasicGuideDescription: e.target.value.toLowerCase()})}
+                                                          onChange={e => this.setState({tempBasicGuideDescription: e.target.value})}
                                                           className="form-control"
                                                           placeholder="Basic Guide Description" cols="30" rows="5"/>
                                             </div>
@@ -905,8 +983,18 @@ export default class Form extends Component {
                                                     <div className="row">
                                                         {this.state.basicGuide.map((data, key) => {
                                                             return <div className="col-lg-6" key={key}>
-                                                                <h4 className="text-uppercase">{data.title}</h4>
-                                                                <p className="font-weight-light text-capitalize">
+                                                                <div
+                                                                    className="d-flex justify-content-between align-items-center">
+                                                                    <h4 className="text-uppercase">{data.title}</h4>
+                                                                    <button type="button"
+                                                                            onClick={() => this.removeElement(key, 'basicGuide')}
+                                                                            className="btn btn-sm badge badge-danger"
+                                                                            data-dismiss="modal" aria-label="Close"
+                                                                            title="Delete!">Delete
+                                                                    </button>
+                                                                </div>
+                                                                <p className="font-weight-light text-capitalize"
+                                                                   style={{whiteSpace: 'pre-wrap'}}>
                                                                     {data.description}
                                                                 </p>
                                                             </div>
@@ -1193,8 +1281,12 @@ export default class Form extends Component {
 
                                         </div>
                                         <div className="card-footer pt-0 d-flex">
+                                            {this.state.combos.length > 1 ?
+                                                <button className="btn bg-transparent mr-auto text-danger"
+                                                        onClick={() => this.removeElement(key, 'combos')}>Delete
+                                                </button> : ''}
                                             <button className="btn bg-transparent ml-auto text-light"
-                                                    onClick={this.addComboCard}>Add another
+                                                    onClick={this.addCombo}>Add another
                                             </button>
                                         </div>
                                     </div>
@@ -1216,20 +1308,52 @@ export default class Form extends Component {
                                                             className="text-danger mr-1">*</span>Name
                                                             & keyword</label>
                                                         <div className="input-group">
-                                                            <input type="text" required id={`spellName-${key}`}
+                                                            <input type="text" id={`spellName-${key}`}
                                                                    placeholder="Name..."
                                                                    value={data.name}
                                                                    onChange={e => this.setSpell(e, 'name', key)}
                                                                    className="form-control w-75"/>
-                                                            <input type="text" required id={`spellKeyword-${key}`}
+                                                            <input type="text" id={`spellKeyword-${key}`}
                                                                    placeholder="Key..."
                                                                    value={data.keyword}
                                                                    onChange={e => this.setSpell(e, 'keyword', key)}
                                                                    className="form-control w-25"/>
                                                         </div>
                                                     </div>
+                                                    <div className="form-group">
+                                                        <label htmlFor={`spellDetailsType-${key}`}>Type & cost</label>
+                                                        <div className="input-group">
+                                                            <div className="btn-group w-75">
+                                                                <button type="button" id={`spellDetailsType-${key}`}
+                                                                        className="btn btn-block rounded-left text-capitalize border btn-light dropdown-toggle"
+                                                                        data-toggle="dropdown"
+                                                                        aria-haspopup="true" aria-expanded="false">
+                                                                    {this.state.spells[key].type !== '' ? this.state.spells[key].type : 'mobility'}
+                                                                </button>
+                                                                <div className="dropdown-menu">
+                                                                    <button className="dropdown-item"
+                                                                            onClick={() => this.setSpell('mobility', 'type', key)}>Mobility
+                                                                    </button>
+                                                                    <button className="dropdown-item"
+                                                                            onClick={() => this.setSpell('aoe', 'type', key)}>Aoe
+                                                                    </button>
+                                                                    <button className="dropdown-item"
+                                                                            onClick={() => this.setSpell('projectile', 'type', key)}>Projectile
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            <input type="text" id={`spellCost-${key}`}
+                                                                   placeholder="Cost..."
+                                                                   value={data.cost} style={{
+                                                                borderTopLeftRadius: 0,
+                                                                borderBottomLeftRadius: 0,
+                                                            }}
+                                                                   onChange={e => this.setSpell(e, 'cost', key)}
+                                                                   className="form-control rounded-right w-25"/>
+                                                        </div>
+                                                    </div>
                                                     <div className="form-group mb-0">
-                                                        <label htmlFor="spellDetailsName-1">
+                                                        <label htmlFor={`spellDetailsName-${key}`}>
                                                             Names & props
                                                         </label>
                                                         {data.details.map((data, index) => {
@@ -1270,7 +1394,7 @@ export default class Form extends Component {
                                                                 </Link>
                                                             </div>
                                                             <div className="custom-file">
-                                                                <input type="file" required
+                                                                <input type="file"
                                                                        className="custom-file-input"
                                                                        id={`spellIcon-${key}`} accept="image/*"
                                                                        onChange={e => this.uploadMedia(e, 'icon', '/spells', key)}/>
@@ -1296,7 +1420,7 @@ export default class Form extends Component {
                                                     <div className="form-group">
                                                         <label htmlFor={`spellDescription-${key}`}><span
                                                             className="text-danger mr-1">*</span>Description</label>
-                                                        <textarea id={`spellDescription-${key}`} required
+                                                        <textarea id={`spellDescription-${key}`}
                                                                   value={data.description}
                                                                   onChange={e => this.setSpell(e, 'description', key)}
                                                                   className="form-control"
@@ -1307,6 +1431,10 @@ export default class Form extends Component {
 
                                         </div>
                                         <div className="card-footer pt-0 d-flex">
+                                            {this.state.spells.length > 1 ?
+                                                <button className="btn bg-transparent mr-auto text-danger"
+                                                        onClick={() => this.removeElement(key, 'spells')}>Delete
+                                                </button> : ''}
                                             <button className="btn bg-transparent ml-auto text-light"
                                                     onClick={this.addSpell}>Add another
                                             </button>
@@ -1324,9 +1452,9 @@ export default class Form extends Component {
                                     <div className="card border-light rounded bg-dark text-light">
                                         <div className="card-body">
                                             <div className="form-group">
-                                                <label htmlFor={`battleriteName-{key}`}><span
+                                                <label htmlFor={`battleriteName-${key}`}><span
                                                     className="text-danger mr-1">*</span>Name</label>
-                                                <input type="text" required id={`battleriteName-{key}`}
+                                                <input type="text" id={`battleriteName-${key}`}
                                                        placeholder="Name..."
                                                        value={data.name}
                                                        onChange={e => this.setBattlerite(e, 'name', key)}
@@ -1335,9 +1463,9 @@ export default class Form extends Component {
                                             <div className="row">
                                                 <div className="col-6">
                                                     <div className="form-group">
-                                                        <label htmlFor={`battleriteType-{key}`}><span
+                                                        <label htmlFor={`battleriteType-${key}`}><span
                                                             className="text-danger mr-1">*</span>Type</label>
-                                                        <button type="button" id={`battleriteType-{key}`}
+                                                        <button type="button" id={`battleriteType-${key}`}
                                                                 className="btn btn-block rounded border btn-light dropdown-toggle"
                                                                 data-toggle="dropdown" aria-haspopup="true"
                                                                 aria-expanded="false">
@@ -1352,15 +1480,25 @@ export default class Form extends Component {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="col-6">
+                                                <div className="col-6 d-flex">
                                                     <div className="form-group">
-                                                        <label htmlFor={`battleriteKeyword-{key}`}><span
-                                                            className="text-danger mr-1">*</span>keyword</label>
-                                                        <input type="text" required id={`battleriteKeyword-{key}`}
+                                                        <label htmlFor={`battleriteKeyword-${key}`}>Keyword</label>
+                                                        <input type="text" id={`battleriteKeyword-${key}`}
                                                                placeholder="Key..."
                                                                value={data.keyword}
                                                                onChange={e => this.setBattlerite(e, 'keyword', key)}
                                                                className="form-control"/>
+                                                    </div>
+                                                    <div className="form-group ml-4">
+                                                        <label htmlFor={`battleriteEX-${key}`}>EX</label>
+                                                        <div className="custom-control custom-checkbox">
+                                                            <input type="checkbox" defaultChecked={data.ex}
+                                                                   onChange={e => this.setBattlerite(e, 'ex', key)}
+                                                                   className="custom-control-input"
+                                                                   id={`battleriteEX-${key}`}/>
+                                                            <label className="custom-control-label"
+                                                                   htmlFor={`battleriteEX-${key}`}/>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1380,7 +1518,7 @@ export default class Form extends Component {
                                                         </Link>
                                                     </div>
                                                     <div className="custom-file">
-                                                        <input type="file" required className="custom-file-input"
+                                                        <input type="file" className="custom-file-input"
                                                                id={`battleriteIcon-${key}`} accept="image/*"
                                                                onChange={e => this.uploadMedia(e, 'icon', '/battlerites', key)}/>
                                                         <label className="custom-file-label"
@@ -1402,9 +1540,9 @@ export default class Form extends Component {
                                                 </div>
                                             </div>
                                             <div className="form-group">
-                                                <label htmlFor={`battleriteDescription-{key}`}><span
+                                                <label htmlFor={`battleriteDescription-${key}`}><span
                                                     className="text-danger mr-1">*</span>Description</label>
-                                                <textarea id={`battleriteDescription-{key}`} required
+                                                <textarea id={`battleriteDescription-${key}`}
                                                           value={data.description}
                                                           onChange={e => this.setBattlerite(e, 'description', key)}
                                                           className="form-control"
@@ -1412,6 +1550,10 @@ export default class Form extends Component {
                                             </div>
                                         </div>
                                         <div className="card-footer pt-0 d-flex">
+                                            {this.state.battlerites.length > 1 ?
+                                                <button className="btn bg-transparent mr-auto text-danger"
+                                                        onClick={() => this.removeElement(key, 'battlerites')}>Delete
+                                                </button> : ''}
                                             <button className="btn bg-transparent ml-auto text-light"
                                                     onClick={this.addBattlerite}>Add another
                                             </button>
@@ -1467,7 +1609,8 @@ export default class Form extends Component {
                         </div>
                         <div className="row mt-4">
                             <div className="col-12">
-                                <button className="btn btn-light" type="submit" onClick={this.saveChampion}>Save</button>
+                                <button className="btn btn-light" type="submit" onClick={this.saveChampion}>Save
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -1475,4 +1618,4 @@ export default class Form extends Component {
             </div>
         )
     }
-}
+};
