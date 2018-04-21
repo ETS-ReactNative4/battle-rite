@@ -3,6 +3,7 @@ import React, {Component} from 'react'
 // Components
 import Champions from './Champions/Champions'
 import Builds from './Builds/Builds'
+import Battlerites from './Battlerites/Battlerites'
 import News from './News/News'
 
 const capitalizeFirstLetter = string => {
@@ -13,7 +14,7 @@ export default class Admin extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            sections: [Champions, Builds, News]
+            sections: [Champions, Builds, Battlerites, News]
         }
     }
 

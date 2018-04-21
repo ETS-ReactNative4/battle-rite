@@ -2,8 +2,6 @@ import React, {Component} from 'react'
 
 import BattleriteCard from '../../../images/battlerite-card.svg'
 import AbilityBorder from '../../../images/Ability_Border_Black.png'
-import Skill from '../../../images/Pummel_icon.png'
-
 import './builds.min.css'
 
 export default class Card extends Component {

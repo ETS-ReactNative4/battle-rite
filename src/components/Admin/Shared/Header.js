@@ -17,6 +17,10 @@ export default class Header extends Component {
                         </li>
                         <li className="nav-item">
                             <NavLink className="nav-link text-uppercase small text-light"
+                                     activeStyle={{fontWeight: 'bold'}} to="/admin/battlerites">Battlerites</NavLink>
+                        </li>
+                        <li className="nav-item">
+                            <NavLink className="nav-link text-uppercase small text-light"
                                      activeStyle={{fontWeight: 'bold'}} to="/admin/news">News</NavLink>
                         </li>
                     </ul>

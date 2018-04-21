@@ -122,38 +122,6 @@ export default class Form extends Component {
             tempMasteringGuideDescription: '',
             tempBasicGuideTitle: '',
             tempBasicGuideDescription: '',
-            tempCombos: {
-                video: '',
-                difficulty: 0,
-                skillCombo: '',
-                description: '',
-            },
-            tempSpells: {
-                name: '',
-                description: '',
-                img: '',
-                keyword: '',
-                type: '',
-                cost: '',
-                details: [
-                    {
-                        name: '',
-                        prop: ''
-                    },
-                    {
-                        name: '',
-                        prop: ''
-                    },
-                ]
-            },
-            tempBattlerites: {
-                name: '',
-                description: '',
-                img: '',
-                keyword: '',
-                type: '',
-                ex: false,
-            },
 
             // Progress bars
             progressbarIcon: 0,
@@ -413,7 +381,12 @@ export default class Form extends Component {
 
     addCombo = () => {
         let arr = this.state.combos
-        let tempCombos = Object.assign({}, this.state.tempCombos)
+        let tempCombos = {
+            video: '',
+            difficulty: 0,
+            skillCombo: '',
+            description: '',
+        }
         arr.push(tempCombos)
         this.setState({combos: arr})
     }
@@ -445,7 +418,24 @@ export default class Form extends Component {
 
     addSpell = () => {
         let arr = this.state.spells
-        let tempSpells = Object.assign({}, this.state.tempSpells)
+        let tempSpells = {
+            name: '',
+            description: '',
+            img: '',
+            keyword: '',
+            type: '',
+            cost: '',
+            details: [
+                {
+                    name: '',
+                    prop: ''
+                },
+                {
+                    name: '',
+                    prop: ''
+                },
+            ]
+        }
         arr.push(tempSpells)
         this.setState({spells: arr})
     }
@@ -486,7 +476,14 @@ export default class Form extends Component {
 
     addBattlerite = () => {
         let arr = this.state.battlerites
-        let tempBattlerites = Object.assign({}, this.state.tempBattlerites)
+        let tempBattlerites = {
+            name: '',
+            description: '',
+            img: '',
+            keyword: '',
+            type: '',
+            ex: false,
+        }
         arr.push(tempBattlerites)
         this.setState({battlerites: arr})
     }
@@ -526,6 +523,13 @@ export default class Form extends Component {
             if (this.state[obj][key] === element) arr.delete(element)
         })
         this.setState({[obj]: [...arr]})
+    }
+
+    deleteChampion = () => {
+        let result = window.confirm('Are you sure?')
+        if (!result) return false
+        firebase.database().ref(`champions/${this.state.editChampion}`).remove()
+        this.props.history.goBack()
     }
 
     saveChampion = () => {
@@ -576,7 +580,8 @@ export default class Form extends Component {
                             <div className="col-lg-2 col-3">
                                 <div className="form-group">
                                     <label htmlFor="champHP">
-                                        <small className="text-danger mr-1">*</small>HP</label>
+                                        <small className="text-danger mr-1">*</small>
+                                        HP</label>
                                     <input type="text" id="champHP" value={this.state.hp}
                                            onChange={e => this.setState({hp: e.target.value})}
                                            className="form-control" placeholder="Champion HP"/>
@@ -1328,7 +1333,7 @@ export default class Form extends Component {
                                                                         className="btn btn-block rounded-left text-capitalize border btn-light dropdown-toggle"
                                                                         data-toggle="dropdown"
                                                                         aria-haspopup="true" aria-expanded="false">
-                                                                    {this.state.spells[key].type !== '' ? this.state.spells[key].type : 'mobility'}
+                                                                    {this.state.spells[key].type !== '' ? this.state.spells[key].type : 'Select a type'}
                                                                 </button>
                                                                 <div className="dropdown-menu">
                                                                     <button className="dropdown-item"
@@ -1353,18 +1358,20 @@ export default class Form extends Component {
                                                         </div>
                                                     </div>
                                                     <div className="form-group mb-0">
-                                                        <label htmlFor={`spellDetailsName-${key}`}>
+                                                        <label htmlFor={`spellDetailsName-${key}-0`}>
                                                             Names & props
                                                         </label>
                                                         {data.details.map((data, index) => {
                                                             return <div className="input-group mb-2"
                                                                         key={index}>
-                                                                <input type="text" id={`spellDetailsName-${index}`}
+                                                                <input type="text"
+                                                                       id={`spellDetailsName-${key}-${index}`}
                                                                        placeholder="Name..."
                                                                        value={data.name}
                                                                        onChange={e => this.setSpell(e, 'details', key, 'name', index)}
                                                                        className="form-control w-75"/>
-                                                                <input type="text" id={`spellDetailsProp-${index}`}
+                                                                <input type="text"
+                                                                       id={`spellDetailsProp-${key}-${index}`}
                                                                        placeholder="Prop..."
                                                                        value={data.prop}
                                                                        onChange={e => this.setSpell(e, 'details', key, 'prop', index)}
@@ -1611,6 +1618,10 @@ export default class Form extends Component {
                             <div className="col-12">
                                 <button className="btn btn-light" type="submit" onClick={this.saveChampion}>Save
                                 </button>
+                                {this.state.editChampion !== undefined ?
+                                    <button className="btn btn-outline-danger ml-3" type="button"
+                                            onClick={this.deleteChampion}>Delete</button> : ''
+                                }
                             </div>
                         </div>
                     </div>

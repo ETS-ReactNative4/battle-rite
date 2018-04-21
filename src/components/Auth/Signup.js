@@ -12,9 +12,9 @@ export default class Signup extends Component {
     }
 
     signUp = () => {
-        const auth = firebase.auth()
+        /*const auth = firebase.auth()
         const promise = auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
-        promise.catch(e => console.log(e.message))
+        promise.catch(e => console.log(e.message))*/
     }
 
     render() {

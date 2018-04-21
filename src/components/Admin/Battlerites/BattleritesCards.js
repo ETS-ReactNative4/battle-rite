@@ -3,7 +3,7 @@ import React, {Component} from 'react'
 import Card from './Card'
 import * as firebase from "firebase";
 
-export default class Battlerite extends Component {
+export default class BattleritesCards extends Component {
     constructor(props) {
         super(props)
         this.state = {
