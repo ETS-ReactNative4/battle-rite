@@ -7,7 +7,10 @@ export default class BattleritesCards extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            champion: this.props.match.params.champion,
+            champion:
+            this.props.match !== undefined ?
+                this.props.match.params.champion :
+                this.props.champion,
             battlerites: []
         }
     }

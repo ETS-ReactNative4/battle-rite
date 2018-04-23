@@ -24,8 +24,9 @@ import Signup from './components/Auth/Signup'
 // Admin
 import AHeader from './components/Admin/Shared/Header'
 import Admin from './components/Admin/Admin'
-import ABuilds from './components/Admin/Builds/Battlerites.js'
-import ABattlerites from './components/Admin/Battlerites/BattleritesCards.js'
+import ABuildsView from './components/Admin/Builds/BuildsView'
+import ABuilder from './components/Admin/Builds/Builder'
+import ABattlerites from './components/Admin/Battlerites/BattleritesCards'
 import AChampionsForm from './components/Admin/Champions/Form'
 import ANewsForm from './components/Admin/News/Form'
 
@@ -79,7 +80,9 @@ export default class App extends Component {
                                 <Route exact path='/admin/:sectionName' component={Admin}/>
 
                                 {/* Builds */}
-                                <Route path='/admin/builds/:champion' component={ABuilds}/>
+                                <Route exact path='/admin/builds/:champion' component={ABuildsView}/>
+                                <Route path='/admin/builds/:champion/create' component={ABuilder}/>
+                                <Route path='/admin/builds/:champion/:build' component={ABuilder}/>
 
                                 {/* Battlerites */}
                                 <Route path='/admin/battlerites/:champion' component={ABattlerites}/>

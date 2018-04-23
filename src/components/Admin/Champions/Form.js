@@ -403,7 +403,7 @@ export default class Form extends Component {
      */
     setSpell = (event, obj, num, detailsType, detailsIndex) => {
         let spells = this.state.spells
-        if (obj === 'type') {
+        if (obj === 'type' || obj === 'cost') {
             spells[num][obj] = event
         } else {
             if (detailsType === undefined) {
@@ -412,7 +412,6 @@ export default class Form extends Component {
                 spells[num][obj][detailsIndex][detailsType] = event.target.value
             }
         }
-
         this.setState({spells})
     }
 
@@ -1210,7 +1209,7 @@ export default class Form extends Component {
                                             style={{height: '11em'}}
                                             onClick={() => document.getElementById(`combosFile-${key}`).click()}>
                                             {this.state.combos[key].video !== '' ?
-                                                <video autoPlay="true" loop className="rounded-top w-100 h-100 bg-dark2"
+                                                <video autoPlay="true" loop className="rounded-top w-100 h-100 bg-black"
                                                        src={this.state.combos[key].video}/> :
                                                 <div
                                                     className="d-flex justify-content-center flex-column align-items-center">
@@ -1333,28 +1332,81 @@ export default class Form extends Component {
                                                                         className="btn btn-block rounded-left text-capitalize border btn-light dropdown-toggle"
                                                                         data-toggle="dropdown"
                                                                         aria-haspopup="true" aria-expanded="false">
-                                                                    {this.state.spells[key].type !== '' ? this.state.spells[key].type : 'Select a type'}
+                                                                    {this.state.spells[key].type !== '' || this.state.spells[key].type !== undefined ? this.state.spells[key].type : 'Select a type'}
+                                                                </button>
+                                                                <div className="dropdown-menu">
+                                                                    <div className="d-flex flex-wrap">
+                                                                        <button className="dropdown-item" style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('mobility', 'type', key)}>Mobility
+                                                                        </button>
+                                                                        <button className="dropdown-item" style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('aoe', 'type', key)}>Aoe
+                                                                        </button>
+                                                                        <button className="dropdown-item" style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('projectile', 'type', key)}>Projectile
+                                                                        </button>
+                                                                        <button className="dropdown-item" style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('wall', 'type', key)}>Wall
+                                                                        </button>
+                                                                        <button className="dropdown-item" style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('shield', 'type', key)}>Shield
+                                                                        </button>
+                                                                        <button className="dropdown-item" style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('melee', 'type', key)}>Melee
+                                                                        </button>
+                                                                        <button className="dropdown-item" style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('block', 'type', key)}>Block
+                                                                        </button>
+                                                                        <button className="dropdown-item" style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('counter', 'type', key)}>Counter
+                                                                        </button>
+                                                                        <button className="dropdown-item" style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('debuff', 'type', key)}>Debuff
+                                                                        </button>
+                                                                        <button className="dropdown-item" style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('self buff', 'type', key)}>Self
+                                                                            buff
+                                                                        </button>
+                                                                        <button className="dropdown-item" style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('buff', 'type', key)}>Buff
+                                                                        </button>
+                                                                        <button className="dropdown-item" style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('heal', 'type', key)}>Heal
+                                                                        </button>
+                                                                        <button className="dropdown-item" style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('dispel', 'type', key)}>Dispel
+                                                                        </button>
+                                                                        <button className="dropdown-item" style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('summon', 'type', key)}>Summon
+                                                                        </button>
+                                                                        <button className="dropdown-item" style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('cleave', 'type', key)}>Cleave
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="btn-group w-25">
+                                                                <button type="button" id={`spellDetailsType-${key}`}
+                                                                        className="btn btn-block rounded-right text-capitalize border btn-light dropdown-toggle"
+                                                                        data-toggle="dropdown"
+                                                                        aria-haspopup="true" aria-expanded="false">
+                                                                    {this.state.spells[key].cost !== '' || this.state.spells[key].cost !== undefined ? this.state.spells[key].cost : 'Select a cost'}
                                                                 </button>
                                                                 <div className="dropdown-menu">
                                                                     <button className="dropdown-item"
-                                                                            onClick={() => this.setSpell('mobility', 'type', key)}>Mobility
+                                                                            onClick={() => this.setSpell(1, 'cost', key)}>1
                                                                     </button>
                                                                     <button className="dropdown-item"
-                                                                            onClick={() => this.setSpell('aoe', 'type', key)}>Aoe
+                                                                            onClick={() => this.setSpell(2, 'cost', key)}>2
                                                                     </button>
                                                                     <button className="dropdown-item"
-                                                                            onClick={() => this.setSpell('projectile', 'type', key)}>Projectile
+                                                                            onClick={() => this.setSpell(3, 'cost', key)}>3
+                                                                    </button>
+                                                                    <button className="dropdown-item"
+                                                                            onClick={() => this.setSpell(4, 'cost', key)}>4
                                                                     </button>
                                                                 </div>
                                                             </div>
-                                                            <input type="text" id={`spellCost-${key}`}
-                                                                   placeholder="Cost..."
-                                                                   value={data.cost} style={{
-                                                                borderTopLeftRadius: 0,
-                                                                borderBottomLeftRadius: 0,
-                                                            }}
-                                                                   onChange={e => this.setSpell(e, 'cost', key)}
-                                                                   className="form-control rounded-right w-25"/>
                                                         </div>
                                                     </div>
                                                     <div className="form-group mb-0">
@@ -1479,11 +1531,13 @@ export default class Form extends Component {
                                                             {data.type === '' ? this.state.battleriteTypes[0] : data.type}
                                                         </button>
                                                         <div className="dropdown-menu">
+                                                            <div className="d-flex flex-row">
                                                             {this.state.battleriteTypes.map((data, index) => {
                                                                 return <button className="dropdown-item text-capitalize"
                                                                                onClick={() => this.setBattlerite(data, 'type', key)}
-                                                                               key={index}>{data}</button>
+                                                                               key={index} style={{maxWidth: '120px'}}>{data}</button>
                                                             })}
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1600,7 +1654,7 @@ export default class Form extends Component {
                                                                  alt="Upload icon"/>
                                                         </label>
                                                         <input type="file" className="d-none"
-                                                               id={`quoteSound-${key}`} accept=".mp3"
+                                                               id={`quoteSound-${key}`} accept=".mp3 .wav"
                                                                onChange={e => this.uploadMedia(e, 'sound', '/quotes', key)}/>
                                                     </div>
                                                 </div>

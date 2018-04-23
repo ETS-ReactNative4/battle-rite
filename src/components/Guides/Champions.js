@@ -292,7 +292,7 @@ export default class Champion extends Component {
                                         {data.cards.map((data, index) => {
                                             return <div className="col-xl-4 col-lg-6" key={index}>
                                                 <div
-                                                    className={`card__build bg-dark2 card__build--${data.type.toLowerCase()} mb-3`}>
+                                                    className={`card__build bg-black card__build--${data.type.toLowerCase()} mb-3`}>
                                                     <div className="d-flex">
                                                         <img
                                                             src={`../../../media/champions/${champion.name.toLowerCase()}/spells/${data.spell.toLowerCase()}.png`}

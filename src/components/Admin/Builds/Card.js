@@ -1,10 +1,8 @@
 import React, {Component} from 'react'
 
-import BattleriteCard from '../../../images/battlerite-card.svg'
+import BattleriteCard from '../../../images/battlerite-card-small.png'
 import AbilityBorder from '../../../images/Ability_Border_Black.png'
-import Skill from '../../../images/Pummel_icon.png'
-
-import './builds.min.css'
+import './battlerites.min.css'
 
 export default class Card extends Component {
     constructor(props) {
@@ -14,11 +12,11 @@ export default class Card extends Component {
 
     render() {
         return (
-            <div className="container">
-                <div className="row">
+            <div className="ml-2 mr-4">
+                <div className="row flex-nowrap px-3 py-5 small-card-container">
                     {this.props.battlerites.map((data, key) => {
-                        return <div className="col-xl-3 col-lg-4 mx-sm-0 col-sm-6 col-9 mb-3 mx-auto" key={key}>
-                            <div className="battlerite-card">
+                        return <div className="col-xl-2 col-lg-4 mx-sm-0 col-sm-6 col-9" key={key}>
+                            <div className="battlerite-card small-card">
                                 <div className="battlerite-title">{data.name}</div>
                                 <div className="battlerite-skill">
                                     <div className="battle-skill-container">
@@ -31,7 +29,7 @@ export default class Card extends Component {
                                 {data.type !== '' ? <div
                                     className={`battlerite-type ${data.type.toLowerCase()}`}>{data.type}</div> : ''}
                                 <div className="battlerite-description">{data.description}</div>
-                                <img src={BattleriteCard} className="battlerite-card-image" alt="Battlerite card"/>
+                                <img src={BattleriteCard} className="w-100" alt="Battlerite card"/>
                             </div>
                         </div>
                     })}

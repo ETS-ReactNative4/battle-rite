@@ -13,7 +13,8 @@ import './plugins/fontawesome/css/font-awesome.min.css'
 
 // JS
 import '../node_modules/jquery/dist/jquery'
-import '../node_modules/popper.js/dist/popper.min'
+// import '../node_modules/popper.js/dist/popper.min'
+import '../src/plugins/propper/propper.min'
 import '../node_modules/bootstrap/dist/js/bootstrap'
 
 const config = {

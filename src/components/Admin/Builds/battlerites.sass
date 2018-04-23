@@ -1,0 +1,30 @@
+@import '../../../sass/vars'
+
+.small-card-container
+  overflow-x: auto
+  overflow-y: hidden
+  &::-webkit-scrollbar-thumb
+    background-color: lighten($dark-color,20%)
+
+.battlerite-card.small-card
+  font-size: 13.5px
+  cursor: pointer
+  .battlerite-title
+    font-size: 0.9em
+    top: 0%
+  .battlerite-skill
+    top: 17%
+    .battle-skill-container
+      width: 55px
+  .battlerite-hotkey
+    top: 11%
+  .battlerite-type
+    top: 43%
+  .battlerite-description
+    height: 105px
+    top: 52%
+    width: 125px
+    line-height: 15px
+  &:hover
+    transform: scale(1.3)
+
