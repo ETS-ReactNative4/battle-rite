@@ -116,19 +116,19 @@
   border-image: initial; }
 
 .card__build--survival, .card__img--survival {
-  border-color: #27ae60; }
+  border-color: #99ff33; }
 
 .card__build--support, .card__img--support {
-  border-color: #3498db; }
+  border-color: #00ffff; }
 
 .card__build--control, .card__img--control {
-  border-color: #8e44ad; }
+  border-color: #ff66cc; }
 
 .card__build--mobility, .card__img--mobility {
-  border-color: #f1c40f; }
+  border-color: #ffcc00; }
 
 .card__build--offense, .card__img--offense {
-  border-color: #e74c3c; }
+  border-color: #ff3333; }
 
 /*** Mastering Guide ** */
 .fa-positioning, .fa-advanced, .fa-sudden, .fa-orb {

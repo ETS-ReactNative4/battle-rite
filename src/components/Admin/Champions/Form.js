@@ -13,6 +13,7 @@ export default class Form extends Component {
         super(props)
         this.state = {
             name: '',
+            hp: '',
             slogan: '',
             avatar: '',
             video: '',
@@ -65,6 +66,8 @@ export default class Form extends Component {
                     description: '',
                     img: '',
                     keyword: '',
+                    type: '',
+                    cost: '',
                     details: [
                         {
                             name: '',
@@ -83,14 +86,16 @@ export default class Form extends Component {
                     description: '',
                     img: '',
                     keyword: '',
-                    type: ''
+                    type: '',
+                    ex: false,
                 },
                 {
                     name: '',
                     description: '',
                     img: '',
                     keyword: '',
-                    type: ''
+                    type: '',
+                    ex: false,
                 },
             ],
             quotes: [
@@ -117,35 +122,6 @@ export default class Form extends Component {
             tempMasteringGuideDescription: '',
             tempBasicGuideTitle: '',
             tempBasicGuideDescription: '',
-            tempCombos: {
-                video: '',
-                difficulty: 0,
-                skillCombo: '',
-                description: '',
-            },
-            tempSpells: {
-                name: '',
-                description: '',
-                img: '',
-                keyword: '',
-                details: [
-                    {
-                        name: '',
-                        prop: ''
-                    },
-                    {
-                        name: '',
-                        prop: ''
-                    },
-                ]
-            },
-            tempBattlerites: {
-                name: '',
-                description: '',
-                img: '',
-                keyword: '',
-                type: ''
-            },
 
             // Progress bars
             progressbarIcon: 0,
@@ -156,384 +132,458 @@ export default class Form extends Component {
             tempBattleriteProgressbar: [0],
             tempQuotesProgressbar: [0],
 
-            editChampion: this.props.champion,
+            editChampion: this.props.match.params.champion,
         }
     }
 
     componentDidMount() {
         if (this.state.editChampion === undefined) return false
         let champion = this.state.editChampion.toLowerCase().replace(/\s/g, '')
-        firebase.database().ref(`battle-rite/champions/${champion}`)
+        firebase.database().ref(`champions/${champion}`)
             .once('value').then(data => {
             console.log(data.val())
             this.setState(data.val())
         })
     }
 
-    render() {
-        // Pros
-        const setPros = () => {
-            if (this.state.tempPros === '') return false
-            let pros = this.state.pros
-            pros.push(this.state.tempPros)
-            this.setState({
-                tempPros: '',
-                pros
-            })
-        }
+    // Pros
+    setPros = () => {
+        if (this.state.tempPros === '') return false
+        let pros = this.state.pros
+        pros.push(this.state.tempPros)
+        this.setState({
+            tempPros: '',
+            pros
+        })
+    }
 
-        // Cons
-        const setCons = () => {
-            if (this.state.tempCons === '') return false
-            let cons = this.state.cons
-            cons.push(this.state.tempCons)
-            this.setState({
-                tempCons: '',
-                cons
-            })
-        }
+    // Cons
+    setCons = () => {
+        if (this.state.tempCons === '') return false
+        let cons = this.state.cons
+        cons.push(this.state.tempCons)
+        this.setState({
+            tempCons: '',
+            cons
+        })
+    }
 
-        // Mastering guide
-        const setMasteringGuide = () => {
-            if (this.state.tempMasteringGuideTitle === '' && this.state.tempMasteringGuideDescription === '') return false
-            let masteringGuide = this.state.masteringGuide
-            masteringGuide.push({
-                title: this.state.tempMasteringGuideTitle,
-                description: this.state.tempMasteringGuideDescription
-            })
-            this.setState({
-                tempMasteringGuideTitle: '',
-                tempMasteringGuideDescription: '',
-                masteringGuide
-            })
-        }
+    // Mastering guide
+    setMasteringGuide = () => {
+        if (this.state.tempMasteringGuideTitle === '' && this.state.tempMasteringGuideDescription === '') return false
+        let masteringGuide = this.state.masteringGuide
+        masteringGuide.push({
+            title: this.state.tempMasteringGuideTitle,
+            description: this.state.tempMasteringGuideDescription
+        })
+        this.setState({
+            tempMasteringGuideTitle: '',
+            tempMasteringGuideDescription: '',
+            masteringGuide
+        })
+    }
 
-        // Basic guide
-        const setBasicGuide = () => {
-            if (this.state.tempBasicGuideTitle === '' && this.state.tempBasicGuideDescription === '') return false
-            let basicGuide = this.state.basicGuide
-            basicGuide.push({
-                title: this.state.tempBasicGuideTitle,
-                description: this.state.tempBasicGuideDescription
-            })
-            this.setState({
-                tempBasicGuideTitle: '',
-                tempBasicGuideDescription: '',
-                basicGuide
-            })
-        }
+    // Basic guide
+    setBasicGuide = () => {
+        if (this.state.tempBasicGuideTitle === '' && this.state.tempBasicGuideDescription === '') return false
+        let basicGuide = this.state.basicGuide
+        basicGuide.push({
+            title: this.state.tempBasicGuideTitle,
+            description: this.state.tempBasicGuideDescription
+        })
+        this.setState({
+            tempBasicGuideTitle: '',
+            tempBasicGuideDescription: '',
+            basicGuide
+        })
+    }
 
-        /**
-         *
-         * @param event For get obj file from the input
-         * @param obj State name using to know what is the state wanna edit
-         * @param subType Child state like: parent:{child:0}
-         */
-        const setStatus = (event, obj, subType) => {
-            let status = this.state.status
-            status[obj][subType] = event.target.value
-            this.setState(status)
-        }
+    /**
+     *
+     * @param event For get obj file from the input
+     * @param obj State name using to know what is the state wanna edit
+     * @param subType Child state like: parent:{child:0}
+     */
+    setStatus = (event, obj, subType) => {
+        let status = this.state.status
+        status[obj][subType] = event.target.value
+        this.setState({status})
+    }
 
-        /**
-         *
-         * @param event For get obj file from the input
-         * @param type File extension like icon, video
-         * @param typePath Path of obj like : /combos
-         * @param num Number of cards meaning obj number
-         */
-        const uploadMedia = (event, type, typePath = '', num) => {
-            // Get file
-            let file = event.target.files[0]
+    /**
+     *
+     * @param event For get obj file from the input
+     * @param type File extension like icon, video
+     * @param typePath Path of obj like : /combos
+     * @param num Number of cards meaning obj number
+     */
+    uploadMedia = (event, type, typePath = '', num) => {
+        // Get file
+        let file = event.target.files[0]
+        let champion = this.state.name.toLowerCase().replace(/\s/g, '')
 
-            // Create a storage ref
-            let storageRef = firebase.storage()
-                .ref(`champions/${this.state.name ? this.state.name : 'none'}${typePath}/${
-                    num !== undefined ? num : type
-                    }`)
+        // Create a storage ref
+        let storageRef = firebase.storage()
+            .ref(`champions/${champion}${typePath}/${
+                num !== undefined ? num : type
+                }`)
 
-            // Upload file
-            let task = storageRef.put(file)
-            let self = this
+        // Upload file
+        let task = storageRef.put(file)
+        let self = this
 
-            // Update progress bar
-            task.on('state_changed',
-                /**
-                 *
-                 * @param snapshot File obj when uploading
-                 */
-                function progress(snapshot) {
-                    let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        // Update progress bar
+        task.on('state_changed',
+            /**
+             *
+             * @param snapshot File obj when uploading
+             */
+            function progress(snapshot) {
+                let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                switch (type) {
+                    case 'icon':
+                        if (num !== undefined) {
+                            let tempSpellProgressbar = self.state.tempSpellProgressbar
+                            tempSpellProgressbar[num] = percentage
+                            self.setState(tempSpellProgressbar)
+                        } else {
+                            self.setState({progressbarIcon: percentage})
+                        }
+                        break
+                    case 'avatar':
+                        self.setState({progressbarAvatar: percentage})
+                        break
+                    case 'video':
+                        if (num !== undefined) {
+                            let tempComboProgressbar = self.state.tempComboProgressbar
+                            tempComboProgressbar[num] = percentage
+                            self.setState(tempComboProgressbar)
+                        } else {
+                            self.setState({progressbarVideo: percentage})
+                        }
+                        break
+                    case 'sound':
+                        let tempQuotesProgressbar = self.state.tempQuotesProgressbar
+                        tempQuotesProgressbar[num] = percentage
+                        self.setState(tempQuotesProgressbar)
+                        break
+                    default:
+                        break
+                }
+            },
+
+            function error(err) {
+                console.log(err)
+            },
+
+            function complete() {
+                if (num !== undefined) {
                     switch (type) {
-                        case 'icon':
-                            if (num !== undefined) {
+                        case 'video': // Combos
+                            let tempComboProgressbar = self.state.tempComboProgressbar
+                            tempComboProgressbar[num] = 0
+
+                            let combos = self.state.combos
+                            combos[num].video = task.snapshot.downloadURL
+                            self.setState({combos, tempComboProgressbar: tempComboProgressbar})
+                            break
+                        case 'icon': // Spells & battlerites
+                            if (typePath === '/spells') {
                                 let tempSpellProgressbar = self.state.tempSpellProgressbar
-                                tempSpellProgressbar[num] = percentage
-                                self.setState(tempSpellProgressbar)
-                            } else {
-                                self.setState({progressbarIcon: percentage})
+                                tempSpellProgressbar[num] = 0
+
+                                let spells = self.state.spells
+                                spells[num].img = task.snapshot.downloadURL
+                                self.setState({spells, tempSpellProgressbar})
+
+                                let spellIcon = document.getElementById(`spellIcon-${num}`).files[0].name
+                                document.getElementById(`spellIconLabel-${num}`).innerText = spellIcon
+                            } else if (typePath === '/battlerites') {
+                                let tempBattleriteProgressbar = self.state.tempBattleriteProgressbar
+                                tempBattleriteProgressbar[num] = 0
+
+                                let battlerites = self.state.battlerites
+                                battlerites[num].img = task.snapshot.downloadURL
+                                self.setState({battlerites, tempBattleriteProgressbar})
+
+                                let battleriteIcon = document.getElementById(`battleriteIcon-${num}`).files[0].name
+                                document.getElementById(`battleriteIconLabel-${num}`).innerText = battleriteIcon
                             }
                             break
-                        case 'avatar':
-                            self.setState({progressbarAvatar: percentage})
-                            break
-                        case 'video':
-                            if (num !== undefined) {
-                                let tempComboProgressbar = self.state.tempComboProgressbar
-                                tempComboProgressbar[num] = percentage
-                                self.setState(tempComboProgressbar)
-                            } else {
-                                self.setState({progressbarVideo: percentage})
-                            }
-                            break
-                        case 'sound':
+                        case 'sound': // Quotes
                             let tempQuotesProgressbar = self.state.tempQuotesProgressbar
-                            tempQuotesProgressbar[num] = percentage
-                            self.setState(tempQuotesProgressbar)
+                            tempQuotesProgressbar[num] = 0
+
+                            let quotes = self.state.quotes
+                            quotes[num].sound = task.snapshot.downloadURL
+                            self.setState({quotes, tempQuotesProgressbar})
                             break
                         default:
+                            //
                             break
                     }
-                },
+                } else {
+                    switch (type) {
+                        case 'video':
+                            self.setState({video: task.snapshot.downloadURL})
 
-                function error(err) {
-                    console.log(err)
-                },
+                            let champUploadVideoLabel = document.getElementById("champUploadVideo").files[0].name
+                            document.getElementById("champUploadVideoLabel").innerText = champUploadVideoLabel
+                            break
+                        case 'icon':
+                            self.setState({icon: task.snapshot.downloadURL})
 
-                function complete() {
-                    if (num !== undefined) {
-                        switch (type) {
-                            case 'video': // Combos
-                                let tempComboProgressbar = self.state.tempComboProgressbar
-                                tempComboProgressbar[num] = 0
+                            let champUploadIcon = document.getElementById("champUploadIcon").files[0].name
+                            document.getElementById("champUploadIconLabel").innerText = champUploadIcon
+                            break
+                        case 'avatar':
+                            self.setState({avatar: task.snapshot.downloadURL})
 
-                                let combos = self.state.combos
-                                combos[num].video = task.snapshot.downloadURL
-                                self.setState({combos, tempComboProgressbar: tempComboProgressbar})
-                                break
-                            case 'icon': // Spells & battlerites
-                                if (typePath === '/spells') {
-                                    let tempSpellProgressbar = self.state.tempSpellProgressbar
-                                    tempSpellProgressbar[num] = 0
-
-                                    let spells = self.state.spells
-                                    spells[num].img = task.snapshot.downloadURL
-                                    self.setState({spells, tempSpellProgressbar})
-
-                                    let spellIcon = document.getElementById(`spellIcon-${num}`).files[0].name
-                                    document.getElementById(`spellIconLabel-${num}`).innerText = spellIcon
-                                } else if (typePath === '/battlerites') {
-                                    let tempBattleriteProgressbar = self.state.tempBattleriteProgressbar
-                                    tempBattleriteProgressbar[num] = 0
-
-                                    let battlerites = self.state.battlerites
-                                    battlerites[num].img = task.snapshot.downloadURL
-                                    self.setState({battlerites, tempBattleriteProgressbar})
-
-                                    let battleriteIcon = document.getElementById(`battleriteIcon-${num}`).files[0].name
-                                    document.getElementById(`battleriteIconLabel-${num}`).innerText = battleriteIcon
-                                }
-                                break
-                            case 'sound': // Quotes
-                                let tempQuotesProgressbar = self.state.tempQuotesProgressbar
-                                tempQuotesProgressbar[num] = 0
-
-                                let quotes = self.state.quotes
-                                quotes[num].sound = task.snapshot.downloadURL
-                                self.setState({quotes, tempQuotesProgressbar})
-                                break
-                            default:
-                                //
-                                break
-                        }
-                    } else {
-                        switch (type) {
-                            case 'video':
-                                self.setState({video: task.snapshot.downloadURL})
-
-                                let champUploadVideoLabel = document.getElementById("champUploadVideo").files[0].name
-                                document.getElementById("champUploadVideoLabel").innerText = champUploadVideoLabel
-                                break
-                            case 'icon':
-                                self.setState({icon: task.snapshot.downloadURL})
-
-                                let champUploadIcon = document.getElementById("champUploadIcon").files[0].name
-                                document.getElementById("champUploadIconLabel").innerText = champUploadIcon
-                                break
-                            case 'avatar':
-                                self.setState({avatar: task.snapshot.downloadURL})
-
-                                let champUploadAvatar = document.getElementById("champUploadAvatar").files[0].name
-                                document.getElementById("champUploadAvatarLabel").innerText = champUploadAvatar
-                                break
-                            default:
-                                //
-                                break
-                        }
+                            let champUploadAvatar = document.getElementById("champUploadAvatar").files[0].name
+                            document.getElementById("champUploadAvatarLabel").innerText = champUploadAvatar
+                            break
+                        default:
+                            //
+                            break
                     }
-                },
-            )
-        }
+                }
+            },
+        )
+    }
 
-        /*** Combos ***/
-        /**
-         *
-         * @param target For get obj file from the input || value directly like difficulty rates
-         * @param obj State name using to know what is the state wanna edit
-         * @param num Number of cards meaning obj number
-         */
-        const setCombo = (target, obj, num) => {
-            let combos = this.state.combos
-            if (obj === 'difficulty') {
-                combos[num][obj] = target
-            } else {
-                combos[num][obj] = target.target.value
-            }
-            this.setState({combos})
+    /*** Combos ***/
+    /**
+     *
+     * @param target For get obj file from the input || value directly like difficulty rates
+     * @param obj State name using to know what is the state wanna edit
+     * @param num Number of cards meaning obj number
+     */
+    setCombo = (target, obj, num) => {
+        let combos = this.state.combos
+        if (obj === 'difficulty') {
+            combos[num][obj] = target
+        } else {
+            combos[num][obj] = target.target.value
         }
+        this.setState({combos})
+    }
 
-        /**
-         *
-         * @param key Difficulty rate from 0 ~ 4
-         * @param num Number of the obj
-         */
-        const difficultyRate = (key, num) => {
-            let combos = this.state.combos
-            combos[num].difficulty = key
-            this.setState({combos})
+    /**
+     *
+     * @param key Difficulty rate from 0 ~ 4
+     * @param num Number of the obj
+     */
+    difficultyRate = (key, num) => {
+        let combos = this.state.combos
+        combos[num].difficulty = key
+        this.setState({combos})
+    }
+
+    addCombo = () => {
+        let arr = this.state.combos
+        let tempCombos = {
+            video: '',
+            difficulty: 0,
+            skillCombo: '',
+            description: '',
         }
+        arr.push(tempCombos)
+        this.setState({combos: arr})
+    }
+    /*** Combos ***/
 
-        const addComboCard = () => {
-            let arr = this.state.combos
-            let tempCombos = Object.assign({}, this.state.tempCombos)
-            arr.push(tempCombos)
-            this.setState({combos: arr})
-        }
-        /*** Combos ***/
-
-        /*** Spells ***/
-        /**
-         *
-         * @param event For get obj file from the input
-         * @param obj State name using to know what is the state wanna edit
-         * @param num Number of cards meaning obj number
-         * @param detailsType Child state like: parent:{child:0}
-         * @param detailsIndex Number of obj in details array
-         */
-        const setSpell = (event, obj, num, detailsType, detailsIndex) => {
-            let spells = this.state.spells
+    /*** Spells ***/
+    /**
+     *
+     * @param event For get obj file from the input
+     * @param obj State name using to know what is the state wanna edit
+     * @param num Number of cards meaning obj number
+     * @param detailsType Child state like: parent:{child:0}
+     * @param detailsIndex Number of obj in details array
+     */
+    setSpell = (event, obj, num, detailsType, detailsIndex) => {
+        let spells = this.state.spells
+        if (obj === 'type' || obj === 'cost') {
+            spells[num][obj] = event
+        } else {
             if (detailsType === undefined) {
                 spells[num][obj] = event.target.value
             } else {
                 spells[num][obj][detailsIndex][detailsType] = event.target.value
             }
-            this.setState(spells)
         }
+        this.setState({spells})
+    }
 
-        const addSpell = () => {
-            let arr = this.state.spells
-            let tempSpells = Object.assign({}, this.state.tempSpells)
-            arr.push(tempSpells)
-            this.setState({spells: arr})
+    addSpell = () => {
+        let arr = this.state.spells
+        let tempSpells = {
+            name: '',
+            description: '',
+            img: '',
+            keyword: '',
+            type: '',
+            cost: '',
+            details: [
+                {
+                    name: '',
+                    prop: ''
+                },
+                {
+                    name: '',
+                    prop: ''
+                },
+            ]
         }
+        arr.push(tempSpells)
+        this.setState({spells: arr})
+    }
 
-        /**
-         *
-         * @param num Number of cards meaning obj number
-         */
-        const addSpellDetails = num => {
-            let arr = this.state.spells
-            let details = {
-                name: '',
-                prop: ''
-            }
-            arr[num].details.push(details)
-            this.setState({spells: arr})
+    /**
+     *
+     * @param num Number of cards meaning obj number
+     */
+    addSpellDetails = num => {
+        let arr = this.state.spells
+        let details = {
+            name: '',
+            prop: ''
         }
-        /*** Spells ***/
+        arr[num].details.push(details)
+        this.setState({spells: arr})
+    }
+    /*** Spells ***/
 
-        /*** Battlerites ***/
-        /**
-         *
-         * @param event For get obj file from the input
-         * @param obj State name using to know what is the state wanna edit
-         * @param num Number of cards meaning obj number
-         */
-        const setBattlerite = (event, obj, num) => {
-            let battlerites = this.state.battlerites
-            if (obj === 'type') {
-                battlerites[num][obj] = event
-            } else {
-                battlerites[num][obj] = event.target.value
-            }
-            this.setState(battlerites)
+    /*** Battlerites ***/
+    /**
+     *
+     * @param event For get obj file from the input
+     * @param obj State name using to know what is the state wanna edit
+     * @param num Number of cards meaning obj number
+     */
+    setBattlerite = (event, obj, num) => {
+        let battlerites = this.state.battlerites
+        if (obj === 'type') {
+            battlerites[num][obj] = event
+        } else if (obj === 'ex') {
+            battlerites[num][obj] = event.target.checked
+        } else {
+            battlerites[num][obj] = event.target.value
         }
+        this.setState({battlerites})
+    }
 
-        const addBattlerite = () => {
-            let arr = this.state.battlerites
-            let tempBattlerites = Object.assign({}, this.state.tempBattlerites)
-            arr.push(tempBattlerites)
-            this.setState({battlerites: arr})
+    addBattlerite = () => {
+        let arr = this.state.battlerites
+        let tempBattlerites = {
+            name: '',
+            description: '',
+            img: '',
+            keyword: '',
+            type: '',
+            ex: false,
         }
-        /*** Battlerites ***/
+        arr.push(tempBattlerites)
+        this.setState({battlerites: arr})
+    }
+    /*** Battlerites ***/
 
-        /*** Quotes ***/
-        /**
-         *
-         * @param event For get obj file from the input
-         * @param obj State name using to know what is the state wanna edit
-         * @param num Number of cards meaning obj number
-         */
-        const setQuote = (event, obj, num) => {
-            let quotes = this.state.quotes
-            quotes[num][obj] = event.target.value
-            this.setState(quotes)
-        }
+    /*** Quotes ***/
+    /**
+     *
+     * @param event For get obj file from the input
+     * @param obj State name using to know what is the state wanna edit
+     * @param num Number of cards meaning obj number
+     */
+    setQuote = (event, obj, num) => {
+        let quotes = this.state.quotes
+        quotes[num][obj] = event.target.value
+        this.setState({quotes})
+    }
 
-        const addQuoteSound = () => {
-            let arr = this.state.quotes
-            arr.push({
-                name: '',
-                sound: ''
-            })
-            this.setState({quotes: arr})
-        }
-        /*** Quotes ***/
+    addQuoteSound = () => {
+        let arr = this.state.quotes
+        arr.push({
+            name: '',
+            sound: ''
+        })
+        this.setState({quotes: arr})
+    }
+    /*** Quotes ***/
 
-        const saveChampion = () => {
-            let champion = this.state.name.toLowerCase().replace(/\s/g, '')
-            firebase.database().ref(`battle-rite/champions/${champion}`).set({
-                name: this.state.name,
-                slogan: this.state.slogan,
-                avatar: this.state.avatar,
-                video: this.state.video,
-                icon: this.state.icon,
-                type: this.state.type,
-                pros: this.state.pros,
-                cons: this.state.cons,
-                bio: this.state.bio,
-                masteringGuide: this.state.masteringGuide,
-                basicGuide: this.state.basicGuide,
-                status: this.state.status,
-                combos: this.state.combos,
-                spells: this.state.spells,
-                battlerites: this.state.battlerites,
-                quotes: this.state.quotes,
-            });
+    /**
+     *
+     * @param key Obj number
+     * @param obj State name using to know what is the state wanna edit
+     */
+    removeElement = (key, obj) => {
+        let arr = new Set(this.state[obj])
+        arr.forEach(element => {
+            if (this.state[obj][key] === element) arr.delete(element)
+        })
+        this.setState({[obj]: [...arr]})
+    }
+
+    deleteChampion = () => {
+        let result = window.confirm('Are you sure?')
+        if (!result) return false
+        firebase.database().ref(`champions/${this.state.editChampion}`).remove()
+        this.props.history.goBack()
+    }
+
+    saveChampion = () => {
+        let champion = this.state.name.toLowerCase().replace(/\s/g, '')
+        let champions = {
+            name: this.state.name,
+            slogan: this.state.slogan,
+            avatar: this.state.avatar,
+            video: this.state.video,
+            icon: this.state.icon,
+            type: this.state.type,
+            pros: this.state.pros,
+            cons: this.state.cons,
+            bio: this.state.bio,
+            masteringGuide: this.state.masteringGuide,
+            basicGuide: this.state.basicGuide,
+            status: this.state.status,
+            combos: this.state.combos,
+            spells: this.state.spells,
+            battlerites: this.state.battlerites,
+            quotes: this.state.quotes,
         }
+        try {
+            firebase.database().ref(`champions/${champion}`).set(champions);
+            this.props.history.goBack()
+        } catch (e) {
+            console.log(e.message)
+            console.log(`Champions: ${champions}`)
+        }
+    }
+
+    render() {
         return (
-            <div className="aChampions">
+            <div className="aChampions col-12 col-md-9 col-xl-10 py-4">
                 <form onSubmit={e => e.preventDefault()}>
                     <div className="container">
                         <div className="row">
-                            <div className="col-lg-10 col-9">
+                            <div className="col-lg-8 col-6">
                                 <div className="form-group">
                                     <label htmlFor="champName">
                                         <small className="text-danger mr-1">*</small>
                                         Name</label>
-                                    <input type="text" required id="champName" value={this.state.name}
+                                    <input type="text" id="champName" value={this.state.name}
                                            onChange={e => this.setState({name: e.target.value})}
                                            className="form-control" placeholder="Champion name"/>
+                                </div>
+                            </div>
+                            <div className="col-lg-2 col-3">
+                                <div className="form-group">
+                                    <label htmlFor="champHP">
+                                        <small className="text-danger mr-1">*</small>
+                                        HP</label>
+                                    <input type="text" id="champHP" value={this.state.hp}
+                                           onChange={e => this.setState({hp: e.target.value})}
+                                           className="form-control" placeholder="Champion HP"/>
                                 </div>
                             </div>
                             <div className="col-lg-2 col-3">
@@ -567,7 +617,7 @@ export default class Form extends Component {
                                     <label htmlFor="champSolgan">
                                         <small className="text-danger mr-1">*</small>
                                         Slogan</label>
-                                    <input type="text" required id="champSolgan" value={this.state.slogan}
+                                    <input type="text" id="champSolgan" value={this.state.slogan}
                                            onChange={e => this.setState({slogan: e.target.value})}
                                            className="form-control" placeholder="Champion slogan"/>
                                 </div>
@@ -586,8 +636,8 @@ export default class Form extends Component {
                                         </Link>
                                     </div>
                                     <div className="custom-file">
-                                        <input type="file" required className="custom-file-input" accept="image/*"
-                                               onChange={e => uploadMedia(e, 'icon')}
+                                        <input type="file" className="custom-file-input" accept="image/*"
+                                               onChange={e => this.uploadMedia(e, 'icon')}
                                                id="champUploadIcon"/>
                                         <label className="custom-file-label" id="champUploadIconLabel"
                                                htmlFor="champUploadIcon">Upload champion
@@ -618,8 +668,8 @@ export default class Form extends Component {
                                         </Link>
                                     </div>
                                     <div className="custom-file">
-                                        <input type="file" required className="custom-file-input" accept="video/*"
-                                               onChange={e => uploadMedia(e, 'video')}
+                                        <input type="file" className="custom-file-input" accept="video/*"
+                                               onChange={e => this.uploadMedia(e, 'video')}
                                                id="champUploadVideo"/>
                                         <label className="custom-file-label" id="champUploadVideoLabel"
                                                htmlFor="champUploadVideo">Upload champion
@@ -648,8 +698,8 @@ export default class Form extends Component {
                                         </Link>
                                     </div>
                                     <div className="custom-file">
-                                        <input type="file" required className="custom-file-input" accept="image/*"
-                                               onChange={e => uploadMedia(e, 'avatar')}
+                                        <input type="file" className="custom-file-input" accept="image/*"
+                                               onChange={e => this.uploadMedia(e, 'avatar')}
                                                id="champUploadAvatar"/>
                                         <label className="custom-file-label" id="champUploadAvatarLabel"
                                                htmlFor="champUploadAvatar">Upload champion
@@ -678,7 +728,7 @@ export default class Form extends Component {
                                                    placeholder="Pros"/>
                                             <div className="input-group-append">
                                                 <button className="btn font-weight-bold rounded-right input-group-text"
-                                                        onClick={setPros}>+
+                                                        onClick={this.setPros}>+
                                                 </button>
                                             </div>
                                         </div>
@@ -699,7 +749,19 @@ export default class Form extends Component {
                                                         <div className="modal-body">
                                                             <ul>
                                                                 {this.state.pros.map((data, key) => {
-                                                                    return <li key={key}>{data}</li>
+                                                                    return <li key={key}>
+                                                                        <div
+                                                                            className="d-flex justify-content-between align-items-center">
+                                                                            {data}
+                                                                            <button type="button"
+                                                                                    onClick={() => this.removeElement(key, 'pros')}
+                                                                                    className="btn btn-sm badge badge-danger"
+                                                                                    data-dismiss="modal"
+                                                                                    aria-label="Close"
+                                                                                    title="Delete!">Delete
+                                                                            </button>
+                                                                        </div>
+                                                                    </li>
                                                                 })}
                                                             </ul>
                                                         </div>
@@ -731,7 +793,7 @@ export default class Form extends Component {
                                                    placeholder="Cons"/>
                                             <div className="input-group-append">
                                                 <button className="btn font-weight-bold rounded-right input-group-text"
-                                                        onClick={setCons}>+
+                                                        onClick={this.setCons}>+
                                                 </button>
                                             </div>
                                         </div>
@@ -752,7 +814,19 @@ export default class Form extends Component {
                                                         <div className="modal-body">
                                                             <ul>
                                                                 {this.state.cons.map((data, key) => {
-                                                                    return <li key={key}>{data}</li>
+                                                                    return <li key={key}>
+                                                                        <div
+                                                                            className="d-flex justify-content-between align-items-center">
+                                                                            {data}
+                                                                            <button type="button"
+                                                                                    onClick={() => this.removeElement(key, 'cons')}
+                                                                                    className="btn btn-sm badge badge-danger"
+                                                                                    data-dismiss="modal"
+                                                                                    aria-label="Close"
+                                                                                    title="Delete!">Delete
+                                                                            </button>
+                                                                        </div>
+                                                                    </li>
                                                                 })}
                                                             </ul>
                                                         </div>
@@ -778,10 +852,10 @@ export default class Form extends Component {
                                     <label htmlFor="champBio">
                                         <small className="text-danger mr-1">*</small>
                                         Bio</label>
-                                    <textarea id="champBio" required className="form-control" value={this.state.bio}
+                                    <textarea id="champBio" className="form-control" value={this.state.bio}
                                               cols="30"
                                               rows="5"
-                                              onChange={e => this.setState({bio: e.target.value.toLowerCase()})}/>
+                                              onChange={e => this.setState({bio: e.target.value})}/>
                                 </div>
                             </div>
                         </div>
@@ -795,7 +869,7 @@ export default class Form extends Component {
                                                 <label htmlFor="champMasteringGuideTitle">Title</label>
                                                 <input type="text" id="champMasteringGuideTitle"
                                                        value={this.state.tempMasteringGuideTitle}
-                                                       onChange={e => this.setState({tempMasteringGuideTitle: e.target.value.toLowerCase()})}
+                                                       onChange={e => this.setState({tempMasteringGuideTitle: e.target.value})}
                                                        className="form-control"
                                                        placeholder="Mastering Guide Title"/>
 
@@ -804,14 +878,14 @@ export default class Form extends Component {
                                                 <label htmlFor="champMasteringGuideDescription">Description</label>
                                                 <textarea id="champMasteringGuideDescription"
                                                           value={this.state.tempMasteringGuideDescription}
-                                                          onChange={e => this.setState({tempMasteringGuideDescription: e.target.value.toLowerCase()})}
+                                                          onChange={e => this.setState({tempMasteringGuideDescription: e.target.value})}
                                                           className="form-control"
                                                           placeholder="Mastering Guide Description" cols="30" rows="5"/>
                                             </div>
                                         </div>
                                         <div className="d-flex justify-content-between">
                                             <button className="btn bg-transparent text-light"
-                                                    onClick={setMasteringGuide}>Add
+                                                    onClick={this.setMasteringGuide}>Add
                                             </button>
                                             <button
                                                 className={`btn btn-secondary ${this.state.masteringGuide.length !== 0 ? '' : 'disabled'}`}
@@ -836,8 +910,18 @@ export default class Form extends Component {
                                                     <div className="row">
                                                         {this.state.masteringGuide.map((data, key) => {
                                                             return <div className="col-lg-6" key={key}>
-                                                                <h4 className="text-uppercase">{data.title}</h4>
-                                                                <p className="font-weight-light text-capitalize">
+                                                                <div
+                                                                    className="d-flex justify-content-between align-items-center">
+                                                                    <h4 className="text-uppercase">{data.title}</h4>
+                                                                    <button type="button"
+                                                                            onClick={() => this.removeElement(key, 'masteringGuide')}
+                                                                            className="btn btn-sm badge badge-danger"
+                                                                            data-dismiss="modal" aria-label="Close"
+                                                                            title="Delete!">Delete
+                                                                    </button>
+                                                                </div>
+                                                                <p className="font-weight-light text-capitalize"
+                                                                   style={{whiteSpace: 'pre-wrap'}}>
                                                                     {data.description}
                                                                 </p>
                                                             </div>
@@ -862,7 +946,7 @@ export default class Form extends Component {
                                                 <label htmlFor="champBasicGuideTitle">Title</label>
                                                 <input type="text" id="champBasicGuideTitle"
                                                        value={this.state.tempBasicGuideTitle}
-                                                       onChange={e => this.setState({tempBasicGuideTitle: e.target.value.toLowerCase()})}
+                                                       onChange={e => this.setState({tempBasicGuideTitle: e.target.value})}
                                                        className="form-control"
                                                        placeholder="Basic Guide Title"/>
 
@@ -871,14 +955,14 @@ export default class Form extends Component {
                                                 <label htmlFor="champBasicGuideDescription">Description</label>
                                                 <textarea id="champBasicGuideDescription"
                                                           value={this.state.tempBasicGuideDescription}
-                                                          onChange={e => this.setState({tempBasicGuideDescription: e.target.value.toLowerCase()})}
+                                                          onChange={e => this.setState({tempBasicGuideDescription: e.target.value})}
                                                           className="form-control"
                                                           placeholder="Basic Guide Description" cols="30" rows="5"/>
                                             </div>
                                         </div>
                                         <div className="d-flex justify-content-between">
                                             <button className="btn bg-transparent text-light"
-                                                    onClick={setBasicGuide}>Add
+                                                    onClick={this.setBasicGuide}>Add
                                             </button>
                                             <button
                                                 className={`btn btn-secondary ${this.state.basicGuide.length !== 0 ? '' : 'disabled'}`}
@@ -903,8 +987,18 @@ export default class Form extends Component {
                                                     <div className="row">
                                                         {this.state.basicGuide.map((data, key) => {
                                                             return <div className="col-lg-6" key={key}>
-                                                                <h4 className="text-uppercase">{data.title}</h4>
-                                                                <p className="font-weight-light text-capitalize">
+                                                                <div
+                                                                    className="d-flex justify-content-between align-items-center">
+                                                                    <h4 className="text-uppercase">{data.title}</h4>
+                                                                    <button type="button"
+                                                                            onClick={() => this.removeElement(key, 'basicGuide')}
+                                                                            className="btn btn-sm badge badge-danger"
+                                                                            data-dismiss="modal" aria-label="Close"
+                                                                            title="Delete!">Delete
+                                                                    </button>
+                                                                </div>
+                                                                <p className="font-weight-light text-capitalize"
+                                                                   style={{whiteSpace: 'pre-wrap'}}>
                                                                     {data.description}
                                                                 </p>
                                                             </div>
@@ -971,7 +1065,7 @@ export default class Form extends Component {
                                                     <input type="text" id="champStatusDamagesProp"
                                                            className="form-control"
                                                            value={this.state.status.damages.props}
-                                                           onChange={e => setStatus(e, 'damages', 'props')}/>
+                                                           onChange={e => this.setStatus(e, 'damages', 'props')}/>
                                                 </div>
                                                 <div className="form-group mb-0 ml-4 mt-3">
                                                     <label htmlFor="champStatusDamagesRate">Rate</label>
@@ -979,7 +1073,7 @@ export default class Form extends Component {
                                                            id="champStatusDamagesRate"
                                                            className="form-control"
                                                            value={this.state.status.damages.rate}
-                                                           onChange={e => setStatus(e, 'damages', 'rate')}/>
+                                                           onChange={e => this.setStatus(e, 'damages', 'rate')}/>
                                                 </div>
                                             </div>
                                             <div className="progress mt-2 rounded-0">
@@ -998,7 +1092,7 @@ export default class Form extends Component {
                                                     <input type="text" id="champStatusSurvivabilityProp"
                                                            className="form-control"
                                                            value={this.state.status.survivability.props}
-                                                           onChange={e => setStatus(e, 'survivability', 'props')}/>
+                                                           onChange={e => this.setStatus(e, 'survivability', 'props')}/>
                                                 </div>
                                                 <div className="form-group mb-0 ml-4 mt-3">
                                                     <label htmlFor="champStatusSurvivabilityRate">Rate</label>
@@ -1006,7 +1100,7 @@ export default class Form extends Component {
                                                            id="champStatusSurvivabilityRate"
                                                            className="form-control"
                                                            value={this.state.status.survivability.rate}
-                                                           onChange={e => setStatus(e, 'survivability', 'rate')}/>
+                                                           onChange={e => this.setStatus(e, 'survivability', 'rate')}/>
                                                 </div>
                                             </div>
                                             <div className="progress mt-2 rounded-0">
@@ -1025,7 +1119,7 @@ export default class Form extends Component {
                                                     <input type="text" id="champStatusProtectionProp"
                                                            className="form-control"
                                                            value={this.state.status.protection.props}
-                                                           onChange={e => setStatus(e, 'protection', 'props')}/>
+                                                           onChange={e => this.setStatus(e, 'protection', 'props')}/>
                                                 </div>
                                                 <div className="form-group mb-0 ml-4 mt-3">
                                                     <label htmlFor="champStatusProtectionRate">Rate</label>
@@ -1033,7 +1127,7 @@ export default class Form extends Component {
                                                            id="champStatusProtectionRate"
                                                            className="form-control"
                                                            value={this.state.status.protection.rate}
-                                                           onChange={e => setStatus(e, 'protection', 'rate')}/>
+                                                           onChange={e => this.setStatus(e, 'protection', 'rate')}/>
                                                 </div>
                                             </div>
                                             <div className="progress mt-2 rounded-0">
@@ -1052,7 +1146,7 @@ export default class Form extends Component {
                                                     <input type="text" id="champStatusControlProp"
                                                            className="form-control"
                                                            value={this.state.status.control.props}
-                                                           onChange={e => setStatus(e, 'control', 'props')}/>
+                                                           onChange={e => this.setStatus(e, 'control', 'props')}/>
                                                 </div>
                                                 <div className="form-group mb-0 ml-4 mt-3">
                                                     <label htmlFor="champStatusControlRate">Rate</label>
@@ -1060,7 +1154,7 @@ export default class Form extends Component {
                                                            id="champStatusControlRate"
                                                            className="form-control"
                                                            value={this.state.status.control.rate}
-                                                           onChange={e => setStatus(e, 'control', 'rate')}/>
+                                                           onChange={e => this.setStatus(e, 'control', 'rate')}/>
                                                 </div>
                                             </div>
                                             <div className="progress mt-2 rounded-0">
@@ -1079,15 +1173,15 @@ export default class Form extends Component {
                                                     <input type="text" id="champStatusDifficultyProp"
                                                            className="form-control"
                                                            value={this.state.status.difficulty.props}
-                                                           onChange={e => setStatus(e, 'difficulty', 'props')}/>
+                                                           onChange={e => this.setStatus(e, 'difficulty', 'props')}/>
                                                 </div>
                                                 <div className="form-group mb-0 ml-4 mt-3">
-                                                    <label htmlFor="champStatusDifficultyRate">Rate</label>
+                                                    <label htmlFor="champStatusthis.difficultyRate">Rate</label>
                                                     <input type="number" min="0" max="100" step="5"
-                                                           id="champStatusDifficultyRate"
+                                                           id="champStatusthis.difficultyRate"
                                                            className="form-control"
                                                            value={this.state.status.difficulty.rate}
-                                                           onChange={e => setStatus(e, 'difficulty', 'rate')}/>
+                                                           onChange={e => this.setStatus(e, 'difficulty', 'rate')}/>
                                                 </div>
                                             </div>
                                             <div className="progress mt-2 rounded-0">
@@ -1115,7 +1209,7 @@ export default class Form extends Component {
                                             style={{height: '11em'}}
                                             onClick={() => document.getElementById(`combosFile-${key}`).click()}>
                                             {this.state.combos[key].video !== '' ?
-                                                <video autoPlay="true" loop className="rounded-top w-100 h-100 bg-dark2"
+                                                <video autoPlay="true" loop className="rounded-top w-100 h-100 bg-black"
                                                        src={this.state.combos[key].video}/> :
                                                 <div
                                                     className="d-flex justify-content-center flex-column align-items-center">
@@ -1125,7 +1219,7 @@ export default class Form extends Component {
                                                 </div>
                                             }
                                             <input type="file" id={`combosFile-${key}`} accept="video/*"
-                                                   onChange={e => uploadMedia(e, 'video', '/combos', key)}
+                                                   onChange={e => this.uploadMedia(e, 'video', '/combos', key)}
                                                    className="d-none"/>
                                         </div>
                                         <div className="progress bg-transparent h-100 rounded-0">
@@ -1144,31 +1238,31 @@ export default class Form extends Component {
                                                 <div className="difficulty d-flex align-items-center">
                                                     <div className="difficultyBox">
                                                         <input type="radio" onChange={() => {
-                                                            difficultyRate(0, key)
+                                                            this.difficultyRate(0, key)
                                                         }} name={`difficukty-${key}`}/>
                                                         <span className='difficultyCircle'/>
                                                     </div>
                                                     <div className="difficultyBox">
                                                         <input type="radio" onChange={() => {
-                                                            difficultyRate(1, key)
+                                                            this.difficultyRate(1, key)
                                                         }} name={`difficukty-${key}`}/>
                                                         <span className='difficultyCircle'/>
                                                     </div>
                                                     <div className="difficultyBox">
                                                         <input type="radio" onChange={() => {
-                                                            difficultyRate(2, key)
+                                                            this.difficultyRate(2, key)
                                                         }} name={`difficukty-${key}`}/>
                                                         <span className='difficultyCircle'/>
                                                     </div>
                                                     <div className="difficultyBox">
                                                         <input type="radio" onChange={() => {
-                                                            difficultyRate(3, key)
+                                                            this.difficultyRate(3, key)
                                                         }} name={`difficukty-${key}`}/>
                                                         <span className='difficultyCircle'/>
                                                     </div>
                                                     <div className="difficultyBox">
                                                         <input type="radio" onChange={() => {
-                                                            difficultyRate(4, key)
+                                                            this.difficultyRate(4, key)
                                                         }} name={`difficukty-${key}`}/>
                                                         <span className='difficultyCircle'/>
                                                     </div>
@@ -1178,21 +1272,25 @@ export default class Form extends Component {
                                                 <label htmlFor={`champCombosSkillCombo-${key}`}>Skill Combo</label>
                                                 <input type="text" id={`champCombosSkillCombo-${key}`}
                                                        className="form-control"
-                                                       onChange={e => setCombo(e, 'skillCombo', key)}
+                                                       onChange={e => this.setCombo(e, 'skillCombo', key)}
                                                        value={this.state.combos[key].skillCombo}/>
                                             </div>
                                             <div className="form-group">
                                                 <label htmlFor={`champCombosDescription-${key}`}>Description</label>
                                                 <textarea id={`champCombosDescription-${key}`} className="form-control"
                                                           cols="30"
-                                                          rows="5" onChange={e => setCombo(e, 'description', key)}
+                                                          rows="5" onChange={e => this.setCombo(e, 'description', key)}
                                                           value={this.state.combos[key].description}/>
                                             </div>
 
                                         </div>
                                         <div className="card-footer pt-0 d-flex">
+                                            {this.state.combos.length > 1 ?
+                                                <button className="btn bg-transparent mr-auto text-danger"
+                                                        onClick={() => this.removeElement(key, 'combos')}>Delete
+                                                </button> : ''}
                                             <button className="btn bg-transparent ml-auto text-light"
-                                                    onClick={addComboCard}>Add another
+                                                    onClick={this.addCombo}>Add another
                                             </button>
                                         </div>
                                     </div>
@@ -1214,40 +1312,127 @@ export default class Form extends Component {
                                                             className="text-danger mr-1">*</span>Name
                                                             & keyword</label>
                                                         <div className="input-group">
-                                                            <input type="text" required id={`spellName-${key}`}
+                                                            <input type="text" id={`spellName-${key}`}
                                                                    placeholder="Name..."
                                                                    value={data.name}
-                                                                   onChange={e => setSpell(e, 'name', key)}
+                                                                   onChange={e => this.setSpell(e, 'name', key)}
                                                                    className="form-control w-75"/>
-                                                            <input type="text" required id={`spellKeyword-${key}`}
+                                                            <input type="text" id={`spellKeyword-${key}`}
                                                                    placeholder="Key..."
                                                                    value={data.keyword}
-                                                                   onChange={e => setSpell(e, 'keyword', key)}
+                                                                   onChange={e => this.setSpell(e, 'keyword', key)}
                                                                    className="form-control w-25"/>
                                                         </div>
                                                     </div>
+                                                    <div className="form-group">
+                                                        <label htmlFor={`spellDetailsType-${key}`}>Type & cost</label>
+                                                        <div className="input-group">
+                                                            <div className="btn-group w-75">
+                                                                <button type="button" id={`spellDetailsType-${key}`}
+                                                                        className="btn btn-block rounded-left text-capitalize border btn-light dropdown-toggle"
+                                                                        data-toggle="dropdown"
+                                                                        aria-haspopup="true" aria-expanded="false">
+                                                                    {this.state.spells[key].type !== '' || this.state.spells[key].type !== undefined ? this.state.spells[key].type : 'Select a type'}
+                                                                </button>
+                                                                <div className="dropdown-menu">
+                                                                    <div className="d-flex flex-wrap">
+                                                                        <button className="dropdown-item" style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('mobility', 'type', key)}>Mobility
+                                                                        </button>
+                                                                        <button className="dropdown-item" style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('aoe', 'type', key)}>Aoe
+                                                                        </button>
+                                                                        <button className="dropdown-item" style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('projectile', 'type', key)}>Projectile
+                                                                        </button>
+                                                                        <button className="dropdown-item" style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('wall', 'type', key)}>Wall
+                                                                        </button>
+                                                                        <button className="dropdown-item" style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('shield', 'type', key)}>Shield
+                                                                        </button>
+                                                                        <button className="dropdown-item" style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('melee', 'type', key)}>Melee
+                                                                        </button>
+                                                                        <button className="dropdown-item" style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('block', 'type', key)}>Block
+                                                                        </button>
+                                                                        <button className="dropdown-item" style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('counter', 'type', key)}>Counter
+                                                                        </button>
+                                                                        <button className="dropdown-item" style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('debuff', 'type', key)}>Debuff
+                                                                        </button>
+                                                                        <button className="dropdown-item" style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('self buff', 'type', key)}>Self
+                                                                            buff
+                                                                        </button>
+                                                                        <button className="dropdown-item" style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('buff', 'type', key)}>Buff
+                                                                        </button>
+                                                                        <button className="dropdown-item" style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('heal', 'type', key)}>Heal
+                                                                        </button>
+                                                                        <button className="dropdown-item" style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('dispel', 'type', key)}>Dispel
+                                                                        </button>
+                                                                        <button className="dropdown-item" style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('summon', 'type', key)}>Summon
+                                                                        </button>
+                                                                        <button className="dropdown-item" style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('cleave', 'type', key)}>Cleave
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="btn-group w-25">
+                                                                <button type="button" id={`spellDetailsType-${key}`}
+                                                                        className="btn btn-block rounded-right text-capitalize border btn-light dropdown-toggle"
+                                                                        data-toggle="dropdown"
+                                                                        aria-haspopup="true" aria-expanded="false">
+                                                                    {this.state.spells[key].cost !== '' || this.state.spells[key].cost !== undefined ? this.state.spells[key].cost : 'Select a cost'}
+                                                                </button>
+                                                                <div className="dropdown-menu">
+                                                                    <button className="dropdown-item"
+                                                                            onClick={() => this.setSpell(1, 'cost', key)}>1
+                                                                    </button>
+                                                                    <button className="dropdown-item"
+                                                                            onClick={() => this.setSpell(2, 'cost', key)}>2
+                                                                    </button>
+                                                                    <button className="dropdown-item"
+                                                                            onClick={() => this.setSpell(3, 'cost', key)}>3
+                                                                    </button>
+                                                                    <button className="dropdown-item"
+                                                                            onClick={() => this.setSpell(4, 'cost', key)}>4
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <div className="form-group mb-0">
-                                                        <label htmlFor="spellDetailsName-1">
+                                                        <label htmlFor={`spellDetailsName-${key}-0`}>
                                                             Names & props
                                                         </label>
                                                         {data.details.map((data, index) => {
                                                             return <div className="input-group mb-2"
                                                                         key={index}>
-                                                                <input type="text" id={`spellDetailsName-${index}`}
+                                                                <input type="text"
+                                                                       id={`spellDetailsName-${key}-${index}`}
                                                                        placeholder="Name..."
                                                                        value={data.name}
-                                                                       onChange={e => setSpell(e, 'details', key, 'name', index)}
+                                                                       onChange={e => this.setSpell(e, 'details', key, 'name', index)}
                                                                        className="form-control w-75"/>
-                                                                <input type="text" id={`spellDetailsProp-${index}`}
+                                                                <input type="text"
+                                                                       id={`spellDetailsProp-${key}-${index}`}
                                                                        placeholder="Prop..."
                                                                        value={data.prop}
-                                                                       onChange={e => setSpell(e, 'details', key, 'prop', index)}
+                                                                       onChange={e => this.setSpell(e, 'details', key, 'prop', index)}
                                                                        className="form-control w-25"/>
                                                             </div>
                                                         })}
                                                     </div>
                                                     <button className="btn btn-sm rounded"
-                                                            onClick={() => addSpellDetails(key)}
+                                                            onClick={() => this.addSpellDetails(key)}
                                                             type="button">Add +
                                                     </button>
                                                 </div>
@@ -1268,10 +1453,10 @@ export default class Form extends Component {
                                                                 </Link>
                                                             </div>
                                                             <div className="custom-file">
-                                                                <input type="file" required
+                                                                <input type="file"
                                                                        className="custom-file-input"
                                                                        id={`spellIcon-${key}`} accept="image/*"
-                                                                       onChange={e => uploadMedia(e, 'icon', '/spells', key)}/>
+                                                                       onChange={e => this.uploadMedia(e, 'icon', '/spells', key)}/>
                                                                 <label className="custom-file-label"
                                                                        id={`spellIconLabel-${key}`}
                                                                        htmlFor={`spellIcon-${key}`}>Upload
@@ -1294,9 +1479,9 @@ export default class Form extends Component {
                                                     <div className="form-group">
                                                         <label htmlFor={`spellDescription-${key}`}><span
                                                             className="text-danger mr-1">*</span>Description</label>
-                                                        <textarea id={`spellDescription-${key}`} required
+                                                        <textarea id={`spellDescription-${key}`}
                                                                   value={data.description}
-                                                                  onChange={e => setSpell(e, 'description', key)}
+                                                                  onChange={e => this.setSpell(e, 'description', key)}
                                                                   className="form-control"
                                                                   cols="30" rows="3"/>
                                                     </div>
@@ -1305,8 +1490,12 @@ export default class Form extends Component {
 
                                         </div>
                                         <div className="card-footer pt-0 d-flex">
+                                            {this.state.spells.length > 1 ?
+                                                <button className="btn bg-transparent mr-auto text-danger"
+                                                        onClick={() => this.removeElement(key, 'spells')}>Delete
+                                                </button> : ''}
                                             <button className="btn bg-transparent ml-auto text-light"
-                                                    onClick={addSpell}>Add another
+                                                    onClick={this.addSpell}>Add another
                                             </button>
                                         </div>
                                     </div>
@@ -1322,43 +1511,55 @@ export default class Form extends Component {
                                     <div className="card border-light rounded bg-dark text-light">
                                         <div className="card-body">
                                             <div className="form-group">
-                                                <label htmlFor={`battleriteName-{key}`}><span
+                                                <label htmlFor={`battleriteName-${key}`}><span
                                                     className="text-danger mr-1">*</span>Name</label>
-                                                <input type="text" required id={`battleriteName-{key}`}
+                                                <input type="text" id={`battleriteName-${key}`}
                                                        placeholder="Name..."
                                                        value={data.name}
-                                                       onChange={e => setBattlerite(e, 'name', key)}
+                                                       onChange={e => this.setBattlerite(e, 'name', key)}
                                                        className="form-control"/>
                                             </div>
                                             <div className="row">
                                                 <div className="col-6">
                                                     <div className="form-group">
-                                                        <label htmlFor={`battleriteType-{key}`}><span
+                                                        <label htmlFor={`battleriteType-${key}`}><span
                                                             className="text-danger mr-1">*</span>Type</label>
-                                                        <button type="button" id={`battleriteType-{key}`}
+                                                        <button type="button" id={`battleriteType-${key}`}
                                                                 className="btn btn-block rounded border btn-light dropdown-toggle"
                                                                 data-toggle="dropdown" aria-haspopup="true"
                                                                 aria-expanded="false">
                                                             {data.type === '' ? this.state.battleriteTypes[0] : data.type}
                                                         </button>
                                                         <div className="dropdown-menu">
+                                                            <div className="d-flex flex-row">
                                                             {this.state.battleriteTypes.map((data, index) => {
                                                                 return <button className="dropdown-item text-capitalize"
-                                                                               onClick={() => setBattlerite(data, 'type', key)}
-                                                                               key={index}>{data}</button>
+                                                                               onClick={() => this.setBattlerite(data, 'type', key)}
+                                                                               key={index} style={{maxWidth: '120px'}}>{data}</button>
                                                             })}
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="col-6">
+                                                <div className="col-6 d-flex">
                                                     <div className="form-group">
-                                                        <label htmlFor={`battleriteKeyword-{key}`}><span
-                                                            className="text-danger mr-1">*</span>keyword</label>
-                                                        <input type="text" required id={`battleriteKeyword-{key}`}
+                                                        <label htmlFor={`battleriteKeyword-${key}`}>Keyword</label>
+                                                        <input type="text" id={`battleriteKeyword-${key}`}
                                                                placeholder="Key..."
                                                                value={data.keyword}
-                                                               onChange={e => setBattlerite(e, 'keyword', key)}
+                                                               onChange={e => this.setBattlerite(e, 'keyword', key)}
                                                                className="form-control"/>
+                                                    </div>
+                                                    <div className="form-group ml-4">
+                                                        <label htmlFor={`battleriteEX-${key}`}>EX</label>
+                                                        <div className="custom-control custom-checkbox">
+                                                            <input type="checkbox" defaultChecked={data.ex}
+                                                                   onChange={e => this.setBattlerite(e, 'ex', key)}
+                                                                   className="custom-control-input"
+                                                                   id={`battleriteEX-${key}`}/>
+                                                            <label className="custom-control-label"
+                                                                   htmlFor={`battleriteEX-${key}`}/>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1378,9 +1579,9 @@ export default class Form extends Component {
                                                         </Link>
                                                     </div>
                                                     <div className="custom-file">
-                                                        <input type="file" required className="custom-file-input"
+                                                        <input type="file" className="custom-file-input"
                                                                id={`battleriteIcon-${key}`} accept="image/*"
-                                                               onChange={e => uploadMedia(e, 'icon', '/battlerites', key)}/>
+                                                               onChange={e => this.uploadMedia(e, 'icon', '/battlerites', key)}/>
                                                         <label className="custom-file-label"
                                                                id={`battleriteIconLabel-${key}`}
                                                                htmlFor={`battleriteIcon-${key}`}>
@@ -1400,18 +1601,22 @@ export default class Form extends Component {
                                                 </div>
                                             </div>
                                             <div className="form-group">
-                                                <label htmlFor={`battleriteDescription-{key}`}><span
+                                                <label htmlFor={`battleriteDescription-${key}`}><span
                                                     className="text-danger mr-1">*</span>Description</label>
-                                                <textarea id={`battleriteDescription-{key}`} required
+                                                <textarea id={`battleriteDescription-${key}`}
                                                           value={data.description}
-                                                          onChange={e => setBattlerite(e, 'description', key)}
+                                                          onChange={e => this.setBattlerite(e, 'description', key)}
                                                           className="form-control"
                                                           cols="30" rows="3"/>
                                             </div>
                                         </div>
                                         <div className="card-footer pt-0 d-flex">
+                                            {this.state.battlerites.length > 1 ?
+                                                <button className="btn bg-transparent mr-auto text-danger"
+                                                        onClick={() => this.removeElement(key, 'battlerites')}>Delete
+                                                </button> : ''}
                                             <button className="btn bg-transparent ml-auto text-light"
-                                                    onClick={addBattlerite}>Add another
+                                                    onClick={this.addBattlerite}>Add another
                                             </button>
                                         </div>
                                     </div>
@@ -1429,7 +1634,7 @@ export default class Form extends Component {
                                             return <div className="form-group" key={key}>
                                                 <div className="input-group">
                                                     <input type="text" value={this.state.quotes[key].name}
-                                                           onChange={e => setQuote(e, 'name', key)}
+                                                           onChange={e => this.setQuote(e, 'name', key)}
                                                            placeholder="Name..."
                                                            className="form-control" id={`quoteName-${key}`}/>
                                                     <div className="input-group-append">
@@ -1449,23 +1654,28 @@ export default class Form extends Component {
                                                                  alt="Upload icon"/>
                                                         </label>
                                                         <input type="file" className="d-none"
-                                                               id={`quoteSound-${key}`} accept=".mp3"
-                                                               onChange={e => uploadMedia(e, 'sound', '/quotes', key)}/>
+                                                               id={`quoteSound-${key}`} accept=".mp3 .wav"
+                                                               onChange={e => this.uploadMedia(e, 'sound', '/quotes', key)}/>
                                                     </div>
                                                 </div>
                                             </div>
                                         })}
                                         <button className="btn btn-sm rounded"
-                                                onClick={() => addQuoteSound()}
+                                                onClick={() => this.addQuoteSound()}
                                                 type="button">Add +
                                         </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="row mt-5">
+                        <div className="row mt-4">
                             <div className="col-12">
-                                <button className="btn btn-light" type="submit" onClick={saveChampion}>Save</button>
+                                <button className="btn btn-light" type="submit" onClick={this.saveChampion}>Save
+                                </button>
+                                {this.state.editChampion !== undefined ?
+                                    <button className="btn btn-outline-danger ml-3" type="button"
+                                            onClick={this.deleteChampion}>Delete</button> : ''
+                                }
                             </div>
                         </div>
                     </div>
@@ -1473,4 +1683,4 @@ export default class Form extends Component {
             </div>
         )
     }
-}
+};
