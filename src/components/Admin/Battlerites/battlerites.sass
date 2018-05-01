@@ -5,8 +5,55 @@
   max-width: 250px
   transition: .1s
   position: relative
+  min-height: 315px !important
+  &:before
+    content: ''
+    position: absolute
+    left: 0
+    right: 0
+    bottom: 0
+    top: 0
+    width: 100%
+    background-repeat: no-repeat
+    background-position: center
+    background-image: url(../../../images/battlerite-card.png)
   &:hover
     transform: scale(1.2)
+  &[data-card-type="mixed"]
+    .battlerite-type
+      color: $mixed
+    .battle-skill-container:before
+      box-shadow: 0 0 5px 6px $mixed
+  &[data-card-type="survival"]
+    .battlerite-type
+      color: $survival
+    .battle-skill-container:before
+      box-shadow: 0 0 5px 6px $survival
+  &[data-card-type="support"]
+    .battlerite-type
+      color: $support
+    .battle-skill-container:before
+      box-shadow: 0 0 5px 6px $support
+  &[data-card-type="control"]
+    .battlerite-type
+      color: $control
+    .battle-skill-container:before
+      box-shadow: 0 0 5px 6px $control
+  &[data-card-type="mobility"]
+    .battlerite-type
+      color: $mobility
+    .battle-skill-container:before
+      box-shadow: 0 0 5px 6px $mobility
+  &[data-card-type="offense"]
+    .battlerite-type
+      color: $offense
+    .battle-skill-container:before
+      box-shadow: 0 0 5px 6px $offense
+  &[data-card-type="utility"]
+    .battlerite-type
+      color: $utility
+    .battle-skill-container:before
+      box-shadow: 0 0 5px 6px $utility
   .battlerite-title
     text-transform: uppercase
     position: absolute
@@ -20,9 +67,13 @@
     top: 11%
     right: 0
     left: 0
-    width: 55px
-    background-color: #d3fdfd
-    color: #050f26
+    width: 22%
+    height: 6%
+    display: flex
+    align-items: center
+    justify-content: center
+    background-color: $lightcyan
+    color: $black
     font-size: 0.8em
     font-weight: 700
     text-transform: uppercase
@@ -38,20 +89,6 @@
     left: 0
     font-size: .9em
     text-align: center
-    &.mixed
-      color: $mixed
-    &.survival
-      color: $survival
-    &.support
-      color: $support
-    &.control
-      color: $control
-    &.mobility
-      color: $mobility
-    &.offense
-      color: $offense
-    &.utility
-      color: $utility
   .battlerite-description
     text-transform: capitalize
     position: absolute
@@ -60,9 +97,10 @@
     left: 0
     font-size: 0.85em
     text-align: center
-    width: 190px
+    width: 70%
     margin: auto
     line-height: 1.4
+    overflow: hidden
   .battlerite-skill
     position: absolute
     top: 16%
@@ -74,31 +112,7 @@
     justify-content: center
     .battle-skill-container
       position: relative
-      width: 108px
-      .battlerite-skill-border
-        position: absolute
-        left: 0
-        right: 0
-        top: 0
-        bottom: 0
-        width: 100%
-        background-repeat: no-repeat
-        background-size: contain
-        border-radius: 100px
-        &.mixed
-          box-shadow: 0 0 5px 6px $mixed
-        &.survival
-          box-shadow: 0 0 5px 6px $survival
-        &.support
-          box-shadow: 0 0 5px 6px $support
-        &.control
-          box-shadow: 0 0 5px 6px $control
-        &.mobility
-          box-shadow: 0 0 5px 6px $mobility
-        &.offense
-          box-shadow: 0 0 5px 6px $offense
-        &.utility
-          box-shadow: 0 0 5px 6px $utility
+      width: 34%
       .battlerite-skill-image
         position: absolute
         left: 5px
@@ -106,3 +120,17 @@
         top: 5px
         bottom: 0
         width: 89%
+      &:before
+        content: ''
+        position: absolute
+        left: 0
+        right: 0
+        top: 0
+        bottom: 0
+        width: 100%
+        min-height: 96.64px
+        background-image: url(../../../images/Ability_Border_Black.png)
+        background-repeat: no-repeat
+        background-size: contain
+        border-radius: 100px
+

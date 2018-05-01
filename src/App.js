@@ -22,7 +22,6 @@ import Auth from './components/Auth/Auth'
 import Signup from './components/Auth/Signup'
 
 // Admin
-import AHeader from './components/Admin/Shared/Header'
 import Admin from './components/Admin/Admin'
 import ABuildsView from './components/Admin/Builds/BuildsView'
 import ABuilder from './components/Admin/Builds/Builder'
@@ -76,12 +75,10 @@ export default class App extends Component {
                     {this.state.isAuthenticated ? <Route>
                         <div className="container-fluid">
                             <div className="row">
-                                <AHeader/>
                                 <Route exact path='/admin/:sectionName' component={Admin}/>
 
                                 {/* Builds */}
                                 <Route exact path='/admin/builds/:champion' component={ABuildsView}/>
-                                <Route path='/admin/builds/:champion/create' component={ABuilder}/>
                                 <Route path='/admin/builds/:champion/:build' component={ABuilder}/>
 
                                 {/* Battlerites */}
