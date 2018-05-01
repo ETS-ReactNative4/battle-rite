@@ -1,7 +1,7 @@
 {
   "name": "battle-rite",
   "version": "0.1.0",
-  "homepage" : "https://battle-rite.firebaseapp.com/",
+  "homepage": "https://battle-rite.firebaseapp.com/",
   "private": true,
   "dependencies": {
     "@tinymce/tinymce-react": "^2.2.4",

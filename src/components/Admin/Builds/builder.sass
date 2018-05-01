@@ -2,9 +2,7 @@
 
 .builder-container
   display: flex
-  flex-direction: row
   justify-content: center
-  flex-wrap: wrap
   .builder-drop
     height: 347px
     width: 256px
@@ -12,5 +10,15 @@
     background-color: lighten($black, 5%)
     margin-top: 30px
     margin-right: 30px
-    &:last-of-type
-      margin-right: 0
+    &.card-dropped
+      border: none
+      background: none
+      margin-top: 43px
+      .battlerite-card
+        transform: scale(1.12)
+        &:hover
+          transform: scale(1.4)
+        .battle-skill-container
+          width: 40%
+          &:before
+            min-height: 99.64px

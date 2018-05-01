@@ -21,22 +21,33 @@ export default class Builder extends Component {
         })
     }
 
+    dropCard = event => {
+        event.preventDefault();
+        let data = event.dataTransfer.getData("card-build")
+        try {
+            document.getElementById(data).style.opacity = "1"
+            document.getElementById(data).classList = "battlerite-card"
+            event.target.appendChild(document.getElementById(data))
+            event.target.classList.add('card-dropped')
+        } catch (err) {
+            console.log(err.message)
+            let cardBuild = document.getElementsByClassName('card-build')
+            for (let i = 0; i < cardBuild.length; i++) {
+                cardBuild[i].style.opacity = "1"
+            }
+        }
+    }
+
     render() {
         return (
-            <div className="aBuilds mt-3 col-12 col-md-9 col-xl-10">
+            <div className="aBuilds mt-3 mb-5 col-12">
                 {this.state.battlerites.length !== 0 ? <BattleriteCard battlerites={this.state.battlerites}/> : ''}
-                {/*<div className="row mt-2">
-                    <div className="col-sm-6 col-lg-4">
-                        <div className="form-group">
-                            <label htmlFor="build-title">Build title</label>
-                            <input type="text" className="form-control" id="build-title"/>
-                        </div>
-                    </div>
-                </div>*/}
                 <div className="builder-container">
-                    {[1,2,3,4,5].map((data, key)=>{
-                        return <div className="builder-drop" key={key}/>
-                    })}
+                    <div className="builder-drop" onDrop={e => this.dropCard(e)} onDragOver={e => e.preventDefault()}/>
+                    <div className="builder-drop" onDrop={e => this.dropCard(e)} onDragOver={e => e.preventDefault()}/>
+                    <div className="builder-drop" onDrop={e => this.dropCard(e)} onDragOver={e => e.preventDefault()}/>
+                    <div className="builder-drop" onDrop={e => this.dropCard(e)} onDragOver={e => e.preventDefault()}/>
+                    <div className="builder-drop" onDrop={e => this.dropCard(e)} onDragOver={e => e.preventDefault()}/>
                 </div>
             </div>
         )

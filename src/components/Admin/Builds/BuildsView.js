@@ -14,7 +14,7 @@ export default class Builder extends Component {
 
     render() {
         return (
-            <div className="aBuilds mt-3 col-12 col-md-9 col-xl-10">
+            <div className="aBuilds mt-3 col-12">
                 <div className="row mb-4">
                     <div className="col-12">
                         <Link to={`/admin/builds/${this.state.championName}/create`}
