@@ -5,24 +5,12 @@
     background-color: #626d78; }
 
 .battlerite-card.small-card {
-  font-size: 13.5px;
+  font-size: 14.5px;
   cursor: pointer; }
-  .battlerite-card.small-card .battlerite-title {
-    font-size: 0.9em;
-    top: 0%; }
   .battlerite-card.small-card .battlerite-skill {
     top: 17%; }
     .battlerite-card.small-card .battlerite-skill .battle-skill-container {
-      width: 55px; }
-  .battlerite-card.small-card .battlerite-hotkey {
-    top: 11%; }
-  .battlerite-card.small-card .battlerite-type {
-    top: 43%; }
-  .battlerite-card.small-card .battlerite-description {
-    height: 105px;
-    top: 52%;
-    width: 125px;
-    line-height: 15px; }
+      width: 38%; }
   .battlerite-card.small-card:hover {
     transform: scale(1.3); }
 

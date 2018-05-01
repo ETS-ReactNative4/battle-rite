@@ -1,8 +1,6 @@
 .builder-container {
   display: flex;
-  flex-direction: row;
-  justify-content: center;
-  flex-wrap: wrap; }
+  justify-content: center; }
   .builder-container .builder-drop {
     height: 347px;
     width: 256px;
@@ -10,7 +8,17 @@
     background-color: #2f2f2f;
     margin-top: 30px;
     margin-right: 30px; }
-    .builder-container .builder-drop:last-of-type {
-      margin-right: 0; }
+    .builder-container .builder-drop.card-dropped {
+      border: none;
+      background: none;
+      margin-top: 43px; }
+      .builder-container .builder-drop.card-dropped .battlerite-card {
+        transform: scale(1.12); }
+        .builder-container .builder-drop.card-dropped .battlerite-card:hover {
+          transform: scale(1.4); }
+        .builder-container .builder-drop.card-dropped .battlerite-card .battle-skill-container {
+          width: 40%; }
+          .builder-container .builder-drop.card-dropped .battlerite-card .battle-skill-container:before {
+            min-height: 99.64px; }
 
 /*# sourceMappingURL=builder.css.map */

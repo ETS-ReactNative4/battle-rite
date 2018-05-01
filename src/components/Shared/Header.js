@@ -64,9 +64,20 @@ export default class Header extends Component {
                                 <NavLink className="nav-link text-uppercase"
                                          to="/contact">Contact</NavLink>
                             </li>
-                            {this.state.isAuthenticated ? <li className="nav-item">
-                                <NavLink className="nav-link text-uppercase"
-                                         to="/admin/champions">Admin</NavLink>
+                            {this.state.isAuthenticated ? <li className="nav-item dropdown">
+                                <NavLink className="nav-link dropdown-toggle text-uppercase" activeClassName={'active'}
+                                         to="/admin/*" id="navbarDropdownAdmin" role="button" data-toggle="dropdown"
+                                         aria-haspopup="false" aria-expanded="false">Admin</NavLink>
+                                <div className="dropdown-menu" aria-labelledby="navbarDropdownAdmin">
+                                    <NavLink className="dropdown-item" activeStyle={{fontWeight: 'bold'}}
+                                             to="/admin/champions">Champions</NavLink>
+                                    <NavLink className="dropdown-item" activeStyle={{fontWeight: 'bold'}}
+                                             to="/admin/builds">Builds</NavLink>
+                                    <NavLink className="dropdown-item" activeStyle={{fontWeight: 'bold'}}
+                                             to="/admin/battlerites">Battlerites</NavLink>
+                                    <NavLink className="dropdown-item" activeStyle={{fontWeight: 'bold'}}
+                                             to="/admin/news">News</NavLink>
+                                </div>
                             </li> : ''}
                         </ul>
                         <div className="d-md-flex navbar-nav align-items-center d-none">

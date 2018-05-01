@@ -25,7 +25,7 @@ export default class BattleritesCards extends Component {
 
     render() {
         return (
-            <div className="aBattlerite col-12 col-md-9 col-xl-10 py-4">
+            <div className="aBattlerite col-12 py-4">
                 {this.state.battlerites.length !== 0 ? <Card battlerites={this.state.battlerites}/> : ''}
             </div>
         )
