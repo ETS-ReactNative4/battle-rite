@@ -1,7 +1,7 @@
 .builder-container {
-  display: flex;
-  justify-content: center; }
+  text-align: center; }
   .builder-container .builder-drop {
+    display: inline-block;
     height: 347px;
     width: 256px;
     border: 1px solid #767676;
@@ -11,13 +11,13 @@
     .builder-container .builder-drop.card-dropped {
       border: none;
       background: none;
-      margin-top: 43px; }
+      padding-top: 15px; }
       .builder-container .builder-drop.card-dropped .battlerite-card {
         transform: scale(1.12); }
         .builder-container .builder-drop.card-dropped .battlerite-card:hover {
           transform: scale(1.4); }
         .builder-container .builder-drop.card-dropped .battlerite-card .battle-skill-container {
-          width: 40%; }
+          width: 41%; }
           .builder-container .builder-drop.card-dropped .battlerite-card .battle-skill-container:before {
             min-height: 99.64px; }
 

@@ -4,6 +4,13 @@
   transition: 0.1s;
   position: relative;
   min-height: 315px !important; }
+  .battlerite-card:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0; }
   .battlerite-card:before {
     content: "";
     position: absolute;

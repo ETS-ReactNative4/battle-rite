@@ -143,13 +143,13 @@ export default class Form extends Component {
             if (e) e.returnValue = 'Sure?'
             return 'Sure?'
         }
-        try{
+        try {
             let champion = this.state.editChampion.toLowerCase().replace(/\s/g, '')
             firebase.database().ref(`champions/${champion}`)
                 .once('value').then(data => {
                 this.setState(data.val())
             })
-        }catch(err){
+        } catch (err) {
             console.log(err.message)
         }
     }
@@ -561,8 +561,9 @@ export default class Form extends Component {
             quotes: this.state.quotes,
         }
         try {
-            firebase.database().ref(`champions/${champion}`).set(champions);
-            this.props.history.goBack()
+            firebase.database().ref(`champions/${champion}`).set(champions).then(
+                // this.props.history.goBack()
+            )
         } catch (e) {
             console.log(e.message)
             console.log(`Champions: ${champions}`)
@@ -1348,6 +1349,14 @@ export default class Form extends Component {
                                                                         <button className="dropdown-item"
                                                                                 style={{maxWidth: '120px'}}
                                                                                 onClick={() => this.setSpell('mobility', 'type', key)}>Mobility
+                                                                        </button>
+                                                                        <button className="dropdown-item"
+                                                                                style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('cloak', 'type', key)}>Cloak
+                                                                        </button>
+                                                                        <button className="dropdown-item"
+                                                                                style={{maxWidth: '120px'}}
+                                                                                onClick={() => this.setSpell('channel', 'type', key)}>Channel
                                                                         </button>
                                                                         <button className="dropdown-item"
                                                                                 style={{maxWidth: '120px'}}

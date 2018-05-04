@@ -3,7 +3,7 @@
   height: 200px;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
   border: 1px solid #767676;
   cursor: pointer;
