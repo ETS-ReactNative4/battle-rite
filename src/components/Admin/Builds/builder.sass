@@ -1,9 +1,9 @@
 @import '../../../sass/vars'
 
 .builder-container
-  display: flex
-  justify-content: center
+  text-align: center
   .builder-drop
+    display: inline-block
     height: 347px
     width: 256px
     border: 1px solid darken($light,50%)
@@ -13,12 +13,12 @@
     &.card-dropped
       border: none
       background: none
-      margin-top: 43px
+      padding-top: 15px
       .battlerite-card
         transform: scale(1.12)
         &:hover
           transform: scale(1.4)
         .battle-skill-container
-          width: 40%
+          width: 41%
           &:before
             min-height: 99.64px

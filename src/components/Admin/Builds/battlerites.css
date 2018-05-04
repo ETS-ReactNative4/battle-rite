@@ -6,11 +6,13 @@
 
 .battlerite-card.small-card {
   font-size: 14.5px;
-  cursor: pointer; }
+  cursor: pointer;
+  min-width: 240px;
+  max-width: initial; }
   .battlerite-card.small-card .battlerite-skill {
     top: 17%; }
     .battlerite-card.small-card .battlerite-skill .battle-skill-container {
-      width: 38%; }
+      width: 41%; }
   .battlerite-card.small-card:hover {
     transform: scale(1.3); }
 
