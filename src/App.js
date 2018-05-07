@@ -73,7 +73,7 @@ export default class App extends Component {
                     <Route path='/login' component={Auth}/>
 
                     {this.state.isAuthenticated ? <Route>
-                        <div className="container-fluid">
+                        <div className="container-fluid mt-5">
                             <div className="row">
                                 <Route exact path='/admin/:sectionName' component={Admin}/>
 

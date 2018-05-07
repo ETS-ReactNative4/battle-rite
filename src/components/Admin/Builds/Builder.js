@@ -13,7 +13,7 @@ export default class Builder extends Component {
             battlerites: [],
             selectedCards: [],
             buildId: this.props.match.params.build,
-            emptyCards: false
+            emptyCards: true
         }
     }
 
@@ -24,7 +24,7 @@ export default class Builder extends Component {
         })
         firebase.database().ref(`builds/${this.state.championName}/${this.state.buildId}`)
             .once('value').then(data => {
-            if (data.val().cards) this.setState({selectedCards: data.val().cards, emptyCards: true})
+            if (data.val().cards) this.setState({selectedCards: data.val().cards, emptyCards: false})
         })
     }
 
@@ -161,14 +161,21 @@ export default class Builder extends Component {
             .then(this.props.history.goBack())
     }
 
-    goBack = ()=>{
+    deleteBuild = () => {
+        let result = window.confirm('Are you sure?')
+        if (!result) return false
+        firebase.database().ref(`builds/${this.state.championName}/${this.state.buildId}`).remove()
+        this.props.history.goBack()
+    }
+
+    goBack = () => {
         this.props.history.goBack()
     }
 
     render() {
         return (
             <div className="aBuilds mt-3 mb-5 col-12">
-                {this.state.battlerites.length !== 0 ?
+                {this.state.battlerites.length !== 0 && this.state.emptyCards ?
                     <div className="d-flex flex-nowrap py-5 px-4 small-card-container" onDrop={e => this.dropCard(e)}
                          onDragOver={e => e.preventDefault()}>
                         {this.state.battlerites.map((data, key) => {
@@ -193,7 +200,7 @@ export default class Builder extends Component {
                         })}
                     </div>
                     : ''}
-                {this.state.selectedCards.length !== 0 && this.state.emptyCards ? <div className="builder-container">
+                {this.state.selectedCards.length !== 0 && !this.state.emptyCards ? <div className="builder-container">
                         {this.state.selectedCards.map((data, key) => {
                             return <div className="builder-drop card-dropped" key={key}>
                                 <div className="battlerite-card small-card"
@@ -225,14 +232,19 @@ export default class Builder extends Component {
                                         onDragOver={e => e.preventDefault()}/>
                         })}
                     </div>}
-                {this.state.emptyCards ?
-                    <button className="btn btn-light mt-4 px-3"
-                            onClick={this.goBack}>Back
-                    </button> :
-                    <button className="btn btn-light mt-4 px-3"
-                            disabled={this.state.selectedCards.length !== 5}
-                            onClick={this.saveBuild}>Save
-                    </button>}
+                <div className="mt-4">
+                    {this.state.emptyCards ?
+                        <button className="btn btn-light px-3"
+                                disabled={this.state.selectedCards.length !== 5}
+                                onClick={this.saveBuild}>Save
+                        </button> :
+                        <div>
+                            <button className="btn btn-light px-3" onClick={this.goBack}>Back</button>
+                            <button className="btn btn-outline-danger ml-3" onClick={this.deleteBuild}
+                                    type="button">Delete
+                            </button>
+                        </div>}
+                </div>
             </div>
         )
     }

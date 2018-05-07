@@ -51,7 +51,7 @@ export default class News extends Component {
     }
     render() {
         return (
-            <div className="news py-3">
+            <div className="news mt-5 py-4">
                 <div className="container">
                     <div className="row">
                         {this.state.admin === undefined ?

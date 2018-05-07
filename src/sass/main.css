@@ -32,4 +32,16 @@ textarea {
 .bg-black {
   background-color: #222222; }
 
+[data-anchor="link"] .anchorjs-link {
+  display: none;
+  opacity: 0;
+  color: rgba(255, 255, 255, 0.5);
+  transition: 0.16s linear;
+  margin-left: 0.25em; }
+  [data-anchor="link"] .anchorjs-link:hover {
+    color: white;
+    text-decoration: none; }
+[data-anchor="link"]:hover .anchorjs-link {
+  opacity: 1; }
+
 /*# sourceMappingURL=main.css.map */

@@ -11,7 +11,7 @@ import raigonImg from '../../images/raigon.jpg'
 import updateJanuaryImg from '../../images/update-january.jpg'
 
 const Home = ()=>(
-    <div>
+    <div className="home mt-5">
         <div id="carouselHomepage" className="carousel slide" data-ride="carousel">
             <ol className="carousel-indicators">
                 <li data-target="#carouselHomepage" data-slide-to="0" className="active"></li>

@@ -66,13 +66,9 @@ export default class Form extends Component {
                     description: '',
                     img: '',
                     keyword: '',
-                    type: '',
+                    type: [],
                     cost: '',
                     details: [
-                        {
-                            name: '',
-                            prop: ''
-                        },
                         {
                             name: '',
                             prop: ''
@@ -105,15 +101,9 @@ export default class Form extends Component {
                 },
             ],
 
-            battleriteTypes: [
-                'offense',
-                'survival',
-                'mixed',
-                'Control',
-                'utility',
-                'mobility',
-                'support',
-            ],
+            battleriteTypes: ['offense', 'survival', 'mixed', 'Control', 'utility', 'mobility', 'support',],
+            spellTypes: ['mobility', 'cloak', 'channel', 'aoe', 'projectile', 'wall', 'shield', 'melee', 'block',
+                'counter', 'debuff', 'self buff', 'buff', 'heal', 'dispel', 'summon', 'cleave',],
 
             // Temp objects
             tempPros: '',
@@ -411,7 +401,9 @@ export default class Form extends Component {
      */
     setSpell = (event, obj, num, detailsType, detailsIndex) => {
         let spells = this.state.spells
-        if (obj === 'type' || obj === 'cost') {
+        if (obj === 'type') {
+            spells[num][obj] = this.getSelectValues(event)
+        } else if (obj === 'cost') {
             spells[num][obj] = event
         } else {
             if (detailsType === undefined) {
@@ -423,6 +415,34 @@ export default class Form extends Component {
         this.setState({spells})
     }
 
+    /** Catch values from multiple select
+     *
+     * @param select Taking the select element
+     * @returns {Array} Return array of values
+     */
+    getSelectValues = select => {
+        let result = []
+        for (let option of select && select.options) {
+            if (option.selected) result.push(option.value || option.text)
+        }
+        return result
+    }
+
+    /** Delete details inputs (name, prop) in spell
+     *
+     * @param key Obj number
+     * @param index details index
+     */
+    deleteSpellDetails = (key, index) => {
+        let spells = this.state.spells
+        let arr = new Set(spells[key].details)
+        arr.forEach(element => {
+            if (this.state.spells[key].details[index] === element) arr.delete(element)
+        })
+        spells[key].details = [...arr]
+        this.setState({spells})
+    }
+
     addSpell = () => {
         let arr = this.state.spells
         let tempSpells = {
@@ -430,13 +450,9 @@ export default class Form extends Component {
             description: '',
             img: '',
             keyword: '',
-            type: '',
+            type: [],
             cost: '',
             details: [
-                {
-                    name: '',
-                    prop: ''
-                },
                 {
                     name: '',
                     prop: ''
@@ -572,7 +588,7 @@ export default class Form extends Component {
 
     render() {
         return (
-            <div className="aChampions col-12 col-md-9 col-xl-10 py-4">
+            <div className="aChampions col-12 py-4">
                 <form onSubmit={e => e.preventDefault()}>
                     <div className="container">
                         <div className="row">
@@ -873,7 +889,11 @@ export default class Form extends Component {
                             <div className="col-lg-6">
                                 <div className="card bg-dark border border-secondary mt-3 text-light">
                                     <div className="card-body">
-                                        <h5 className="card-title">Mastering Guide</h5>
+                                        <h4 className="card-title" data-anchor="link" id="masteringGuide">Mastering
+                                            Guide
+                                            <Link className="anchorjs-link" to="#masteringGuide"
+                                                  aria-label="Anchor">#</Link>
+                                        </h4>
                                         <div className="d-flex flex-column">
                                             <div className="form-group w-100">
                                                 <label htmlFor="champMasteringGuideTitle">Title</label>
@@ -950,7 +970,10 @@ export default class Form extends Component {
                             <div className="col-lg-6">
                                 <div className="card bg-dark border border-secondary mt-3 text-light">
                                     <div className="card-body">
-                                        <h5 className="card-title">Basic Guide</h5>
+                                        <h4 className="card-title" data-anchor="link" id="basicGuide">Basic Guide
+                                            <Link className="anchorjs-link" to="#basicGuide" aria-label="Anchor"
+                                            >#</Link>
+                                        </h4>
                                         <div className="d-flex flex-column">
                                             <div className="form-group w-100">
                                                 <label htmlFor="champBasicGuideTitle">Title</label>
@@ -1028,7 +1051,9 @@ export default class Form extends Component {
                         <div className="row mt-4">
                             <div className="col-12">
                                 <div className="p-4 rounded border border-secondary text-dark bg-light">
-                                    <h5 className="mb-3">Status</h5>
+                                    <h4 className="mb-3" data-anchor="link" id="status">Status
+                                        <Link className="anchorjs-link" to="#status" aria-label="Anchor">#</Link>
+                                    </h4>
                                     <nav>
                                         <div className="nav nav-tabs" id="nav-tab" role="tablist">
                                             <NavLink className="nav-item nav-link text-dark active"
@@ -1208,7 +1233,9 @@ export default class Form extends Component {
                         </div>
                         <div className="row mt-4">
                             <div className="col-12">
-                                <h5 className="mb-0">Combos</h5>
+                                <h4 className="mb-0" data-anchor="link" id="combos">Combos
+                                    <Link className="anchorjs-link" to="#combos" aria-label="Anchor">#</Link>
+                                </h4>
                             </div>
                             {this.state.combos.map((data, key) => {
                                 return <div className="col-lg-6 mt-3" key={key}>
@@ -1309,7 +1336,9 @@ export default class Form extends Component {
                         </div>
                         <div className="row mt-4">
                             <div className="col-12">
-                                <h5 className="mb-0">Spells</h5>
+                                <h4 className="mb-0" data-anchor="link" id="spells">Spells
+                                    <Link className="anchorjs-link" to="#spells" aria-label="Anchor">#</Link>
+                                </h4>
                             </div>
                             {this.state.spells.map((data, key) => {
                                 return <div className="col-12 mt-3" key={key}>
@@ -1339,82 +1368,27 @@ export default class Form extends Component {
                                                         <div className="input-group">
                                                             <div className="btn-group w-75">
                                                                 <button type="button" id={`spellDetailsType-${key}`}
-                                                                        className="btn btn-block rounded-left text-capitalize border btn-light dropdown-toggle"
+                                                                        className="btn btn-block rounded-left border btn-light dropdown-toggle"
                                                                         data-toggle="dropdown"
                                                                         aria-haspopup="true" aria-expanded="false">
-                                                                    {this.state.spells[key].type !== '' || this.state.spells[key].type !== undefined ? this.state.spells[key].type : 'Select a type'}
+                                                                    {this.state.spells[key].type ? this.state.spells[key].type.map((type, index) => {
+                                                                        return <span className="text-capitalize mr-2"
+                                                                                     key={index}>{type}</span>
+                                                                    }) : 'Select a type'}
                                                                 </button>
-                                                                <div className="dropdown-menu">
+                                                                <div className="dropdown-menu" style={{right: '0'}}>
                                                                     <div className="d-flex flex-wrap">
-                                                                        <button className="dropdown-item"
-                                                                                style={{maxWidth: '120px'}}
-                                                                                onClick={() => this.setSpell('mobility', 'type', key)}>Mobility
-                                                                        </button>
-                                                                        <button className="dropdown-item"
-                                                                                style={{maxWidth: '120px'}}
-                                                                                onClick={() => this.setSpell('cloak', 'type', key)}>Cloak
-                                                                        </button>
-                                                                        <button className="dropdown-item"
-                                                                                style={{maxWidth: '120px'}}
-                                                                                onClick={() => this.setSpell('channel', 'type', key)}>Channel
-                                                                        </button>
-                                                                        <button className="dropdown-item"
-                                                                                style={{maxWidth: '120px'}}
-                                                                                onClick={() => this.setSpell('aoe', 'type', key)}>Aoe
-                                                                        </button>
-                                                                        <button className="dropdown-item"
-                                                                                style={{maxWidth: '120px'}}
-                                                                                onClick={() => this.setSpell('projectile', 'type', key)}>Projectile
-                                                                        </button>
-                                                                        <button className="dropdown-item"
-                                                                                style={{maxWidth: '120px'}}
-                                                                                onClick={() => this.setSpell('wall', 'type', key)}>Wall
-                                                                        </button>
-                                                                        <button className="dropdown-item"
-                                                                                style={{maxWidth: '120px'}}
-                                                                                onClick={() => this.setSpell('shield', 'type', key)}>Shield
-                                                                        </button>
-                                                                        <button className="dropdown-item"
-                                                                                style={{maxWidth: '120px'}}
-                                                                                onClick={() => this.setSpell('melee', 'type', key)}>Melee
-                                                                        </button>
-                                                                        <button className="dropdown-item"
-                                                                                style={{maxWidth: '120px'}}
-                                                                                onClick={() => this.setSpell('block', 'type', key)}>Block
-                                                                        </button>
-                                                                        <button className="dropdown-item"
-                                                                                style={{maxWidth: '120px'}}
-                                                                                onClick={() => this.setSpell('counter', 'type', key)}>Counter
-                                                                        </button>
-                                                                        <button className="dropdown-item"
-                                                                                style={{maxWidth: '120px'}}
-                                                                                onClick={() => this.setSpell('debuff', 'type', key)}>Debuff
-                                                                        </button>
-                                                                        <button className="dropdown-item"
-                                                                                style={{maxWidth: '120px'}}
-                                                                                onClick={() => this.setSpell('self buff', 'type', key)}>Self
-                                                                            buff
-                                                                        </button>
-                                                                        <button className="dropdown-item"
-                                                                                style={{maxWidth: '120px'}}
-                                                                                onClick={() => this.setSpell('buff', 'type', key)}>Buff
-                                                                        </button>
-                                                                        <button className="dropdown-item"
-                                                                                style={{maxWidth: '120px'}}
-                                                                                onClick={() => this.setSpell('heal', 'type', key)}>Heal
-                                                                        </button>
-                                                                        <button className="dropdown-item"
-                                                                                style={{maxWidth: '120px'}}
-                                                                                onClick={() => this.setSpell('dispel', 'type', key)}>Dispel
-                                                                        </button>
-                                                                        <button className="dropdown-item"
-                                                                                style={{maxWidth: '120px'}}
-                                                                                onClick={() => this.setSpell('summon', 'type', key)}>Summon
-                                                                        </button>
-                                                                        <button className="dropdown-item"
-                                                                                style={{maxWidth: '120px'}}
-                                                                                onClick={() => this.setSpell('cleave', 'type', key)}>Cleave
-                                                                        </button>
+                                                                        <select className="custom-select my-1 mx-2"
+                                                                                onChange={e => this.setSpell(e.target, 'type', key)}
+                                                                                id={`spellDetailsTypeSelect-${key}`}
+                                                                                multiple={true}>
+                                                                            {this.state.spellTypes.map((spell, index) => {
+                                                                                return <option value={spell}
+                                                                                               key={index}>
+                                                                                    {spell}
+                                                                                </option>
+                                                                            })}
+                                                                        </select>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1449,6 +1423,10 @@ export default class Form extends Component {
                                                         {data.details.map((data, index) => {
                                                             return <div className="input-group mb-2"
                                                                         key={index}>
+                                                                {index > 0 ? <div
+                                                                    className="deleteNameAndPropsSpell"
+                                                                    onClick={()=>this.deleteSpellDetails(key, index)}>
+                                                                    &times;</div> : ''}
                                                                 <input type="text"
                                                                        id={`spellDetailsName-${key}-${index}`}
                                                                        placeholder="Name..."
@@ -1516,7 +1494,7 @@ export default class Form extends Component {
                                                                   value={data.description}
                                                                   onChange={e => this.setSpell(e, 'description', key)}
                                                                   className="form-control"
-                                                                  cols="30" rows="3"/>
+                                                                  cols="30" rows="4"/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1537,7 +1515,9 @@ export default class Form extends Component {
                         </div>
                         <div className="row mt-4">
                             <div className="col-12">
-                                <h5 className="mb-0">Battlerites</h5>
+                                <h4 className="mb-0" data-anchor="link" id="battlerites">Battlerites
+                                    <Link className="anchorjs-link" to="#battlerites" aria-label="Anchor">#</Link>
+                                </h4>
                             </div>
                             {this.state.battlerites.map((data, key) => {
                                 return <div className="col-6 mt-3" key={key}>
@@ -1660,7 +1640,9 @@ export default class Form extends Component {
                         </div>
                         <div className="row mt-4">
                             <div className="col-12">
-                                <h5 className="mb-0">Quotes</h5>
+                                <h4 className="mb-0" data-anchor="link" id="quotes">Quotes
+                                    <Link className="anchorjs-link" to="#quotes" aria-label="Anchor">#</Link>
+                                </h4>
                             </div>
                             <div className="col-6 mt-3">
                                 <div className="card border-light rounded bg-dark text-light">
