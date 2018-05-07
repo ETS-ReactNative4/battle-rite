@@ -5,7 +5,7 @@ import {Link} from '../../../node_modules/react-router-dom/umd/react-router-dom.
 import './Contact.min.css'
 
 const Contact = () => (
-    <div className="contact py-3">
+    <div className="contact mt-5 py-4">
         <div className="container">
             <div className="row">
                 <div className="col-12 mb-2">

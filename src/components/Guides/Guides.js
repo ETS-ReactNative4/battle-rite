@@ -44,10 +44,10 @@ export default class Guides extends Component {
             )
         }
         return (
-            <div className="guide py-3">
+            <div className={`guide ${this.state.admin ? '' : 'mt-5'} py-4`}>
                 <div className="container">
                     <div className="row">
-                        {this.state.admin === undefined ?
+                        {!this.state.admin ?
                             <div className="col-12 mb-2">
                                 <h3 className="text-uppercase">Builds & Guides</h3>
                             </div>
