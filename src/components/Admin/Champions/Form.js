@@ -102,7 +102,7 @@ export default class Form extends Component {
             ],
 
             battleriteTypes: ['offense', 'survival', 'mixed', 'Control', 'utility', 'mobility', 'support',],
-            spellTypes: ['mobility', 'cloak', 'channel', 'aoe', 'projectile', 'wall', 'shield', 'melee', 'block',
+            spellTypes: ['mobility', 'reflect', 'cloak', 'channel', 'aoe', 'projectile', 'wall', 'shield', 'melee', 'block',
                 'counter', 'debuff', 'self buff', 'buff', 'heal', 'dispel', 'summon', 'cleave',],
 
             // Temp objects
@@ -138,6 +138,7 @@ export default class Form extends Component {
             firebase.database().ref(`champions/${champion}`)
                 .once('value').then(data => {
                 this.setState(data.val())
+                console.log(data.val())
             })
         } catch (err) {
             console.log(err.message)
@@ -368,7 +369,7 @@ export default class Form extends Component {
 
     /**
      *
-     * @param key Difficulty rate from 0 ~ 4
+     * @param key Difficulty rate from 1 ~ 5
      * @param num Number of the obj
      */
     difficultyRate = (key, num) => {
@@ -1273,36 +1274,14 @@ export default class Form extends Component {
                                             <div className="d-flex">
                                                 <label htmlFor="">Difficulty:</label>
                                                 <div className="difficulty d-flex align-items-center">
-                                                    <div className="difficultyBox">
-                                                        <input type="radio" onChange={() => {
-                                                            this.difficultyRate(0, key)
-                                                        }} name={`difficukty-${key}`}/>
-                                                        <span className='difficultyCircle'/>
-                                                    </div>
-                                                    <div className="difficultyBox">
-                                                        <input type="radio" onChange={() => {
-                                                            this.difficultyRate(1, key)
-                                                        }} name={`difficukty-${key}`}/>
-                                                        <span className='difficultyCircle'/>
-                                                    </div>
-                                                    <div className="difficultyBox">
-                                                        <input type="radio" onChange={() => {
-                                                            this.difficultyRate(2, key)
-                                                        }} name={`difficukty-${key}`}/>
-                                                        <span className='difficultyCircle'/>
-                                                    </div>
-                                                    <div className="difficultyBox">
-                                                        <input type="radio" onChange={() => {
-                                                            this.difficultyRate(3, key)
-                                                        }} name={`difficukty-${key}`}/>
-                                                        <span className='difficultyCircle'/>
-                                                    </div>
-                                                    <div className="difficultyBox">
-                                                        <input type="radio" onChange={() => {
-                                                            this.difficultyRate(4, key)
-                                                        }} name={`difficukty-${key}`}/>
-                                                        <span className='difficultyCircle'/>
-                                                    </div>
+                                                    {[1, 2 ,3, 4, 5].map((number)=> {
+                                                        return <div className="difficultyBox">
+                                                            <input type="radio" checked={number === data.difficulty} onChange={() => {
+                                                                this.difficultyRate(number, key)
+                                                            }} name={`difficukty-${key}`}/>
+                                                            <span className='difficultyCircle'/>
+                                                        </div>
+                                                    })}
                                                 </div>
                                             </div>
                                             <div className="form-group">
@@ -1323,7 +1302,7 @@ export default class Form extends Component {
                                         </div>
                                         <div className="card-footer pt-0 d-flex">
                                             {this.state.combos.length > 1 ?
-                                                <button className="btn bg-transparent mr-auto text-danger"
+                                                <button className="btn btn-danger mr-auto"
                                                         onClick={() => this.removeElement(key, 'combos')}>Delete
                                                 </button> : ''}
                                             <button className="btn bg-transparent ml-auto text-light"
@@ -1502,7 +1481,7 @@ export default class Form extends Component {
                                         </div>
                                         <div className="card-footer pt-0 d-flex">
                                             {this.state.spells.length > 1 ?
-                                                <button className="btn bg-transparent mr-auto text-danger"
+                                                <button className="btn btn-danger mr-auto"
                                                         onClick={() => this.removeElement(key, 'spells')}>Delete
                                                 </button> : ''}
                                             <button className="btn bg-transparent ml-auto text-light"
@@ -1627,7 +1606,7 @@ export default class Form extends Component {
                                         </div>
                                         <div className="card-footer pt-0 d-flex">
                                             {this.state.battlerites.length > 1 ?
-                                                <button className="btn bg-transparent mr-auto text-danger"
+                                                <button className="btn btn-danger mr-auto"
                                                         onClick={() => this.removeElement(key, 'battlerites')}>Delete
                                                 </button> : ''}
                                             <button className="btn bg-transparent ml-auto text-light"
@@ -1690,7 +1669,7 @@ export default class Form extends Component {
                                 <button className="btn btn-light" type="submit" onClick={this.saveChampion}>Save
                                 </button>
                                 {this.state.editChampion !== undefined ?
-                                    <button className="btn btn-outline-danger ml-3" type="button"
+                                    <button className="btn btn-danger ml-3" type="button"
                                             onClick={this.deleteChampion}>Delete</button> : ''
                                 }
                             </div>

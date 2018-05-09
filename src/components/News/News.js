@@ -6,14 +6,6 @@ import * as firebase from 'firebase'
 // CSS
 import './News.min.css'
 
-// Images
-import jamilaImg from '../../images/jamila.jpg'
-import legends_of_quna from '../../images/legends_of_quna.jpg'
-import dragon from '../../images/dragon.jpg'
-import redditPartner from '../../images/reddit-partner.jpg'
-import updateJanuary from '../../images/update-january.jpg'
-import zander from '../../images/zander.png'
-
 export default class News extends Component {
     constructor(props) {
         super(props)
@@ -66,7 +58,7 @@ export default class News extends Component {
                                     <div className="news__items" style={{backgroundImage: `url(${data.img})`}}>
                                         <h4>{data.title}</h4>
                                         <h6>{data.subTitle}</h6>
-                                        <span>{this.formatDate(data.date)}</span>
+                                        <span>{this.formatDate(data.created_at)}</span>
                                     </div>
                                 </Link>
                             </div>
