@@ -130,15 +130,15 @@ export default class Form extends Component {
             img: this.state.img,
             author: this.state.author,
             content: this.state.content,
-            date: (new Date()).toISOString()
+            [this.state.editNews ? 'updated_at' : 'created_at']: new Date().toISOString()
         }
-        firebase.database().ref(`news/${this.state.permalink}`).set(news);
+        firebase.database().ref(`news/${this.state.permalink}`).update(news);
         this.props.history.goBack()
     }
 
     render() {
         return (
-            <div className="aNews col-12 col-md-9 col-xl-10 py-4">
+            <div className="aNews col-12 py-4">
                 <form onSubmit={e => e.preventDefault()}>
                     <div className="container">
                         <div className="row">
@@ -180,8 +180,8 @@ export default class Form extends Component {
                                     className="text-danger mr-1">*</span>Img</label>
                                 <div className="input-group">
                                     <div className="input-group-prepend">
-                                        <Link to={this.state.img !== '' ? this.state.img : 'javascript:void(0)'}
-                                              target="_blank">
+                                        <Link to={this.state.img !== '' ? this.state.img : '#'}
+                                              target={this.state.img !== '' ? '_blank' : ''}>
                                             <button
                                                 className={`btn btn-secondary rounded-left ${this.state.img !== '' ? '' : 'disabled'}`}
                                                 type="button">
