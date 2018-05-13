@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Link} from '../../../node_modules/react-router-dom/umd/react-router-dom.min.js'
+import {Link} from 'react-router-dom'
 
 // CSS
 import './Guides.min.css'
@@ -44,7 +44,7 @@ export default class Guides extends Component {
             )
         }
         return (
-            <div className={`guide ${this.state.admin ? '' : 'mt-5'} py-4`}>
+            <div className={`${!this.state.admin ? 'main-content' : ''} guide`}>
                 <div className="container">
                     <div className="row">
                         {!this.state.admin ?

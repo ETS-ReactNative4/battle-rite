@@ -36,7 +36,7 @@ export default class View extends Component {
     }
     render() {
         return (
-            <div className="bg-light">
+            <div className="main-content news bg-light">
                 <div className="d-flex justify-content-end flex-column p-5"
                      style={{
                          backgroundImage: `url('${this.state.news.img}')`,

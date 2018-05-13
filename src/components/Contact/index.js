@@ -1,11 +1,11 @@
 import React from 'react'
-import {Link} from '../../../node_modules/react-router-dom/umd/react-router-dom.min.js'
+import {Link} from 'react-router-dom'
 
 // CSS
 import './Contact.min.css'
 
 const Contact = () => (
-    <div className="contact mt-5 py-4">
+    <div className="main-content contact">
         <div className="container">
             <div className="row">
                 <div className="col-12 mb-2">

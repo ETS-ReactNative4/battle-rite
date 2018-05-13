@@ -7,16 +7,17 @@ import * as firebase from 'firebase'
 import Header from './components/Shared/Header'
 
 import Home from './components/Home/Home'
+import Players from './components/Players'
 
 // News
-import News from './components/News/News'
+import News from './components/News'
 import ViewNews from './components/News/View'
 
-import Guides from './components/Guides/Guides'
+import Guides from './components/Guides'
 import Champions from './components/Guides/Champions'
-import Videos from './components/Videos/Videos'
-import Staff from './components/Staff/Staff'
-import Contact from './components/Contact/Contact'
+import Videos from './components/Videos'
+import Staff from './components/Staff'
+import Contact from './components/Contact'
 
 import Auth from './components/Auth/Auth'
 import Signup from './components/Auth/Signup'
@@ -69,11 +70,13 @@ export default class App extends Component {
                     <Route path='/staff' component={Staff}/>
                     <Route path='/contact' component={Contact}/>
 
+                    <Route path='/player/:id' component={Players}/>
+
                     <Route path='/signup' component={Signup}/>
                     <Route path='/login' component={Auth}/>
 
                     {this.state.isAuthenticated ? <Route>
-                        <div className="container-fluid mt-5">
+                        <div className="container-fluid">
                             <div className="row">
                                 <Route exact path='/admin/:sectionName' component={Admin}/>
 

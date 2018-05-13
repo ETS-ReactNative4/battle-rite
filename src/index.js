@@ -1,20 +1,23 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+
+// CSS
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
+
 import App from './App'
 import registerServiceWorker from './registerServiceWorker'
 import {BrowserRouter} from '../node_modules/react-router-dom/umd/react-router-dom'
 
-import * as firebase from 'firebase';
+import * as firebase from 'firebase'
 
 // CSS
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import './sass/main.min.css'
 import './plugins/fontawesome/css/font-awesome.min.css'
 
 // JS
 import '../node_modules/jquery/dist/jquery'
-// import '../node_modules/popper.js/dist/popper.min'
-import '../src/plugins/propper/propper.min'
+import '../node_modules/popper.js/dist/popper.min'
+// import '../src/plugins/propper/propper.min'
 import '../node_modules/bootstrap/dist/js/bootstrap'
 
 const config = {
@@ -24,8 +27,8 @@ const config = {
     projectId: "battle-rite",
     storageBucket: "gs://battle-rite.appspot.com",
     messagingSenderId: "13229329100"
-};
-firebase.initializeApp(config);
+}
+firebase.initializeApp(config)
 
 ReactDOM.render(
     <BrowserRouter>

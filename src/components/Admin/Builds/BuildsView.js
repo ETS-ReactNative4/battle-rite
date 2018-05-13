@@ -39,7 +39,7 @@ export default class Builder extends Component {
 
     render() {
         return (
-            <div className="aBuilds mt-3 col-12">
+            <div className="main-content aBuilds mt-3 col-12">
                 <div className="row mb-4">
                     <div className="col-12">
                         <button type="button" className="btn btn-light" data-toggle="modal"

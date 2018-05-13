@@ -1,6 +1,50 @@
+.main-content.home {
+  margin-top: 3em; }
+
 #carouselHomepage .carousel-item {
   background-color: #343a40; }
   #carouselHomepage .carousel-item img {
     opacity: 0.7; }
+
+.battlerite-subscribe-card {
+  background-color: #1d2e41;
+  border: 1px solid #687584;
+  padding: 15px;
+  position: relative;
+  width: 300px;
+  color: white; }
+  .battlerite-subscribe-card .subscribe-card-jade {
+    width: 100%;
+    margin-top: -20px;
+    margin-bottom: 10px; }
+  .battlerite-subscribe-card .battlerite-subscribe-card__btn {
+    padding: 5px 10px;
+    background-color: #014a03;
+    color: #59f15c;
+    font-size: 8pt;
+    box-sizing: border-box;
+    width: 80px;
+    text-align: center;
+    background-image: none;
+    border-radius: 0;
+    font-weight: 400;
+    border: 2px solid #59f15c;
+    margin-left: -2px; }
+    .battlerite-subscribe-card .battlerite-subscribe-card__btn:hover {
+      border-color: #d5ffd6;
+      color: #d5ffd6; }
+
+.play-battlerite {
+  background-image: url(../../images/play-battlerite.png);
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  width: 300px;
+  height: 50px;
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  transition: opacity 1s ease-in-out; }
+  .play-battlerite:hover {
+    background-position: 0px -50px; }
 
 /*# sourceMappingURL=Home.css.map */

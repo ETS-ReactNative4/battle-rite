@@ -1,11 +1,11 @@
 import React, {Component} from 'react'
 
-import ChmapionCards from '../../../components/Guides/Guides.js'
+import ChmapionCards from '../../Guides/index.js'
 
 export default class Battlerites extends Component{
     render(){
         return(
-            <div className="aBattlerites">
+            <div className="main-content aBattlerites">
                 <ChmapionCards admin={{path:'/admin/battlerites'}}/>
             </div>
         )

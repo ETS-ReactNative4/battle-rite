@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
 import {Link} from '../../../../node_modules/react-router-dom/umd/react-router-dom.min'
 
-import NewsCards from '../../News/News'
+import NewsCards from '../../News/index'
 
 export default class News extends Component{
     render(){
         return(
-            <div className="aNews">
+            <div className="main-content aNews">
                 <div className="container">
                     <div className="row">
                         <div className="col-12">

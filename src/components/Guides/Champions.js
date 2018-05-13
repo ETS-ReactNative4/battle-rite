@@ -46,7 +46,7 @@ export default class Champion extends Component {
 
         }
         return (
-            <div className="champion">
+            <div className="main-content champions">
                 {this.state.champion !== undefined ? <div>
                     <div className="video-container d-lg-block d-none">
                         <video autoPlay="true" loop
