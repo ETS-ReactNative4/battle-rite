@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 
-import ChmapionCards from '../../../components/Guides/Guides'
+import ChmapionCards from '../../Guides/index'
 
 export default class Builds extends Component{
     render(){

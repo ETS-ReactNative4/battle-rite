@@ -138,7 +138,7 @@ export default class Form extends Component {
 
     render() {
         return (
-            <div className="aNews col-12 py-4">
+            <div className="main-content aNews col-12 py-4">
                 <form onSubmit={e => e.preventDefault()}>
                     <div className="container">
                         <div className="row">

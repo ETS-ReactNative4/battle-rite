@@ -22,7 +22,7 @@ export default class Admin extends Component {
     render() {
         let Section = this.state.sections[this.props.match.params.sectionName]
         return (
-            <main className="aContainer col-12 py-4">
+            <main className="main-content aContainer col-12">
                 <Section/>
             </main>
         )

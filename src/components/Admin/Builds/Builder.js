@@ -174,7 +174,7 @@ export default class Builder extends Component {
 
     render() {
         return (
-            <div className="aBuilds mt-3 mb-5 col-12">
+            <div className="main-content aBuilds mt-3 mb-5 col-12">
                 {this.state.battlerites.length !== 0 && this.state.emptyCards ?
                     <div className="d-flex flex-nowrap py-5 px-4 small-card-container" onDrop={e => this.dropCard(e)}
                          onDragOver={e => e.preventDefault()}>
