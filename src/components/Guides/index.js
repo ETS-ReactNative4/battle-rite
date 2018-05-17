@@ -23,16 +23,6 @@ export default class Guides extends Component {
         })
     }
 
-    searchChamption(event) {
-        this.setState({
-            search: event.target.value
-        })
-    }
-
-    selectChampionType(type) {
-        this.setState({type})
-    }
-
     render() {
         let champions = []
         if (this.state.champions !== undefined) {
@@ -57,33 +47,33 @@ export default class Guides extends Component {
                                 <div className="col-sm-6">
                                     <div className="form-group">
                                         <input type="text" value={this.state.search}
-                                               onChange={this.searchChamption.bind(this)}
-                                               className="form-control bg-dark rounded-0 form-control-lg"
+                                               onChange={e => this.setState({search: e.target.value})}
+                                               className="form-control bg-dark rounded-0 text-light form-control-lg"
                                                placeholder="SEARCH YOUR CHAMPION"/>
                                     </div>
                                 </div>
                                 <div className="col-sm-6 text-sm-right text-center">
                                     <div className="btn-group btn-group-toggle px-2" data-toggle="buttons">
                                         <label className="btn btn-outline-light btn-lg active" onClick={() => {
-                                            this.selectChampionType('')
+                                            this.setState({type: ''})
                                         }}>
                                             <input type="radio" name="champion-type"/>
                                             <span className="h6 text-uppercase">All</span>
                                         </label>
                                         <label className="btn btn-outline-light btn-lg" onClick={() => {
-                                            this.selectChampionType('melee')
+                                            this.setState({type: 'melee'})
                                         }}>
                                             <input type="radio" name="champion-type"/>
                                             <span className="h6 text-uppercase">Melee</span>
                                         </label>
                                         <label className="btn btn-outline-light btn-lg" onClick={() => {
-                                            this.selectChampionType('ranged')
+                                            this.setState({type: 'ranged'})
                                         }}>
                                             <input type="radio" name="champion-type"/>
                                             <span className="h6 text-uppercase">Ranged</span>
                                         </label>
                                         <label className="btn btn-outline-light btn-lg" onClick={() => {
-                                            this.selectChampionType('support')
+                                            this.setState({type: 'support'})
                                         }}>
                                             <input type="radio" name="champion-type"/>
                                             <span className="h6 text-uppercase">Support</span>
