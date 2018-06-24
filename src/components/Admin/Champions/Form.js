@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
-import {NavLink, Link} from '../../../../node_modules/react-router-dom/umd/react-router-dom.min'
-
+import {NavLink, Link} from 'react-router-dom'
+import axios from "axios"
 import * as firebase from 'firebase'
 
 import './champion.min.css'
@@ -135,13 +135,12 @@ export default class Form extends Component {
         }
         try {
             let champion = this.state.editChampion.toLowerCase().replace(/\s/g, '')
-            firebase.database().ref(`champions/${champion}`)
-                .once('value').then(data => {
-                this.setState(data.val())
-                console.log(data.val())
-            })
-        } catch (err) {
-            console.log(err.message)
+            axios.get(`http://localhost:3000/champions/g/${champion}`)
+                .then(champion => this.setState(champion.data.collection))
+                .catch(e => console.log(e))
+        }
+        catch (e) {
+            console.log(e)
         }
     }
 
@@ -557,34 +556,20 @@ export default class Form extends Component {
     }
 
     saveChampion = () => {
-        let champion = this.state.name.toLowerCase().replace(/\s/g, '')
-        let champions = {
-            name: this.state.name,
-            slogan: this.state.slogan,
-            avatar: this.state.avatar,
-            hp: this.state.hp,
-            video: this.state.video,
-            icon: this.state.icon,
-            type: this.state.type,
-            pros: this.state.pros,
-            cons: this.state.cons,
-            bio: this.state.bio,
-            masteringGuide: this.state.masteringGuide,
-            basicGuide: this.state.basicGuide,
-            status: this.state.status,
-            combos: this.state.combos,
-            spells: this.state.spells,
-            battlerites: this.state.battlerites,
-            quotes: this.state.quotes,
+        const token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyRGF0YSI6eyJpZCI6IjViMjYxZjBkZjI5YjhhNTZhNDJlMGEwYyIsIm5hbWUiOiJBYmRlbHJobWFuIG1vaGFtZWQiLCJlbWFpbCI6ImFiZGVscmhtYW5AY29kZXJzZWEuY29tIiwicm9sZSI6ImFkbWluIn0sImlhdCI6MTUyOTg2MTM0MiwiZXhwIjoxNTI5OTQ3NzQyfQ.7KJg5CiBwBdIaKw6_exn3DCvLh4UxjR55m__4OzneNg"
+        let options = {
+            headers: {authorization: token},
+            method: "POST",
+            url: `http://localhost:3000/champions/p`,
+            data: this.state
         }
-        try {
-            firebase.database().ref(`champions/${champion}`).set(champions).then(
-                // this.props.history.goBack()
-            )
-        } catch (e) {
-            console.log(e.message)
-            console.log(`Champions: ${champions}`)
+        if (this.state.editChampion) {
+            options.url = `http://localhost:3000/champions/u/${this.state.premalink}`
+            options.method = "PATCH"
         }
+        axios(options)
+            .then(champion => console.log(champion))
+            .catch(e => console.log(e))
     }
 
     render() {
@@ -1049,7 +1034,7 @@ export default class Form extends Component {
                                     </div> : ''}
                             </div>
                         </div>
-                        <div className="row mt-4">
+                        {/* <div className="row mt-4">
                             <div className="col-12">
                                 <div className="p-4 rounded border border-secondary text-dark bg-light">
                                     <h4 className="mb-3" data-anchor="link" id="status">Status
@@ -1231,8 +1216,8 @@ export default class Form extends Component {
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="row mt-4">
+                        </div>*/}
+                        {/*  <div className="row mt-4">
                             <div className="col-12">
                                 <h4 className="mb-0" data-anchor="link" id="combos">Combos
                                     <Link className="anchorjs-link" to="#combos" aria-label="Anchor">#</Link>
@@ -1241,7 +1226,7 @@ export default class Form extends Component {
                             {this.state.combos.map((data, key) => {
                                 return <div className="col-lg-6 mt-3" key={key}>
                                     <div className="card border-light rounded bg-dark text-light">
-                                        {/*<img className="card-img-top" src="" alt="Card image cap"/>*/}
+                                        <img className="card-img-top" src="" alt="Card image cap"/>
                                         <div
                                             className="bg-light d-flex justify-content-center text-dark align-items-center"
                                             style={{height: '11em'}}
@@ -1274,11 +1259,12 @@ export default class Form extends Component {
                                             <div className="d-flex">
                                                 <label htmlFor="">Difficulty:</label>
                                                 <div className="difficulty d-flex align-items-center">
-                                                    {[1, 2 ,3, 4, 5].map((number)=> {
+                                                    {[1, 2, 3, 4, 5].map((number) => {
                                                         return <div className="difficultyBox">
-                                                            <input type="radio" checked={number === data.difficulty} onChange={() => {
-                                                                this.difficultyRate(number, key)
-                                                            }} name={`difficukty-${key}`}/>
+                                                            <input type="radio" checked={number === data.difficulty}
+                                                                   onChange={() => {
+                                                                       this.difficultyRate(number, key)
+                                                                   }} name={`difficukty-${key}`}/>
                                                             <span className='difficultyCircle'/>
                                                         </div>
                                                     })}
@@ -1404,7 +1390,7 @@ export default class Form extends Component {
                                                                         key={index}>
                                                                 {index > 0 ? <div
                                                                     className="deleteNameAndPropsSpell"
-                                                                    onClick={()=>this.deleteSpellDetails(key, index)}>
+                                                                    onClick={() => this.deleteSpellDetails(key, index)}>
                                                                     &times;</div> : ''}
                                                                 <input type="text"
                                                                        id={`spellDetailsName-${key}-${index}`}
@@ -1616,7 +1602,7 @@ export default class Form extends Component {
                                     </div>
                                 </div>
                             })}
-                        </div>
+                        </div>*/}
                         <div className="row mt-4">
                             <div className="col-12">
                                 <h4 className="mb-0" data-anchor="link" id="quotes">Quotes

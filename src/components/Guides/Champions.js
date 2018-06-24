@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import {Link} from '../../../node_modules/react-router-dom/umd/react-router-dom.min'
-
 import * as firebase from 'firebase'
 
 // CSS
@@ -36,7 +35,7 @@ export default class Champion extends Component {
     }
 
     render() {
-        let spellSelected ,championsSameType
+        let spellSelected, championsSameType
         if (this.state.champion !== undefined) {
             spellSelected = this.state.champion.spells.filter(
                 spell => {

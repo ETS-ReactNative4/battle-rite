@@ -9,7 +9,7 @@ export default class Header extends Component {
         super(props)
         this.state = {
             theme: 'dark',
-            isAuthenticated: false
+            isAuthenticated: true
         }
     }
 
@@ -19,13 +19,13 @@ export default class Header extends Component {
     }
 
     componentDidMount() {
-        firebase.auth().onAuthStateChanged(firebaseUser => {
+        /*firebase.auth().onAuthStateChanged(firebaseUser => {
             if (firebaseUser) {
                 this.setState({isAuthenticated: true})
             } else {
                 this.setState({isAuthenticated: false})
             }
-        })
+        })*/
     }
 
     render() {

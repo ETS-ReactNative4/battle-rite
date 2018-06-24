@@ -35,7 +35,7 @@ export default class App extends Component {
         super(props)
         this.state = {
             theme: 'dark',
-            isAuthenticated: false
+            isAuthenticated: true
         }
     }
 
@@ -44,13 +44,13 @@ export default class App extends Component {
     }
 
     componentDidMount() {
-        firebase.auth().onAuthStateChanged(firebaseUser => {
+        /*firebase.auth().onAuthStateChanged(firebaseUser => {
             if (firebaseUser) {
                 this.setState({isAuthenticated: true})
             } else {
                 this.setState({isAuthenticated: false})
             }
-        })
+        })*/
     }
 
     render() {

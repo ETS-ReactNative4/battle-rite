@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
+import axios from "axios"
 
 // CSS
 import './Guides.min.css'
@@ -17,10 +18,13 @@ export default class Guides extends Component {
     }
 
     componentDidMount() {
-        firebase.database().ref(`champions`)
+        axios.get("http://localhost:3000/champions/g")
+            .then(champions => this.setState({champions: champions.data.collection}))
+            .catch(e => console.log(e))
+        /*firebase.database().ref(`champions`)
             .once('value').then(data => {
             this.setState({champions: Object.values(data.val())})
-        })
+        })*/
     }
 
     render() {
