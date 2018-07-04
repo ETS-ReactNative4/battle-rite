@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Link} from '../../../../node_modules/react-router-dom/umd/react-router-dom.min'
+import {Link} from 'react-router-dom'
 import * as firebase from 'firebase'
 
 import './builds-view.min.css'

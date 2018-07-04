@@ -1,4 +1,5 @@
 @import "./vars"
+@import "./fonts"
 
 // Scrollbar
 ::-webkit-scrollbar-track
@@ -27,9 +28,12 @@
   margin-top: 4em
   padding-top: .5em
   padding-bottom: .5em
+  position: relative
 
 body
   height: 100%
+  font-family: Exo
+  letter-spacing: .1em
 
 textarea
   min-height: 5em
@@ -38,11 +42,25 @@ textarea
 .btn
   border-radius: 0
 
+/** Backgrounds **/
 .bg-black
-  background-color: $black
+  background-color: $black !important
+
+.bg-red
+  background-color: $red !important
+/** End:Backgrounds **/
+
+/** Text **/
+.text-green
+  color: $green !important
+
+.text-red
+  color: $red !important
+/** End:Text **/
 
 // Anchor link
 [data-anchor="link"]
+
   .anchorjs-link
     display: none
     opacity: 0

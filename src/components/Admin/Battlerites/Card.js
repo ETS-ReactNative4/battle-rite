@@ -3,11 +3,6 @@ import React, {Component} from 'react'
 import './battlerites.min.css'
 
 export default class Card extends Component {
-    constructor(props) {
-        super(props)
-
-    }
-
     render() {
         return (
             <div className="container mt-3">

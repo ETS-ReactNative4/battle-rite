@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import {Link} from 'react-router-dom'
 
 export default class Quickmatch extends Component {
     constructor(props){
@@ -24,6 +25,7 @@ export default class Quickmatch extends Component {
     render() {
         return (
             <div className="player__queue-stats">
+                <Link className="card-link" to="#"/>
                 <h5 className="player__queue-stats--title">Quickmatch</h5>
                 <table className="league__stats">
                     <thead>
@@ -39,7 +41,7 @@ export default class Quickmatch extends Component {
                         <td className="font-weight-normal">2v2</td>
                         <td>{this.state.q2v2.win}</td>
                         <td>{this.state.q2v2.lose}</td>
-                        <td className={`${this.state.q2v2.winRate > 49.9 ? 'text-success' : 'text-danger'}`}>
+                        <td className={`${this.state.q2v2.winRate > 49.9 ? 'text-green' : 'text-red'}`}>
                             {this.state.q2v2.winRate}%
                         </td>
                     </tr>
@@ -47,7 +49,7 @@ export default class Quickmatch extends Component {
                         <td className="font-weight-normal">3v3</td>
                         <td>{this.state.q3vs3.win}</td>
                         <td>{this.state.q3vs3.lose}</td>
-                        <td className={`${this.state.q3vs3.winRate > 49.9 ? 'text-success' : 'text-danger'}`}>
+                        <td className={`${this.state.q3vs3.winRate > 49.9 ? 'text-green' : 'text-red'}`}>
                             {this.state.q3vs3.winRate}%
                         </td>
                     </tr>
@@ -55,7 +57,7 @@ export default class Quickmatch extends Component {
                         <td className="font-weight-normal">Brawl</td>
                         <td>{this.state.qBrawl.win}</td>
                         <td>{this.state.qBrawl.lose}</td>
-                        <td className={`${this.state.qBrawl.winRate > 49.9 ? 'text-success' : 'text-danger'}`}>
+                        <td className={`${this.state.qBrawl.winRate > 49.9 ? 'text-green' : 'text-red'}`}>
                             {this.state.qBrawl.winRate}%
                         </td>
                     </tr>

@@ -1,7 +1,5 @@
 import React, {Component} from 'react'
-import {Switch, Route, Redirect} from '../node_modules/react-router-dom/umd/react-router-dom'
-
-import * as firebase from 'firebase'
+import {Switch, Route} from '../node_modules/react-router-dom/umd/react-router-dom'
 
 // Components
 import Header from './components/Shared/Header'
@@ -35,7 +33,7 @@ export default class App extends Component {
         super(props)
         this.state = {
             theme: 'dark',
-            isAuthenticated: false
+            isAuthenticated: true
         }
     }
 
@@ -44,13 +42,13 @@ export default class App extends Component {
     }
 
     componentDidMount() {
-        firebase.auth().onAuthStateChanged(firebaseUser => {
+        /*firebase.auth().onAuthStateChanged(firebaseUser => {
             if (firebaseUser) {
                 this.setState({isAuthenticated: true})
             } else {
                 this.setState({isAuthenticated: false})
             }
-        })
+        })*/
     }
 
     render() {

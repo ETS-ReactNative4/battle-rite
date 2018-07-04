@@ -1,32 +1,39 @@
 @import "../../sass/vars"
 
+.players
+  input
+    background-color: transparentize($black, .2)
+    &:focus
+      border-color: $light
+      box-shadow: none
+      background-color: transparentize($black, .2)
+
 .player__container
   display: flex
   color: $light
-  background-color: $dark-color
   padding: 1em
   flex-direction: column
   position: relative
   margin-top: 1em
   border-top: 5px solid $golden
   overflow: hidden
+  border-bottom: 2px dashed transparentize($light, .8)
   > .player__container--content
     z-index: 1
 
 .player__container--image
-  position: absolute
+  position: fixed
   top: 0
   right: 0
   bottom: 0
   left: 0
-  opacity: 0.7
-  width: 100%
+  opacity: 0.2
 
 .player__name
   font-size: 2rem
   margin-left: 0.5em
   line-height: 1
-  font-weight: 500
+  font-weight: bold
   color: $light
 
 .player__img
@@ -42,14 +49,14 @@
   right: 15px
   color: $dark-color
   background-color: $golden
+  font-weight: bold
   padding: 3px
 
 .player__details
   list-style: none
-  margin-top: 1em
+  margin-top: .5em
   margin-bottom: 0
   padding-left: 0
-  border-top: 2px solid lighten($dark-color, 60%)
   li
     font-weight: bold
     padding-top: .5em
@@ -67,7 +74,7 @@
 .player__queue-stats
   margin-top: 2em
   display: flex
-  width: 30%
+  width: 100%
   margin-right: 1em
   color: $light
   background-color: transparentize($black, .2)
@@ -76,8 +83,10 @@
   position: relative
   transition: .1s
   border-top: 5px solid transparentize($light, .3)
+  &:first-of-type
+    margin-top: 0
   &:hover
-    transform: scale(1.05)
+    transform: scale(1.03)
     border-top: 5px solid $light
 
 .player__queue-stats--title
@@ -94,7 +103,6 @@
   > tbody td
     font-weight: bold
     padding: 0.5em
-    background-color: transparentize($black, .3)
     color: $light
 
 .player__champion-card
@@ -145,4 +153,34 @@
   font-size: 1rem
   font-weight: bold
   border: 3px solid lighten($brown, 15%)
+
+.card-link
+  display: block
+  position: absolute
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  z-index: 1
+  cursor: default
+
+.player__nav-pills
+  margin-bottom: 2em
+  background-color: transparentize($black, .2)
+  .nav-pills
+    .nav-link
+      font-size: 1.2em
+      flex: 1
+      text-align: center
+      transition: .2s
+      border-radius: 0
+      text-transform: uppercase
+      background-color: lighten($black, 5%)
+      color: darken($light, 10%)
+      &:hover
+        color: white
+      &.active
+        color: $golden
+        font-weight: bold
+        background: transparent
 

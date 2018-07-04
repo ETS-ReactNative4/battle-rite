@@ -28,7 +28,7 @@ export default class Info extends Component {
                     </p>
                     <p className="player__level">{this.state.level}</p>
                 </div>
-                <ul className="player__details">
+               {/* <ul className="player__details">
                     <li> Matches played
                         <span>{this.state.totalMatches}</span>
                     </li>
@@ -39,7 +39,7 @@ export default class Info extends Component {
                         Win rate
                         <span>{this.state.winRate}%</span>
                     </li>
-                </ul>
+                </ul>*/}
             </div>
         )
     }

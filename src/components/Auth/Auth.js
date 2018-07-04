@@ -1,33 +1,22 @@
 import React, {Component} from 'react'
 import {NavLink} from '../../../node_modules/react-router-dom/umd/react-router-dom'
 
-import * as firebase from 'firebase'
+import axios from "axios/index";
 
 export default class Auth extends Component {
     constructor() {
         super()
         this.state = {
             email: '',
-            password: '',
-            isAuthenticated: false
+            password: ''
         }
     }
 
     login = () => {
-        const auth = firebase.auth()
-        const promise = auth.signInWithEmailAndPassword(this.state.email, this.state.password)
-        promise.catch(e => console.log(e.message))
-    }
-
-    componentDidMount() {
-        firebase.auth().onAuthStateChanged(firebaseUser => {
-            if (firebaseUser) {
-                this.setState({isAuthenticated: true})
-                this.props.history.goBack()
-            } else {
-                this.setState({isAuthenticated: false})
-            }
-        })
+        axios.post("http://localhost:3000/users/signin",
+            {email: this.state.email, password: this.state.password})
+            .then(docs => this.props.history.goBack())
+            .catch(e => console.log(e.message))
     }
 
     render() {

@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import {Link} from '../../../../node_modules/react-router-dom/umd/react-router-dom.min'
 import * as firebase from "firebase";
 
 import './builder.min.css'
