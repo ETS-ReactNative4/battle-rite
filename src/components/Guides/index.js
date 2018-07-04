@@ -4,7 +4,6 @@ import axios from "axios"
 
 // CSS
 import './Guides.min.css'
-import * as firebase from "firebase";
 
 export default class Guides extends Component {
     constructor(props) {
@@ -21,10 +20,6 @@ export default class Guides extends Component {
         axios.get("http://localhost:3000/champions/g")
             .then(champions => this.setState({champions: champions.data.collection}))
             .catch(e => console.log(e))
-        /*firebase.database().ref(`champions`)
-            .once('value').then(data => {
-            this.setState({champions: Object.values(data.val())})
-        })*/
     }
 
     render() {

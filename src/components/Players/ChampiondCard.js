@@ -4,11 +4,6 @@ import {Link} from 'react-router-dom'
 import './championCards.min.css'
 
 export default class ChampionCard extends Component {
-    constructor(props) {
-        super(props)
-
-    }
-
     render() {
         return (
             <div>
